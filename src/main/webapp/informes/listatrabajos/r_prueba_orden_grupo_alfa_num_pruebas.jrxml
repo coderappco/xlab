@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="r_prueba_orden_grupo_alfa_num_pruebas" language="groovy" pageWidth="572" pageHeight="752" columnWidth="572" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="d798fa1c-67e0-4dfa-b24f-8f0692320809">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="P_EMPRESA" class="java.lang.Integer"/>
+	<parameter name="P_ESTADO" class="java.lang.String"/>
+	<parameter name="P_GRUPO_AREA" class="java.lang.Integer"/>
+	<parameter name="P_FECHA_INICIO" class="java.util.Date"/>
+	<parameter name="P_FECHA_FIN" class="java.util.Date"/>
+	<parameter name="P_PRUEBA_ID" class="java.lang.Integer"/>
+	<queryString>
+		<![CDATA[select 	count(distinct nro_orden),
+	prueba.codigo,
+	count(prueba.codigo)+(case when xr.id is null then 0 else 8 end) as total_codigo,
+	case when xr.id is null then 0 else xr.id end id
+from xlab_orden x
+inner join xlab_orden_estudios xo on  x.id = xo.orden_id
+inner join xlab_orden_estudios_pruebas xp on xp.estudio_id = xo.estudio_id
+inner join  xlab_prueba prueba on prueba.id = xp.prueba_id
+inner join cfg_pacientes cp on cp.id_paciente = x.paciente_id
+left join xlab_orden_estudio_prueba_resultados xr on xr.orden_estudios_pruebas_id = xp.id
+where prueba.grupo_Area =$P{P_GRUPO_AREA}
+and x.empresa_id=$P{P_EMPRESA}
+and xp.estado = $P{P_ESTADO}
+and x.id = $P{P_PRUEBA_ID}
+and to_date( to_char(x.fecha_orden,'yyyy-MM-dd'), 'yyyy-MM-dd' ) between $P{P_FECHA_INICIO} and $P{P_FECHA_FIN}
+group by x.fecha_orden,cp.identificacion,prueba.codigo,xr.id]]>
+	</queryString>
+	<field name="count" class="java.lang.Long"/>
+	<field name="codigo" class="java.lang.String"/>
+	<field name="total_codigo" class="java.lang.Long"/>
+	<field name="id" class="java.lang.Integer"/>
+	<variable name="V_TOTAL_CU" class="java.lang.Integer" calculation="Count">
+		<variableExpression><![CDATA[$F{codigo}]]></variableExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="572" height="20" uuid="658079c8-8d9d-4421-9ef4-d47dc931f82a"/>
+				<textFieldExpression><![CDATA[$F{codigo}+"_____"+($F{id}!=0?"NE%_____ LY%_____ CAY%_____ EOS%_____ MON%_____ BAS %_____ MET%_____ NOR%_____":"")]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

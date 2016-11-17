@@ -1,0 +1,536 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./../template/master.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://java.sun.com/jsf/core">
+
+    <ui:define name="title">
+        Contratos
+    </ui:define>
+
+    <ui:define name="content">
+        #{contratosMB.inicializar()}
+        <div class="container-fluid container-fullw">
+
+            <h:form id="IdFormContratos">
+                <section id="page-title">
+                    <div class="row">
+                        <div class="col-sm-8">
+                            <h1 class="mainTitle">Contratos</h1>
+                        </div>
+                        <ol class="breadcrumb">
+                            <li>
+                                <span>Configuración</span>
+                            </li>
+                            <li>
+                                <span>Facturación</span>
+                            </li>
+                            <li class="active">
+                                <span>Contratos</span>
+                            </li>
+                        </ol>
+                    </div>
+                </section>
+                <p:commandButton 
+                    title="Nuevo Contrato" 
+                    icon="fa fa-fw fa-plus-circle"
+                    styleClass="icon-new fg-lightBlue bg-white no-border"
+                    actionListener="#{contratosMB.btnNuevoContrato}"  
+                    oncomplete="PF('wvTabView').select(0);"
+                    update=":IdFormContratos"
+                    style="font-size: 20px; width: 30px; height: 40px;"/> 
+                &nbsp;
+                <p:commandButton 
+                    title="Buscar Contrato" 
+                    styleClass="icon-search fg-lightBlue bg-white no-border" 
+                    icon="fa fa-fw fa-search"
+                    actionListener="#{contratosMB.buscarContratos}"
+                    style="font-size: 20px; width: 30px; height: 40px; "/> 
+                &nbsp;
+                &nbsp;
+                <p:commandButton                     
+                    title="Eliminar Contrato"
+                    icon="fa fa-fw fa-remove"
+                    styleClass="icon-cancel fg-lightBlue bg-white no-border" 
+                    actionListener="#{contratosMB.eliminarContrato}"
+                    style="font-size: 20px; width: 30px; height: 40px; "/> 
+                &nbsp;
+                <p:commandButton 
+                    title="Guardar Contrato"
+                    icon="fa fa-fw fa-save"
+                    styleClass="icon-floppy fg-lightBlue bg-white no-border" 
+                    oncomplete="PF('wvTabView').select(0);"
+                    actionListener="#{contratosMB.guardarContrato}"
+                    style="font-size: 20px; width: 30px; height: 40px;"/>                                            
+                <p:tabView id="IdTabView" widgetVar="wvTabView">  
+                    <p:tab title="#{contratosMB.tituloTabContratos}">
+                         <div class="row">
+                            <div class="col-lg-3 col-xs-12">
+                                <div class="form-group">
+                                    <p:outputLabel for="codigo" styleClass="campoObligatorio" value="Código"/>
+                                    <p:inputText id="codigo" styleClass="form-control" size="12" disabled="false" value="#{contratosMB.codigo}"  maxlength="10" placeholder="Código"/>
+                                </div>
+                            </div>
+                             <div class="col-lg-9 col-xs-12">
+                                <div class="form-group">
+                                    <p:outputLabel styleClass="campoObligatorio" value="Nombre"/>
+                                    <p:inputText   styleClass="form-control" size="91" value="#{contratosMB.descripcionContrato}" placeholder="Nombre"/>                                
+                                </div>
+                            </div>
+                            <div class="col-lg-7 col-xs-12">
+                                <div class="form-group">
+                                    <p:outputLabel  styleClass="campoObligatorio" value="Administradora: "/>
+                                    <p:selectOneMenu style="width: 485px;" value="#{contratosMB.administradora}"  filter="true" filterMatchMode="contains">
+                                        <f:selectItem itemLabel="" itemValue=""/>
+                                        <f:selectItems value="#{loginMB.listaAdministradoras}" var="administradora" itemLabel="#{administradora.razonSocial}" itemValue="#{administradora.idAdministradora}" />
+                                    </p:selectOneMenu>
+                                </div>
+                            </div>
+                            <div class="col-lg-5 col-xs-12">
+                                <div class="form-group">
+                                    <p:outputLabel    styleClass="campoObligatorio" value="Tipo (Régimen)" title="Hace referencia a que régimen tienen los pacientes a los que aplica este contrato."/> 
+                                    <p:selectOneMenu styleClass="campoFormulario" style="width: 205px;" value="#{contratosMB.tipoContrato}" filter="true" filterMatchMode="contains">
+                                        <f:selectItem itemLabel="" itemValue=""/>
+                                        <f:selectItems value="#{loginMB.listaRegimen}"/>
+                                    </p:selectOneMenu>
+                                </div>
+                            </div>
+                         </div>
+                        <!--.row-->
+                        <div class="row">
+                            <div class="col-lg-2 col-xs-12">
+                                <div class="form-group">
+                                    <p:outputLabel value="Fecha inicio"/><br />
+                                    <p:calendar navigator="true" styleClass="campoFormulario" locale="es" pattern="dd/MM/yyyy" mask="99/99/9999"  maxlength="10" value="#{contratosMB.fechaInicio}"  placeholder="Fecha Inicio"/>
+                                </div>
+                            </div>
+                            <div class="col-lg-2 col-xs-12">
+                                <div class="form-group">
+                                    <p:outputLabel value="Fecha Vencimiento"/><br />
+                                    <p:calendar navigator="true" locale="es" pattern="dd/MM/yyyy" mask="99/99/9999"  maxlength="10" value="#{contratosMB.fechaVencimiento}" placeholder="Fecha Vencimiento"/>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-xs-12">
+                                <div class="form-group">
+                                    <p:outputLabel  value="Tipo Pago" title="Según el 'Tipo de Pago' se determinan los 'Tipos de Facturación'"/>
+                                    <p:selectOneMenu style="width: 200px;" value="#{contratosMB.tipoPago}">
+                                        <f:ajax 
+                                            event="change"
+                                            listener="#{contratosMB.cambiaTipoPago}"                                                
+                                            render="IdTipoFacturacion"/>
+                                        <f:selectItem itemLabel="" itemValue=""/>
+                                        <f:selectItems value="#{loginMB.listaTipoPago}"/>
+                                    </p:selectOneMenu>     
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-xs-12">
+                                <div class="form-group">
+                                    <p:outputLabel  value="Tipo Facturación" title="Determina los tipos de documentos que se generan cuando se realiza la facturación"/> 
+                                    <p:selectOneMenu id="IdTipoFacturacion" styleClass="campoFormulario" style="width: 300px;" value="#{contratosMB.tipoFacturacion}">                                    
+                                        <f:selectItems value="#{contratosMB.listaTipoFacturacion}"/>
+                                    </p:selectOneMenu> 
+                                </div>
+                            </div>
+                        </div>
+                        <!--.row-->
+                        <div class="row">
+                            <div class="col-lg-2 col-xs-12">
+                                <div class="form-group">
+                                    <p:outputLabel styleClass="campoNoObligatorio" value="Número Afiliados"/><br />
+                                    <p:inputText style="width: 100%;"  styleClass="campoFormulario"  value="#{contratosMB.numeroAfiliados}"/>                                                                
+                                </div>
+                            </div>
+                            <div class="col-lg-2 col-xs-12">
+                                <div class="form-group">
+                                    <p:outputLabel styleClass="campoNoObligatorio" value="Número RIP"/>
+                                    <p:inputText   styleClass="campoFormulario" size="23" value="#{contratosMB.numeroRipContrato}" maxlength="10" placeholder="Número RIP"/>                                     
+                                </div>
+                            </div>
+                            <div class="col-lg-2 col-xs-12">
+                                <div class="form-group">
+                                    <p:outputLabel styleClass="campoNoObligatorio" value="Numeró Poliza"/>
+                                    <p:inputText styleClass="campoFormulario" size="23" value="#{contratosMB.numeroPoliza}"  maxlength="10" placeholder="Número Poliza"/>
+                                </div>
+                            </div>
+                            <div class="col-lg-2 col-xs-12">
+                                <div class="form-group">
+                                    <p:outputLabel styleClass="campoNoObligatorio" value="Valor total"/>                                
+                                    <p:inputText  styleClass="campoFormulario" value="#{contratosMB.valorTotal}"/>
+                                </div>
+                            </div>
+                            <div class="col-lg-2 col-xs-12">
+                                <div class="form-group">
+                                    <p:outputLabel styleClass="campoNoObligatorio" value="Valor Mensual"/>
+                                    <p:inputText  styleClass="campoFormulario" value="#{contratosMB.valorMensual}"/>
+                                </div>
+                            </div>
+                            <div class="col-lg-2 col-xs-12">
+                                <div class="form-group">
+                                    <p:outputLabel styleClass="campoNoObligatorio" value="Valor validación mensual"/>
+                                    <p:inputText styleClass="campoFormulario" value="#{contratosMB.valorValidacionMensual}"/>
+                                </div>
+                            </div>
+                        </div>
+                        <!--.row-->
+                        <div class="row">
+                            <div class="col-lg-2 col-xs-12">
+                                <div class="form-group">
+                                    <p:outputLabel styleClass="campoNoObligatorio" value="Valor Alerta"/>                                        
+                                    <p:inputText styleClass="campoFormulario" value="#{contratosMB.valorAlarma}"/>
+                                </div>
+                            </div>
+                            <div class="col-lg-2 col-xs-12">
+                                <div class="form-group">
+                                    <p:outputLabel styleClass="campoNoObligatorio" value="Cod Tarifa pos"/> 
+                                    <p:inputText   styleClass="campoFormulario" size="23" maxlength="3" value="#{contratosMB.tarifaPos}" placeholder="Código Tarifa Pos"/>
+                                </div>
+                            </div>
+                            <div class="col-lg-2 col-xs-12">
+                                <div class="form-group">
+                                    <p:outputLabel styleClass="campoNoObligatorio" value="Cod Tarifa no pos"/> 
+                                    <p:inputText   styleClass="campoFormulario" size="23" maxlength="3" value="#{contratosMB.tarifaNoPos}" placeholder="Código Tarifa No pos"/>
+                                </div>
+                            </div>
+                        </div>
+                        <!--.row-->
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <div class="form-group">
+                                    <p:outputLabel   value="Observaciones Contrato" /><br />
+                                    <p:inputTextarea styleClass="campoFormulario" style="width: 600px; height: 50px;" value="#{contratosMB.observacionesContrato}" placeholder="Observaciones Contratos"/>                                                            
+                                </div>
+                            </div>
+                        </div>
+                        <!--.row-->
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <div class="form-group">
+                                    <p:outputLabel   styleClass="campoNoObligatorio" value="Observaciones Facturación"/>   <br />                         
+                                    <p:inputTextarea styleClass="campoFormulario" style="width: 600px; height: 50px;" value="#{contratosMB.observacionesFacturacion}" placeholder="Observaciones Facturación"/>
+                                </div>
+                            </div>
+                        </div>
+                        <!--.row-->
+                        <!--.row-->
+                        <div class="row">
+                            <div class="col-lg-2 col-xs-12">
+                                <div class="form-group">
+                                    <p:outputLabel styleClass="campoNoObligatorio" value="Cta por Cobrar"/>                            
+                                    <p:inputText   styleClass="campoFormulario" disabled="false" value="#{contratosMB.cuentaPorCobrar}" size="23" maxlength="20" placeholder="Cuenta Por Cobrar"/>                                
+                                </div>
+                            </div>
+                            <div class="col-lg-2 col-xs-12">
+                                <div class="form-group">
+                                    <p:outputLabel styleClass="campoNoObligatorio" value="Cta Copago"/>
+                                    <p:inputText   styleClass="campoFormulario" value="#{contratosMB.cuentaCopago}" size="23" maxlength="20" placeholder="Cuenta Copago"/>
+                                </div>
+                            </div>
+                            <div class="col-lg-2 col-xs-12">
+                                <div class="form-group">
+                                    <p:outputLabel styleClass="campoNoObligatorio" value="Cod Concepto"/>
+                                    <p:inputText   styleClass="campoFormulario" value="#{contratosMB.codigoConcepto}" size="23" maxlength="5" placeholder="Código Concepto"/>
+                                </div>
+                            </div>
+                            <div class="col-lg-2 col-xs-12">
+                                <div class="form-group">
+                                    <p:outputLabel styleClass="campoNoObligatorio" value="Exigir RIPS al Facturar PS"/><br />
+                                    <p:selectBooleanCheckbox styleClass="campoFormulario" value="#{contratosMB.exigirRipsFacturar}"/>
+                                </div>
+                            </div>
+                            <div class="col-lg-2 col-xs-12">
+                                <div class="form-group">
+                                    <p:outputLabel styleClass="campoNoObligatorio" value="Código Concepto Descuento"/>
+                                    <p:inputText   styleClass="campoFormulario" value="#{contratosMB.cuentaConceptoDescuento}" maxlength="5" placeholder="Código Concepto Descuento"/>                                                                
+                                </div>
+                            </div>
+                        </div>
+                        <!--.row-->
+                    </p:tab>
+                    <p:tab title="Facturación contrato">
+                        <div class="row">
+                            <div class="col-xs-10">
+                                <div class="form-group">
+                                    <p:outputLabel styleClass="campoObligatorio" value="Manual Tarifario: "/>
+                                    <p:selectOneMenu styleClass="campoFormulario" style="width: 250px;" value="#{contratosMB.idManualTarifario}"  filter="true" filterMatchMode="contains">                                                                                                
+                                        <f:selectItem itemValue="" itemLabel=""/>
+                                        <f:selectItems value="#{contratosMB.listaManuales}" var="manual" itemLabel="#{manual.nombreManualTarifario}" itemValue="#{manual.idManualTarifario}" />
+                                    </p:selectOneMenu>
+                                </div>
+                            </div>
+                            <div class="col-xs-2">
+                                <div class="form-group">
+                                    <br />
+                                    <p:commandButton 
+                                        disabled="#{contratosMB.contratoSeleccionado == null}"
+                                        title="Copiar manual tarifario (Activo si se esta editando contrato existente)" value="&nbsp;"
+                                        styleClass="icon-copy fg-lightBlue bg-white no-border" 
+                                        icon="fa fa-fw fa-file-text"
+                                        actionListener="#{contratosMB.clickBtnCopiarManual}"               
+                                        style="font-size: 20px; width: 30px; height: 40px;"/>
+                                </div>
+                            </div>
+                        </div>
+                        <!--.row-->
+                        <div class="row">
+                            <div class="col-lg-2 col-xs-12">
+                                <div class="form-group">
+                                    <br />
+                                    <p:outputLabel value="Nivel 1" />
+                                </div>
+                            </div>
+                            <div class="col-lg-2 col-xs-12">
+                                <div class="form-group">
+                                    <p:outputLabel value="Cuota Moderadora" />
+                                    <p:inputText value="#{contratosMB.cm1}"/> 
+                                </div>
+                            </div>
+                            <div class="col-lg-2 col-xs-12">
+                                <div class="form-group">
+                                    <p:outputLabel value="Copago" />
+                                    <p:inputText value="#{contratosMB.cp1}"/> 
+                                </div>
+                            </div>
+                            <div class="col-lg-2 col-xs-12">
+                                <div class="form-group">
+                                    <p:outputLabel value="% Medicamentos" />
+                                    <p:inputText value="#{contratosMB.medicamentoValor1}"/> 
+                                </div>
+                            </div>
+                            <div class="col-lg-2 col-xs-12">
+                                <div class="form-group">
+                                    <p:outputLabel value="% Insumos" />
+                                    <p:inputText   value="#{contratosMB.insumosPorcentaje1}"/> 
+                                </div>
+                            </div>
+                        </div>
+                        <!--.row-->
+                        <div class="row">
+                            <div class="col-lg-2 col-xs-12">
+                                <div class="form-group">
+                                    <br />
+                                    <p:outputLabel value="Nivel 2" />
+                                </div>
+                            </div>
+                            <div class="col-lg-2 col-xs-12">
+                                <div class="form-group">
+                                    <br />
+                                    <p:inputText  value="#{contratosMB.cm2}"/> 
+                                </div>
+                            </div>
+                            <div class="col-lg-2 col-xs-12">
+                                <div class="form-group">
+                                    <br />
+                                    <p:inputText  value="#{contratosMB.cp2}"/> 
+                                </div>
+                            </div>
+                            <div class="col-lg-2 col-xs-12">
+                                <div class="form-group">
+                                    <br />
+                                    <p:inputText  value="#{contratosMB.medicamentoValor2}"/> 
+                                </div>
+                            </div>
+                            <div class="col-lg-2 col-xs-12">
+                                <div class="form-group">
+                                    <br />
+                                    <p:inputText  value="#{contratosMB.insumosPorcentaje2}"/> 
+                                </div>
+                            </div>
+                        </div>
+                        <!--.row-->
+                        <div class="row">
+                            <div class="col-lg-2 col-xs-12">
+                                <div class="form-group">
+                                    <br />
+                                    <p:outputLabel value="Nivel 3" />
+                                </div>
+                            </div>
+                            <div class="col-lg-2 col-xs-12">
+                                <div class="form-group">
+                                    <br />
+                                    <p:inputText  value="#{contratosMB.cm3}"/> 
+                                </div>
+                            </div>
+                            <div class="col-lg-2 col-xs-12">
+                                <div class="form-group">
+                                    <br />
+                                    <p:inputText  value="#{contratosMB.cp3}"/> 
+                                </div>
+                            </div>
+                            <div class="col-lg-2 col-xs-12">
+                                <div class="form-group">
+                                    <br />
+                                    <p:inputText  value="#{contratosMB.medicamentoValor3}"/> 
+                                </div>
+                            </div>
+                            <div class="col-lg-2 col-xs-12">
+                                <div class="form-group">
+                                    <br />
+                                    <p:inputText  value="#{contratosMB.insumosPorcentaje3}"/> 
+                                </div>
+                            </div>
+                        </div>
+                        <!--.row-->
+                        <div class="row">
+                            <div class="col-lg-2 col-xs-12">
+                                <div class="form-group">
+                                    <br />
+                                    <p:outputLabel value="Nivel 4" />
+                                </div>
+                            </div>
+                            <div class="col-lg-2 col-xs-12">
+                                <div class="form-group">
+                                    <br />
+                                    <p:inputText  value="#{contratosMB.cm4}"/> 
+                                </div>
+                            </div>
+                            <div class="col-lg-2 col-xs-12">
+                                <div class="form-group">
+                                    <br />
+                                    <p:inputText  value="#{contratosMB.cp4}"/> 
+                                </div>
+                            </div>
+                        </div>
+                        <!--.row-->
+                        <div class="row">
+                            <div class="col-lg-2 col-xs-12">
+                                <div class="form-group">
+                                    <br />
+                                    <p:outputLabel value="Nivel 5" />
+                                </div>
+                            </div>
+                            <div class="col-lg-2 col-xs-12">
+                                <div class="form-group">
+                                    <br />
+                                    <p:inputText  value="#{contratosMB.cm5}"/> 
+                                </div>
+                            </div>
+                            <div class="col-lg-2 col-xs-12">
+                                <div class="form-group">
+                                    <br />
+                                    <p:inputText  value="#{contratosMB.cp5}"/> 
+                                </div>
+                            </div>
+                        </div>
+                        <!--.row-->
+                        <div class="row">
+                            <div class="col-lg-2 col-xs-12">
+                                <div class="form-group">
+                                    <br />
+                                    <p:outputLabel value="Cotizante" />
+                                </div>
+                            </div>
+                            <div class="col-lg-2 col-xs-12">
+                                <div class="form-group">
+                                    <br />
+                                    <p:selectBooleanButton styleClass="campoFormulario" value="#{contratosMB.cmc}" onLabel="SI" offLabel="NO" style="width:40px"/>
+                                </div>
+                            </div>
+                            <div class="col-lg-2 col-xs-12">
+                                <div class="form-group">
+                                    <br />
+                                    <p:selectBooleanButton styleClass="campoFormulario" value="#{contratosMB.cpc}" onLabel="SI" offLabel="NO" style="width:40px"/>
+                                </div>
+                            </div>
+                        </div>
+                        <!--.row-->
+                        <div class="row">
+                            <div class="col-lg-2 col-xs-12">
+                                <div class="form-group">
+                                    <br />
+                                    <p:outputLabel value="Beneficiario" />
+                                </div>
+                            </div>
+                            <div class="col-lg-2 col-xs-12">
+                                <div class="form-group">
+                                    <br />
+                                    <p:selectBooleanButton styleClass="campoFormulario" value="#{contratosMB.cmb}" onLabel="SI" offLabel="NO" style="width:40px"/>
+                                </div>
+                            </div>
+                            <div class="col-lg-2 col-xs-12">
+                                <div class="form-group">
+                                    <br />
+                                    <p:selectBooleanButton styleClass="campoFormulario" value="#{contratosMB.cpb}" onLabel="SI" offLabel="NO" style="width:40px"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-2 col-xs-12">
+                                <div class="form-group">
+                                    <p:outputLabel styleClass="campoNoObligatorio" value="APLICA IVA" /><br />
+                                    <p:selectBooleanButton styleClass="campoFormulario" value="#{contratosMB.iva}" onLabel="SI" offLabel="NO" style="width:40px"/>
+                                </div>
+                            </div>
+                            <div class="col-lg-2 col-xs-12">
+                                <div class="form-group">
+                                    <p:outputLabel styleClass="campoNoObligatorio" value="APLICA CREE" /><br />
+                                    <p:selectBooleanButton styleClass="campoFormulario" value="#{contratosMB.cree}" onLabel="SI" offLabel="NO" style="width:40px"/>
+                                </div>
+                            </div>
+                        </div>
+                    </p:tab>
+                </p:tabView>
+                <p:dialog id="IdDialogoBuscarContratos" header="BUSCAR CONTRATO" widgetVar="dialogoBuscarContratos" resizable="false" modal="true">                
+                    <table>
+                        <tr>
+                            <td>
+                                <p:dataTable 
+                                    id="IdTablaContratos" 
+                                    var="contrato" 
+                                    widgetVar="wvTablaContratos"
+                                    value="#{contratosMB.listaContratos}" 
+                                    rowKey="#{contrato.idContrato}"  
+                                    selection="#{contratosMB.contratoSeleccionadoTabla}" 
+                                    paginator="true"
+                                    style="width: 600px; height: 300px;"
+                                    rows="10"                                    
+                                    paginatorPosition="bottom"                                
+                                    emptyMessage="No hay contratos"
+                                    scrollable="true" 
+                                    currentPageReportTemplate="Mostrando {startRecord}-{endRecord} de {totalRecords}"
+                                    paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                    pageLinks="5"
+                                    selectionMode="single"
+                                    resizableColumns="true">                                                                                               
+                                    <p:column headerText="CODIGO" width="20" filterBy="#{contrato.codigoContrato}" filterMatchMode="contains">
+                                        #{contrato.codigoContrato}
+                                    </p:column>                                
+                                    <p:column headerText="NOMBRE" width="90" filterBy="#{contrato.descripcion}" filterMatchMode="contains">
+                                        #{contrato.descripcion}
+                                    </p:column>                                
+                                    <p:column headerText="ADMINISTRADORA" width="90" filterBy="#{contrato.idAdministradora.razonSocial}" filterMatchMode="contains">
+                                        #{contrato.idAdministradora.razonSocial}
+                                    </p:column>                                
+                                    <p:column headerText="TIPO" width="60" filterBy="#{contrato.tipoContrato.descripcion}" filterMatchMode="contains">
+                                        #{contrato.tipoContrato.descripcion}
+                                    </p:column>                                
+                                </p:dataTable>  
+                            </td>    
+                        </tr>
+                        <tr>
+                            <td>
+                                <br/>
+                                <p:commandButton 
+                                    value="Cargar Contrato"                                        
+                                    update=":IdFormContratos"
+                                    actionListener="#{contratosMB.cargarContrato}"/>
+                            </td>    
+                        </tr>
+                    </table>
+                </p:dialog> 
+                <p:dialog id="IdDialogoEliminarContrato" header="ELIMINAR CONTRATO" widgetVar="dialogoEliminarContrato" resizable="false" modal="true">  
+                    <p:panelGrid id="panelEliminarContrato" styleClass="panelGridSinBordes" columns="1">
+                        <h:outputText value="¿ Confirma La eliminacion de este contrato ?"/>                    
+                        <p:commandButton 
+                            value="Eliminar" 
+                            oncomplete="PF('dialogoEliminarContrato').hide();"
+                            actionListener="#{contratosMB.confirmarEliminarContrato}"/>
+                    </p:panelGrid>
+                </p:dialog>            
+            </h:form>
+        </div>
+    </ui:define>
+
+</ui:composition>

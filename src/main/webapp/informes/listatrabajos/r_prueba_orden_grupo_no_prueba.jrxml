@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="r_prueba_orden_grupo_no_prueba" language="groovy" pageWidth="572" pageHeight="752" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="067d8c87-7a32-4496-b8c9-b5219a425055">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="8"/>
+	<property name="ireport.y" value="0"/>
+	<subDataset name="dataset1" uuid="53905ca2-2690-40bd-aeb2-72ad6320de1e"/>
+	<parameter name="P_ESTADO" class="java.lang.String"/>
+	<parameter name="P_GRUPO_AREA" class="java.lang.Integer"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="P_EMPRESA" class="java.lang.Integer"/>
+	<parameter name="P_FECHA_INICIO" class="java.util.Date"/>
+	<parameter name="P_FECHA_FIN" class="java.util.Date"/>
+	<queryString>
+		<![CDATA[select 	distinct x.nro_orden,
+	to_char(x.fecha_orden, 'DD/MM/YYYY') as fecha_orden,
+	cp.identificacion,
+	concat('Edad: ',DATE_PART('year',current_date) - DATE_PART('year', cp.fecha_nacimiento) ,' Años') edad,
+	concat(cp.primer_apellido,' ',cp.segundo_apellido,' ',primer_nombre,' ', segundo_nombre) nombre_paciente,
+x.id,count(xp.prueba_id)
+from xlab_orden x
+inner join xlab_orden_estudios xo on  x.id = xo.orden_id
+inner join xlab_orden_estudios_pruebas xp on xp.estudio_id = xo.estudio_id
+inner join  xlab_prueba prueba on prueba.id = xp.prueba_id
+inner join cfg_pacientes cp on cp.id_paciente = x.paciente_id
+where prueba.grupo_Area =$P{P_GRUPO_AREA}
+and x.empresa_id=$P{P_EMPRESA}
+and xp.estado = $P{P_ESTADO}
+and to_date( to_char(x.fecha_orden,'yyyy-MM-dd'), 'yyyy-MM-dd' ) between $P{P_FECHA_INICIO} and $P{P_FECHA_FIN}
+group by x.id,x.nro_orden,x.fecha_orden,cp.fecha_nacimiento,cp.primer_apellido,cp.segundo_apellido,primer_nombre,segundo_nombre,cp.identificacion
+order by nro_orden]]>
+	</queryString>
+	<field name="nro_orden" class="java.lang.String"/>
+	<field name="fecha_orden" class="java.lang.String"/>
+	<field name="identificacion" class="java.lang.String"/>
+	<field name="edad" class="java.lang.String">
+		<fieldDescription><![CDATA[EDAD A PARTIR DE LA CUAL SE PUEDE APLICAR EL PROGRAMA]]></fieldDescription>
+	</field>
+	<field name="nombre_paciente" class="java.lang.String"/>
+	<field name="id" class="java.lang.Integer"/>
+	<field name="count" class="java.lang.Long"/>
+	<variable name="V_TOTAL" class="java.lang.Integer" calculation="Count">
+		<variableExpression><![CDATA[$F{nro_orden}]]></variableExpression>
+	</variable>
+	<variable name="V_TOTAL_L" class="java.lang.Integer" calculation="Sum">
+		<variableExpression><![CDATA[$F{count}]]></variableExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<columnHeader>
+		<band height="21">
+			<staticText>
+				<reportElement x="0" y="1" width="115" height="20" uuid="a5de02ee-3bf8-41a2-9391-f5e3c69d9940"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[No. Orden]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="115" y="1" width="100" height="20" uuid="385af54c-8a4d-447b-ba23-8270fe7dddd5"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Fecha]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="215" y="1" width="100" height="20" uuid="cf64212d-26a1-4721-82bd-7f37bad9b12e"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Id. Paciente]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="315" y="1" width="75" height="20" uuid="3a35cf80-8a06-4bf6-bd93-c118f9d57b79"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Edad]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="390" y="1" width="182" height="20" uuid="318debcb-1929-414e-a7f1-f73556f7ac9b"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Paciente]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="115" height="20" uuid="4193722b-1ef0-4c00-95a4-7933b74ed7a3"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nro_orden}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="115" y="0" width="100" height="20" uuid="1d3ca3ff-b746-4773-b0cc-07e8f4b158de"/>
+				<textFieldExpression><![CDATA[$F{fecha_orden}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="315" y="0" width="75" height="20" uuid="c84686a0-60a2-4f88-bfe7-9de0be3aa7d7"/>
+				<textFieldExpression><![CDATA[$F{edad}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="390" y="0" width="182" height="20" uuid="2d8d90e2-59be-4346-9983-589d19770c82"/>
+				<textFieldExpression><![CDATA[$F{nombre_paciente}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="215" y="0" width="100" height="20" uuid="d3de78b2-dc45-4635-8285-258f84f79a86"/>
+				<textFieldExpression><![CDATA[$F{identificacion}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<summary>
+		<band height="20">
+			<textField>
+				<reportElement x="0" y="0" width="572" height="20" uuid="f3094502-7c72-4015-b959-d1ce918e5ff9"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{V_TOTAL}+" Ordenes - Número Total de Laboratorios: "+$V{V_TOTAL_L}]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>

@@ -1,0 +1,201 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./../template/master.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://java.sun.com/jsf/core">
+
+    <ui:define name="title">
+        Estudios
+    </ui:define>
+
+    <ui:define name="content">
+        #{estudiosMB.inicializar()}
+        <div class="container-fluid container-fullw">
+            <h:form id="frmEstudio">
+                <p:outputPanel  id="opEstudio">
+                    <section id="page-title">
+                        <div class="row">
+                            <div class="col-sm-8">
+                                <h1 class="mainTitle">Estudios</h1>
+                            </div>
+                            <ol class="breadcrumb">
+                                <li>
+                                    <span>Configuraciones</span>
+                                </li>
+                                <li class="active">
+                                    <span>Estudios</span>
+                                </li>
+                            </ol>
+                        </div>
+                    </section>
+                    <div class="row">
+                        <div class="col-sm-2 col-xs-12">
+                            <p:commandLink       
+                                id="btnNuevo"
+                                styleClass="btn btn-primary btn-block button-prime"
+                                style="margin-top:5%;"
+                                update="frmEstudio:opEstudio,frmEstudio:pgEstudios"
+                                ajax="true"
+                                action="#{estudiosMB.nuevo()}"
+                                rendered="#{!estudiosMB.renderForm}"
+                                >
+                                <i class="fa fa-plus-circle"></i> Nuevo
+                            </p:commandLink>
+                        </div>
+                    </div>
+                    <!--./row-->
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <p:dataTable id="pEstudio" var="estudio" 
+                                         value="#{estudiosMB.lstEstudios}"
+                                         emptyMessage="No hay Estudios"
+                                         filteredValue="#{estudiosMB.lstEstudiosFiltro}"
+                                         rendered="#{!estudiosMB.renderForm}"
+                                         rows="10" 
+                                         widgetVar="estudioTable"
+                                         paginatorPosition="bottom"
+                                         paginator="true"
+                                         tableStyleClass="table-striped table-hover"
+                                         styleClass="table"
+                                         reflow="true"
+                                         >
+                                <f:facet name="header">
+                                    <p:outputPanel>
+                                        <h:outputText value="Buscar" />
+                                        <p:inputText id="globalFilter" onkeyup="PF('estudioTable').filter()" style="width:150px" placeholder="Ingrese Palabra"/>
+                                    </p:outputPanel>
+                                </f:facet>
+                                <p:column headerText="Código" filterMatchMode="startsWith"  filterBy="#{estudio.codigo}">
+                                    <h:outputText value="#{estudio.codigo}" />
+                                </p:column>
+                                <p:column headerText="Nombre" filterMatchMode="startsWith"  filterBy="#{estudio.nombre}">
+                                    <h:outputText value="#{estudio.nombre}" />
+                                </p:column>
+                                <p:column headerText="" width="50px;">
+                                    <p:commandButton icon="ui-icon-search" title="Ver" style="height: 15px;width: 20px;"  update=":frmEstudio:opEstudio,growl" action="#{estudiosMB.consultar(estudio)}"/>
+                                </p:column>
+                            </p:dataTable>
+
+                        </div>
+                    </div>
+                    <!-- /.row -->
+                    <h:panelGroup id="pgEstudios" rendered="#{estudiosMB.renderForm}">
+                        <div class="row">
+                            <div class="col-lg-3 col-xs-12">
+                                <div class="form-group">
+                                    <p:outputLabel for="codigo"  value="Código" id="lbCodigo"/>
+                                    <p:inputText id="codigo" required="true" styleClass="form-control" value="#{estudiosMB.estudio.codigo}" >
+                                        <f:validateLength minimum="2" />
+                                        <p:ajax update="codigo,lbCodigo " event="blur" />
+                                    </p:inputText>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-xs-12">
+                                <div class="form-group">
+                                    <p:outputLabel for="nombre"  value="Nombre" id="lbNombre"/>
+                                    <p:inputText id="nombre" required="true" styleClass="form-control" value="#{estudiosMB.estudio.nombre}" >
+                                        <f:validateLength minimum="2" />
+                                        <p:ajax update="nombre,lbNombre " event="blur" />
+                                    </p:inputText>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-8">
+                                <h1 class="mainTitle">Pruebas</h1>
+                            </div>
+                        </div>
+                         <div class="row">
+                        <div class="col-sm-2 col-xs-12">
+
+                            <p:commandLink       
+                                id="btnAdd"
+                                styleClass="btn btn-primary btn-block button-prime"
+                                style="margin-top:5%;"
+                                update="frmEstudio:opEstudio"
+                                ajax="true"
+                                action="#{estudiosMB.openDialog}"
+                                oncomplete="PF('pruebaDialog').show();" process="@this"
+                                rendered="#{estudiosMB.renderForm}"
+                                >
+                                <i class="fa fa-plus"></i> Agregar
+                            </p:commandLink>
+                        </div>
+                    </div>
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <p:dataTable id="pdPruebas" emptyMessage="Agregar Pruebas" var="prueba" value="#{estudiosMB.lstPruebas}"
+                                             >
+                                    <p:column headerText="Código">
+                                        <h:outputText value="#{prueba.codigo}" />
+                                    </p:column>
+                                    <p:column headerText="Nombre">
+                                        <h:outputText value="#{prueba.nombre}" />
+                                    </p:column>
+                                    <p:column headerText="" width="50px;">
+                                        <p:commandButton icon="ui-icon-close" title="Ver" style="height: 15px;width: 20px;"  update=":frmEstudio:opEstudio,growl" action="#{estudiosMB.eliminarPrueba(prueba)}"/>
+                                    </p:column>
+                                </p:dataTable>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row">
+                            <div class="col-lg-2 col-xs-2">
+                                <p:commandLink          styleClass="btn btn-lg btn-success btn-block button-prime"
+                                                        update="growl,frmEstudio:opEstudio"
+                                                        action="#{estudiosMB.guardar()}"
+                                                        >
+                                    <i class="fa fa-save"></i> Guardar
+                                </p:commandLink>
+                            </div>
+                            <div class="col-lg-2 col-xs-2">
+                                <p:commandLink       
+                                    styleClass="btn btn-lg btn-info btn-block button-prime"
+                                    action="#{estudiosMB.cancelar()}"
+                                    update="frmEstudio:opEstudio,:frmEstudio:pdPruebas"
+                                    process="@this"
+                                    immediate="true"
+                                    ajax="true"
+                                    >
+                                    <i class="fa fa-close"></i> Cancelar
+                                    <p:resetInput target="frmEstudio:opEstudio" />
+                                </p:commandLink>
+                            </div>
+                        </div>
+                    </h:panelGroup>
+                    <p:dialog widgetVar="pruebaDialog" id="dialogPrueba" modal="true"
+                        header="Pruebas" showEffect="clip" hideEffect="clip">
+                        <div class="row">
+                            <div class="col-lg-12 col-xs-12">
+                            <div class="form-group">
+                                <p:outputLabel for="pruebaId"  value="Prueba" id="lbArea"/> <br />
+                                <p:autoComplete id="pruebaId" size="35"  value="#{estudiosMB.codigoPrueba}" completeMethod="#{estudiosMB.autocompletarPruebas}" forceSelection="true">
+                                    <p:ajax event="itemSelect" listener="#{estudiosMB.onItemSelect}" update="pruebaId" />
+        
+                                </p:autoComplete>
+                            </div>
+                        </div>
+                            
+                        </div>
+                         <div class="row">
+                            <div class="col-lg-12 col-xs-12">
+                                <p:commandLink          styleClass="btn btn-lg btn-success btn-block button-prime"
+                                                        update="growl,frmEstudio:opEstudio,frmEstudio:pdPruebas"
+                                                        style="color: #fff;"
+                                                        process="@this"
+                                                        action="#{estudiosMB.adicionar}"
+                                                        >
+                                    <i class="fa fa-save"></i> Agregar
+                                </p:commandLink>
+                            </div>
+                             </div>
+                    </p:dialog>
+                </p:outputPanel>
+            </h:form>
+        </div>
+    </ui:define>
+
+</ui:composition>

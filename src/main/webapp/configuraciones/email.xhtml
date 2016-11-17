@@ -1,0 +1,74 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./../template/master.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://java.sun.com/jsf/core">
+
+    <ui:define name="title">
+        Configuración E-mail
+    </ui:define>
+
+    <ui:define name="content">
+        #{emailMB.inicializar()}
+        <div class="container-fluid container-fullw">
+            <h:form id="frmEmail">
+                <section id="page-title">
+                    <div class="row">
+                        <div class="col-sm-8">
+                            <h1 class="mainTitle">Email</h1>
+                        </div>
+                        <ol class="breadcrumb">
+                            <li>
+                                <span>Email</span>
+                            </li>
+                            <li class="active">
+                                <span>Configuración</span>
+                            </li>
+                        </ol>
+                    </div>
+                </section>
+                <div class="row">
+                    <div class="col-xs-12 col-sm3">
+                        <div class="form-group">
+                            <p:outputLabel value="servidor"  /> 
+                            <p:inputText styleClass="form-control" value="#{emailMB.correo.host}" placeholder="Dígite Servidor smtp" />
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm3">
+                        <div class="form-group">
+                            <p:outputLabel value="puerto"  />
+                            <p:inputText styleClass="form-control" value="#{emailMB.correo.port}" placeholder="Dígite puerto smtp" />
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12 col-sm3">
+                        <div class="form-group">
+                            <p:outputLabel value="email"  /> 
+                            <p:inputText styleClass="form-control" value="#{emailMB.correo.email}" placeholder="Dígite email destinatario" />
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm3">
+                        <div class="form-group">
+                            <p:outputLabel value="clave"  />
+                            <p:password styleClass="form-control" value="#{emailMB.correo.password}" placeholder="Dígite clave destinatario" />
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-1 col-xs-12">
+                        <p:commandLink  styleClass="btn btn-lg btn-success btn-block button-prime"
+                                        actionListener="#{emailMB.guardar}">
+                            <i class="fa fa-save"></i> Guardar
+                        </p:commandLink>
+                    </div>
+                </div>
+            </h:form>
+        </div>
+
+    </ui:define>
+
+</ui:composition>

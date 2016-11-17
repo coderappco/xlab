@@ -1,0 +1,127 @@
+.form-norden{
+	padding: 3px 7px 3px 3px;
+	-webkit-box-shadow: 1px 11px 25px -2px rgba(0,0,0,0.75);
+-moz-box-shadow: 1px 11px 25px -2px rgba(0,0,0,0.75);
+box-shadow: 1px 11px 25px -2px rgba(0,0,0,0.75);
+	margin: 5px;
+	width: 100%;
+	margin: 5px auto;
+	border: 1px solid gray;
+	border-radius: 5px;
+}
+
+.color{
+    background: #30a898;
+    color: red;
+    padding: 5px;
+}
+.cont-nuorden{
+    padding: 3px;
+    background: #646e7a;
+    border: 1px #485058;
+    border-radius: 3px;
+    margin-left: 3px;
+    color: #fff;
+    
+}
+.cont-nuorden label{
+    color: #fff;
+}
+.cont-nestudio{
+    background: #EAEDED  ;
+    padding: 3px;
+    border-radius: 3px;
+    margin-bottom: 5px;
+    
+}
+.cont-nestudio input[type="text"]{
+    width: 30%;
+    border: 1px solid gray;
+}
+.cont-nestudio i{
+    font-size: 30px;
+    color:#999;
+    cursor: pointer;
+}
+.cont-nestudio i:hover{
+    color:#34495E;
+    cursor: pointer;
+}
+.cont-resul-busqueda ul{   
+    list-style:none;
+}
+.cont-resul-busqueda table{
+    width: 100%;
+    display: none;
+}
+
+#sample_1 i{
+    font-size: 25px;
+    color: #000;
+}
+.cont-bus-res{
+    font-family: "Times New Roman";
+    font-size: 13px;
+}
+.form-bus{
+    background: blue;
+}
+#form-buscar-pac input[type=number]{
+    float: left;
+    width: 80%;    
+}
+#form-buscar-pac button{
+    float: left;
+    width: 20%;    
+}
+#ven_sel_reporte{
+	cursor: move;
+	width: 30%;
+	margin: auto;
+        border: 2px solid gray;
+        position: absolute;
+        left: 40%;
+        top: 25%;
+        float: left;
+        background: #485058;
+        display: none;
+        color: #094B8D;
+        border-radius: 5px;
+        -webkit-box-shadow: 1px 11px 25px -2px rgba(0,0,0,0.75);
+-moz-box-shadow: 1px 11px 25px -2px rgba(0,0,0,0.75);
+box-shadow: 1px 11px 25px -2px rgba(0,0,0,0.75);
+        
+}
+#ven_sel_reporte2{
+    border-radius: 5px;
+        color: #094B8D;
+	cursor: move;
+	width: 25%;
+	margin: auto;
+        border: 2px solid gray;
+        position: absolute;
+        left: 40%;
+        top: 25%;
+        float: left;
+        background: #485058;
+        display: none;
+        -webkit-box-shadow: 1px 11px 25px -2px rgba(0,0,0,0.75);
+-moz-box-shadow: 1px 11px 25px -2px rgba(0,0,0,0.75);
+box-shadow: 1px 11px 25px -2px rgba(0,0,0,0.75);
+}
+.btn-form{
+    width: 100%;
+}
+.panel-form li a{
+    color: #000;
+}
+.botones-crud{
+    display: none;
+}
+#botones-crud{
+    display: none;
+}
+#botones-crud button i{
+    font-size: 18px;
+    
+}

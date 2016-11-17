@@ -1,0 +1,59 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./../template/master.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://java.sun.com/jsf/core">
+
+    <ui:define name="title">
+        Ordenes
+    </ui:define>
+
+    <ui:define name="content">
+        #{ordenesMB.inicializar()}
+        <div class="container-fluid container-fullw">
+            <section id="page-title">
+                    <div class="row">
+                        <div class="col-sm-8">
+                            <h1 class="mainTitle">Ordenes</h1>
+                        </div>
+                        <ol class="breadcrumb">
+                            <li>
+                                <span>Configuraciones</span>
+                            </li>
+                            <li class="active">
+                                <span>Ordenes</span>
+                            </li>
+                        </ol>
+                    </div>
+                </section>
+            <h:form id="frmOrdenes">
+                <div class="row">
+                    <div class="col-lg-3 col-xs-12">
+                        <div class="form-group">
+                            <p:outputLabel for="orden"  value="Configuración Ordenes" id="lbOrden"/><br />
+                            <p:selectOneMenu id="orden" value="#{ordenesMB.clasificacion.descripcion}">
+                                <f:selectItem itemLabel="Autómatica" itemValue="S"  />
+                                <f:selectItem itemLabel="Manual" itemValue="N"  />
+                            </p:selectOneMenu>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-2 col-xs-12">
+                        <p:commandLink          styleClass="btn btn-lg btn-success btn-block button-prime"
+                                                update="growl,frmOrdenes"
+                                                action="#{ordenesMB.guardar}"
+                                                >
+                            <i class="fa fa-save"></i> Guardar
+                        </p:commandLink>
+                    </div>
+                </div>
+
+            </h:form>
+        </div>
+    </ui:define>
+
+</ui:composition>

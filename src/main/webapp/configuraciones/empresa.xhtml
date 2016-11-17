@@ -1,0 +1,172 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./../template/master.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://java.sun.com/jsf/core">
+
+    <ui:define name="title">
+        Empresa
+    </ui:define>
+
+    <ui:define name="content">
+        #{empresaMB.inicializar()}
+        <div class="container-fluid container-fullw">
+            <h:form id="frmEmpresa">
+                <section id="page-title">
+                    <div class="row">
+                        <div class="col-sm-8">
+                            <h1 class="mainTitle">Empresa</h1>
+                        </div>
+                        <ol class="breadcrumb">
+                            <li>
+                                <span>Configuraciones</span>
+                            </li>
+                            <li class="active">
+                                <span>Empresa</span>
+                            </li>
+                        </ol>
+                    </div>
+                </section>
+                 <div class="row">
+                    <div class="col-xs-12">
+                        <div class="form-group">
+                            <p:outputLabel for="razon"   value="Razón Social" id="lbSocial"/><br />
+                            <p:inputText id="razon" required="true" styleClass="form-control" value="#{empresaMB.empresa.razonSocial}" >
+                                    <f:validateLength minimum="2" />
+                                    <p:ajax update="razon,lbSocial " event="blur" />
+                                </p:inputText>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12 col-sm-6">
+                        <div class="form-group">
+                            <p:outputLabel  value="Dirección"/><br />
+                            <p:inputText  styleClass="form-control" value="#{empresaMB.empresa.direccion}" />
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6">
+                        <div class="form-group">
+                            <p:outputLabel  value="Código Ministerio"/><br />
+                            <p:inputText  styleClass="form-control" value="#{empresaMB.empresa.codigoEmpresa}" />
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12 col-sm-4">
+                        <div class="form-group">
+                            <p:outputLabel  value="Régimen"/><br />
+                            <p:inputText  styleClass="form-control" value="#{empresaMB.empresa.regimen}" />
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-4">
+                        <div class="form-group">
+                            <p:outputLabel  value="Teléfono 1"/><br />
+                            <p:inputText  styleClass="form-control" value="#{empresaMB.empresa.telefono1}" />
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-4">
+                        <div class="form-group">
+                            <p:outputLabel  value="Teléfono 2"/><br />
+                            <p:inputText  styleClass="form-control" value="#{empresaMB.empresa.telefono2}" />
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12 col-sm-3">
+                        <div class="form-group">
+                            <p:outputLabel  value="Tipo Documento"/><br />
+                            <p:selectOneMenu id="tipoDocumento" value="#{empresaMB.empresa.tipoDoc.id}">
+                                    <f:selectItems value="#{empresaMB.listaTipoIdentificacion}" />
+                                </p:selectOneMenu>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-7">
+                        <div class="form-group">
+                            <p:outputLabel  value="Identificación"/><br />
+                            <p:inputText  styleClass="form-control" value="#{empresaMB.empresa.numIdentificacion}" />
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-2">
+                        <div class="form-group">
+                            <p:outputLabel  value="Digito Verificación"/><br />
+                            <p:inputText  styleClass="form-control" value="#{empresaMB.empresa.dv}" maxlength="1"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12 col-sm-3">
+                        <div class="form-group">
+                            <p:outputLabel  value="Tipo Doc Representante Legal"/><br />
+                            <p:selectOneMenu id="tipoDocRe" value="#{empresaMB.empresa.tipoDocRepLegal.id}">
+                                    <f:selectItems value="#{empresaMB.listaTipoIdentificacion}" />
+                                </p:selectOneMenu>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-4">
+                        <div class="form-group">
+                            <p:outputLabel  value="Identificación Representante Legal"/><br />
+                            <p:inputText  styleClass="form-control" value="#{empresaMB.empresa.numDocRepLegal}" />
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-5">
+                        <div class="form-group">
+                            <p:outputLabel  value="Nombre Representante Legal"/><br />
+                            <p:inputText  styleClass="form-control" value="#{empresaMB.empresa.nomRepLegal}" />
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12 col-sm-4">
+                        <div class="form-group">
+                            <p:outputLabel  value="Departamento"/><br />
+                            <p:selectOneMenu id="departamento" value="#{empresaMB.empresa.codDepartamento.id}" filter="true" filterMatchMode="contains">
+                                <f:ajax 
+                                        event="change"
+                                        listener="#{empresaMB.cargarMunicipios}"                                                
+                                        render="municipio"/> 
+                                    <f:selectItem itemLabel="" itemValue=""/>
+                                <f:selectItems value="#{empresaMB.listaDpto}" />
+                                </p:selectOneMenu>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-4">
+                        <div class="form-group">
+                            <p:outputLabel  value="Municipio"/><br />
+                            <p:selectOneMenu id="municipio" value="#{empresaMB.empresa.codMunicipio.id}" filter="true" filterMatchMode="contains">
+                                <f:selectItems value="#{empresaMB.listaMunicipio}" />
+                                </p:selectOneMenu>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-4">
+                        <div class="form-group">
+                            <p:outputLabel  value="Sitio Web"/><br />
+                            <p:inputText  styleClass="form-control" value="#{empresaMB.empresa.website}" />
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12">
+                        <p:outputLabel  value="Observaciones"/><br />
+                        <p:inputTextarea id="nota" styleClass="form-control" value="#{empresaMB.empresa.observaciones}"/>
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                        <div class="col-lg-2 col-xs-12">
+                            <p:commandLink          styleClass="btn btn-lg btn-success btn-block button-prime"
+                                                    update="growl"
+                                                    action="#{empresaMB.guardar}"
+                                                    >
+                                <i class="fa fa-save"></i> Guardar
+                            </p:commandLink>
+                        </div>
+                    </div>
+            </h:form>
+        </div>
+    </ui:define>
+
+</ui:composition>

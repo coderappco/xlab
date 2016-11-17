@@ -1,0 +1,145 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./../template/master.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://java.sun.com/jsf/core">
+
+    <ui:define name="title">
+        Copia de Seguridad
+    </ui:define>
+
+    <ui:define name="content">
+        #{copiaSeguridadMB.inicializar()}
+        <div class="container-fluid container-fullw">
+            <h:form id="frmCopia">
+                <p:outputPanel  id="opCopia">
+                    <section id="page-title">
+                        <div class="row">
+                            <div class="col-sm-8">
+                                <h1 class="mainTitle">Copia De Seguridad</h1>
+                            </div>
+                            <ol class="breadcrumb">
+                                <li>
+                                    <span>Configuraciones</span>
+                                </li>
+                                <li class="active">
+                                    <span>Copia De Seguridad</span>
+                                </li>
+                            </ol>
+                        </div>
+                    </section>
+                    <div class="row">
+                        <div class="col-sm-2 col-xs-12">
+
+                            <p:commandLink       
+                                id="btnNuevo"
+                                styleClass="btn btn-primary btn-block button-prime"
+                                style="margin-top:5%;"
+                                update="frmCopia:opCopia"
+                                ajax="true"
+                                action="#{copiaSeguridadMB.nuevo}"
+                                rendered="#{!copiaSeguridadMB.renderForm}"
+                                >
+                                <i class="fa fa-plus-circle"></i> Nuevo
+                            </p:commandLink>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <p:dataTable id="pCopias" var="copia" 
+                                         value="#{copiaSeguridadMB.listaCopiasSeguridad}"
+                                         emptyMessage="No hay administradora"
+                                         filteredValue="#{copiaSeguridadMB.listaCopiasSeguridadFiltro}"
+                                         rendered="#{!copiaSeguridadMB.renderForm}"
+                                         rows="10" 
+                                         widgetVar="copiaTable"
+                                         paginatorPosition="bottom"
+                                         paginator="true"
+                                         tableStyleClass="table-striped table-hover"
+                                         styleClass="table"
+                                         reflow="true"
+                                         >
+                                <f:facet name="header">
+                                    <p:outputPanel>
+                                        <h:outputText value="Buscar" />
+                                        <p:inputText id="globalFilter" onkeyup="PF('copiaTable').filter()" style="width:150px" placeholder="Ingrese Palabra"/>
+                                    </p:outputPanel>
+                                </f:facet>
+                                <p:column headerText="Código" filterMatchMode="startsWith"  filterBy="#{copia.fecha}">
+                                    <h:outputText value="#{copia.fecha}" />
+                                </p:column>
+                                <p:column headerText="Tipo" filterMatchMode="startsWith"  filterBy="#{copia.tipo}">
+                                    <h:outputText value="#{copia.tipo}" />
+                                </p:column>
+                                <p:column headerText="Nombre de la copia" filterMatchMode="startsWith"  filterBy="#{copia.nombre}">
+                                    <h:outputText value="#{copia.nombre}" />
+                                </p:column>
+                                <p:column headerText="" width="50px;">
+                                    <p:commandButton icon="ui-icon-search" title="Ver" style="height: 15px;width: 20px;"  update=":frmCopia:opCopia,growl" action="#{copiaSeguridadMB.consultar(copia)}"/>
+                                </p:column>
+                            </p:dataTable>
+
+                        </div>
+                    </div>
+                    <!-- /.row -->
+                    <h:panelGroup id="pgCopia" rendered="#{copiaSeguridadMB.renderForm}">
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <div class="form-group">
+                                    <p:outputLabel for="nombre"  value="Nombre" id="lbNombre"/>
+                                    <p:inputText id="nombre" required="true" styleClass="form-control" value="#{copiaSeguridadMB.copiaSeguridadSeleccionada.nombre}" >
+                                        <f:validateLength minimum="2" />
+                                        <p:ajax update="nombre,lbNombre " event="blur" />
+                                    </p:inputText>
+                                </div>
+                            </div>
+                        </div>
+                        <br />
+                          <div class="row">
+                        <div class="col-lg-2 col-xs-12">
+                            <p:commandLink          styleClass="btn btn-lg btn-success btn-block button-prime"
+                                                    update="growl,frmCopia:opCopia"
+                                                    action="#{copiaSeguridadMB.guardar}"
+                                                    rendered="#{copiaSeguridadMB.renderGuardar}"
+                                                    onstart="PF('statusDialog').show()" 
+                                                    onsuccess="PF('statusDialog').hide()" 
+                                                    >
+                                <i class="fa fa-save"></i> Guardar
+                            </p:commandLink>
+                        </div>
+                              <div class="col-lg-2 col-xs-12">
+                            <p:commandLink          styleClass="btn btn-lg btn-success btn-block button-prime"
+                                                    update="growl,frmCopia:opCopia"
+                                                    rendered="#{copiaSeguridadMB.renderRestaurar}"
+                                                    action="#{copiaSeguridadMB.restaurarCopiaDeSeguridad}"
+                                                    >
+                                <i class="fa fa-upload"></i> Restaurar
+                            </p:commandLink>
+                        </div>
+                        <div class="col-lg-2 col-xs-12">
+                            <p:commandLink       
+                                                    styleClass="btn btn-lg btn-info btn-block button-prime"
+                                                    action="#{copiaSeguridadMB.cancelar()}"
+                                                    update="frmCopia:opCopia"
+                                                    process="@this"
+                                                    immediate="true"
+                                                    ajax="true"
+                                                    >
+                                <i class="fa fa-close"></i> Cancelar
+                                <p:resetInput target="frmCopia:opCopia" />
+                            </p:commandLink>
+
+
+
+                        </div>
+                    </div>
+                    </h:panelGroup>
+                </p:outputPanel>
+            </h:form>
+        </div>
+    </ui:define>
+
+</ui:composition>

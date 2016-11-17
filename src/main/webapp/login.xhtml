@@ -1,0 +1,134 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!-- Template Name: Clip-Two - Responsive Admin Template build with Twitter Bootstrap 3.x | Author: ClipTheme -->
+<!--[if IE 8]><html class="ie8" lang="en"><![endif]-->
+<!--[if IE 9]><html class="ie9" lang="en"><![endif]-->
+<!--[if !IE]><!-->
+<html xmlns:p="http://primefaces.org/ui"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"      
+      xmlns:f="http://java.sun.com/jsf/core"
+      
+      >
+    <h:head>
+        <title>XLAB- INGRESO</title>
+        <link rel="stylesheet" href="../resources/vendor/bootstrap/css/bootstrap.min.css" />
+        <link rel="stylesheet" href="../resources/vendor/fontawesome/css/font-awesome.min.css" />
+        <link rel="stylesheet" href="../resources/vendor/themify-icons/themify-icons.min.css" />
+        <link href="../resources/vendor/animate.css/animate.min.css" rel="stylesheet" media="screen" />
+        <link href="../resources/vendor/jquery-ui/jquery-ui-1.10.1.custom.min.css" rel="stylesheet" />
+        <link href="../resources/vendor/perfect-scrollbar/perfect-scrollbar.min.css" rel="stylesheet" media="screen" />
+        <link href="../resources/vendor/switchery/switchery.min.css" rel="stylesheet" media="screen" />
+        <!-- end: MAIN CSS -->
+        <!-- start: CLIP-TWO CSS -->
+        <link rel="stylesheet" href="../resources/assets/css/styles.css" />
+        <link rel="stylesheet" href="../resources/assets/css/plugins.css" />
+        <link rel="stylesheet" href="../resources/assets/css/estilos.css" />		
+        <link rel="stylesheet" href="../resources/assets/css/themes/theme-3.css" id="skin_color" />
+        <!-- end: CLIP-TWO CSS -->
+        <!-- start: CSS REQUIRED FOR THIS PAGE ONLY -->
+        
+        <link href="../resources/vendor/bootstrap-touchspin/jquery.bootstrap-touchspin.min.css" rel="stylesheet" media="screen" />
+        <link href="../resources/vendor/select2/select2.min.css" rel="stylesheet" media="screen" />
+	
+        <!-- end: CSS REQUIRED FOR THIS PAGE ONLY -->
+        
+        <!-- start: GOOGLE FONTS -->
+        <link href="http://fonts.googleapis.com/css?family=Lato:300,400,400italic,600,700|Raleway:300,400,500,600,700|Crete+Round:400italic" rel="stylesheet" type="text/css" />
+        <!-- end: GOOGLE FONTS -->
+        
+        <script type="text/javascript" src="recursos/js/coin-slider.min.js"></script>          
+        <script type="text/javascript">            
+            //<![CDATA[
+            //la anterior linea va obligatoriamente            
+            $(document).ready(function () {//activa las animaciones de las imagenes
+                $('#games').coinslider({hoverPause: false});
+            });
+            function capLock(e) {//identifica activo o no de 'Bloq Mayus'
+                kc = e.keyCode ? e.keyCode : e.which;
+                sk = e.shiftKey ? e.shiftKey : ((kc === 16) ? true : false);
+                if (((kc >= 65 && kc <= 90) && !sk) || ((kc >= 97 && kc <= 122) && sk))
+                    document.getElementById('caplock').style.visibility = 'visible';
+                else
+                    document.getElementById('caplock').style.visibility = 'hidden';
+            }
+            //]]>
+        </script>
+    </h:head>
+    <h:body style="font-size: 13px;" styleClass="body">
+        <h:form id="frmLogin">
+            <p:growl id="IdMensajes"  showDetail="true" sticky="false" autoUpdate="true" life="2000"/>
+            <!-- new Login -->
+            <div class="row">
+                <div class="main-login col-xs-10 col-xs-offset-1 col-sm-8 col-sm-offset-2 col-md-3 col-md-offset-4">
+                    <div class="logo margin-top-30">
+                       XLAB
+      
+                    </div>
+                    <div class="box-login">
+                        <div id="caplock" style="visibility:hidden; color: #c7cef4">El bloqueo de mayúsculas está activado</div>
+                        <div class="form-login">
+                            <fieldset>
+                                <legend>
+                                    Inicia con tu cuenta
+                                </legend>
+                                <p>
+                                    
+                                </p>
+                                <div class="form-group">
+                                    <span class="input-icon">
+                                        <p:inputText  id="usuario" size="25"  onkeypress="capLock(event);" styleClass="form-control" placeholder="Usuario" value="#{loginMB.usuario}" required="true" label="usuario"/>
+                                    <i class="fa fa-user"></i> 
+                                    </span>
+                                </div>
+                                <div class="form-group">
+                                    <span class="input-icon">
+                                        <p:password id="password" size="25"  onkeypress="capLock(event);" styleClass="form-control password" placeholder="Clave" value="#{loginMB.password}" required="true" label="password"/>
+                                    <i class="fa fa-lock"></i>
+                                    </span>
+                                </div>
+                                <div class="form-group">
+                                    <p:commandLink
+                                            value="Iniciar Sesión"                             
+                                            styleClass="btn btn-primary pull-right"
+                                            action="#{loginMB.iniciarSesion}"
+                                            update="IdMensajes password">                                                                                                    
+                                        Iniciar Sesión <i class="fa fa-arrow-circle-right"></i>
+                                    </p:commandLink>
+
+                                </div>
+                            </fieldset>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- End : new Login -->
+            <!--p:commandButton value="Basic" type="button" onclick="PF('closeSessionDialog').show();" /-->            
+        </h:form>
+        <!-- start: MAIN JAVASCRIPTS -->
+        		<script src="../resources/assets/js/jquery.js"></script>
+        <script src="../resources/vendor/bootstrap/js/bootstrap.min.js"></script>
+		<script src="../resources/vendor/modernizr/modernizr.js"></script>
+		<script src="../resources/vendor/jquery-cookie/jquery.cookie.js"></script>
+		<script src="../resources/vendor/perfect-scrollbar/perfect-scrollbar.min.js"></script>
+		<script src="../resources/vendor/switchery/switchery.min.js"></script>
+		<!-- end: MAIN JAVASCRIPTS -->
+		<!-- start: JAVASCRIPTS REQUIRED FOR THIS PAGE ONLY -->
+		<script src="../resources/vendor/maskedinput/jquery.maskedinput.min.js"></script>
+		<script src="../resources/vendor/bootstrap-touchspin/jquery.bootstrap-touchspin.min.js"></script>
+		<script src="../resources/vendor/autosize/autosize.min.js"></script>
+		<script src="../resources/vendor/selectFx/classie.js"></script>
+		<script src="../resources/vendor/selectFx/selectFx.js"></script>
+		<script src="../resources/vendor/select2/select2.min.js"></script>
+		<!-- end: JAVASCRIPTS REQUIRED FOR THIS PAGE ONLY -->
+		<!-- start: CLIP-TWO JAVASCRIPTS -->
+		<script src="../resources/assets/js/main.js"></script>
+		<!-- start: JavaScript Event Handlers for this page -->
+		<script>
+			jQuery(document).ready(function() {
+				Main.init();
+			}); 	
+		</script>
+		
+    </h:body>
+</html>

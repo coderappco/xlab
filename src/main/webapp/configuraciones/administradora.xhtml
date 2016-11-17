@@ -1,0 +1,267 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./../template/master.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://java.sun.com/jsf/core">
+
+    <ui:define name="title">
+        Administradora
+    </ui:define>
+
+    <ui:define name="content">
+        #{administradoraMB.inicializar()}
+        <div class="container-fluid container-fullw">
+            <h:form id="frmAd">
+                <p:outputPanel  id="opAd">
+                    <section id="page-title">
+                        <div class="row">
+                            <div class="col-sm-8">
+                                <h1 class="mainTitle">Administradora</h1>
+                            </div>
+                            <ol class="breadcrumb">
+                                <li>
+                                    <span>Configuraciones</span>
+                                </li>
+                                <li class="active">
+                                    <span>Administradora</span>
+                                </li>
+                            </ol>
+                        </div>
+                    </section>
+
+                    <div class="row">
+                        <div class="col-sm-2 col-xs-12">
+
+                            <p:commandLink       
+                                id="btnNuevo"
+                                styleClass="btn btn-primary btn-block button-prime"
+                                style="margin-top:5%;"
+                                update="frmAd:opAd"
+                                ajax="true"
+                                action="#{administradoraMB.nuevo}"
+                                rendered="#{!administradoraMB.renderForm}"
+                                >
+                                <i class="fa fa-plus-circle"></i> Nuevo
+                            </p:commandLink>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <p:dataTable id="pAdministradora" var="administradora" 
+                                         value="#{administradoraMB.lstaAdminitradora}"
+                                         emptyMessage="No hay administradora"
+                                         filteredValue="#{administradoraMB.lstaAdminitradoraFiltro}"
+                                         rendered="#{!administradoraMB.renderForm}"
+                                         rows="10" 
+                                         widgetVar="administradoraTable"
+                                         paginatorPosition="bottom"
+                                         paginator="true"
+                                         tableStyleClass="table-striped table-hover"
+                                         styleClass="table"
+                                         reflow="true"
+                                         >
+                                <f:facet name="header">
+                                    <p:outputPanel>
+                                        <h:outputText value="Buscar" />
+                                        <p:inputText id="globalFilter" onkeyup="PF('administradoraTable').filter()" style="width:150px" placeholder="Ingrese Palabra"/>
+                                    </p:outputPanel>
+                                </f:facet>
+                                <p:column headerText="Código" filterMatchMode="startsWith"  filterBy="#{administradora.codigoAdministradora}">
+                                    <h:outputText value="#{administradora.codigoAdministradora}" />
+                                </p:column>
+                                <p:column headerText="Razón Social" filterMatchMode="startsWith"  filterBy="#{administradora.razonSocial}">
+                                    <h:outputText value="#{administradora.razonSocial}" />
+                                </p:column>
+                                <p:column headerText="" width="50px;">
+                                    <p:commandButton icon="ui-icon-search" title="Ver" style="height: 15px;width: 20px;"  update=":frmAd:opAd,growl" action="#{administradoraMB.consultar(administradora)}"/>
+                                </p:column>
+                            </p:dataTable>
+
+                        </div>
+                    </div>
+                    <!-- /.row -->
+                    <h:panelGroup id="pgAdministradora" rendered="#{administradoraMB.renderForm}">
+                        <div class="row">
+                            <div class="col-lg-3 col-xs-12">
+                                <div class="form-group">
+                                    <p:outputLabel for="codigo"  value="Código" id="lbCodigo"/>
+                                    <p:inputText id="codigo" required="true" styleClass="form-control" value="#{administradoraMB.administradora.codigoAdministradora}" >
+                                        <f:validateLength minimum="2" />
+                                        <p:ajax update="codigo,lbCodigo " event="blur" />
+                                    </p:inputText>
+                                </div>
+                            </div>
+                            <div class="col-lg-9 col-xs-12">
+                                <div class="form-group">
+                                    <p:outputLabel for="razon"  value="Razón Social" id="lbRazon"/>
+                                    <p:inputText id="razon" required="true" styleClass="form-control" value="#{administradoraMB.administradora.razonSocial}" >
+                                        <f:validateLength minimum="2" />
+                                        <p:ajax update="razon,lbRazon " event="blur" />
+                                    </p:inputText>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-3 col-xs-12">
+                                <div class="form-group">
+                                    <p:outputLabel  value="Tipo Entidad" id="lbEntidad"/><br />
+                                    <p:selectOneMenu id="tipoEntidad" value="#{administradoraMB.administradora.tipoAdministradora.id}">
+                                        <f:selectItems value="#{administradoraMB.listaTipoEntidad}" />
+                                </p:selectOneMenu>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-xs-12">
+                                <div class="form-group">
+                                    <p:outputLabel  value="Tipo Identificación" id="lbTipoIdentificacion"/><br />
+                                    <p:selectOneMenu id="tipoDocumentoAd" value="#{administradoraMB.administradora.tipoDocumento.id}">
+                                    <f:selectItems value="#{administradoraMB.listaTipoIdentificacion}" />
+                                </p:selectOneMenu>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-xs-12">
+                                <div class="form-group">
+                                    <p:outputLabel for="identificacion"  value="Número Identificación" id="lbIdentificacion"/>
+                                    <p:inputText id="identificacion" required="true" styleClass="form-control" value="#{administradoraMB.administradora.numeroIdentificacion}" >
+                                        <f:validateLength minimum="2" />
+                                        <p:ajax update="identificacion,lbIdentificacion " event="blur" />
+                                    </p:inputText>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-6 col-xs-12">
+                                <div class="form-group">
+                                    <p:outputLabel   value="Dirección" />
+                                    <p:inputText styleClass="form-control" value="#{administradoraMB.administradora.direccion}" >
+                                    </p:inputText>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-xs-12">
+                                <div class="form-group">
+                                    <p:outputLabel   value="Teléfono" />
+                                    <p:inputText styleClass="form-control" value="#{administradoraMB.administradora.telefono1}" >
+                                    </p:inputText>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-xs-12">
+                                <div class="form-group">
+                                    <p:outputLabel   value="Teléfono 2" />
+                                    <p:inputText styleClass="form-control" value="#{administradoraMB.administradora.telefono2}" >
+                                    </p:inputText>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-3 col-xs-12">
+                                <div class="form-group">
+                                    <p:outputLabel  value="Departamento"/> <br />
+                                    <p:selectOneMenu id="departamento" value="#{administradoraMB.administradora.codigoDepartamento.id}" filter="true" filterMatchMode="contains">
+                                <f:ajax 
+                                        event="change"
+                                        listener="#{administradoraMB.cargarMunicipios}"                                                
+                                        render="municipio"/> 
+                                    <f:selectItem itemLabel="" itemValue=""/>
+                                <f:selectItems value="#{administradoraMB.listaDpto}" />
+                                </p:selectOneMenu>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-xs-12">
+                                <div class="form-group">
+                                    <p:outputLabel  value="Municipio"/> <br />
+                                    <p:selectOneMenu id="municipio" value="#{administradoraMB.administradora.codigoMunicipio.id}" filter="true" filterMatchMode="contains">
+                                <f:selectItems value="#{administradoraMB.listaMunicipio}" />
+                                </p:selectOneMenu>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-4 col-xs-12">
+                                <div class="form-group">
+                                    <p:outputLabel  value="Tipo Identificación Representante"/><br />
+                                    <p:selectOneMenu id="tipoDocumentoRep" value="#{administradoraMB.administradora.tipoDocumentoRepresentante.id}">
+                                    <f:selectItems value="#{administradoraMB.listaTipoIdentificacion}" />
+                                </p:selectOneMenu>
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-xs-12">
+                                <div class="form-group">
+                                    <p:outputLabel   value="Nombre Representante" />
+                                    <p:inputText styleClass="form-control" value="#{administradoraMB.administradora.nombreRepresentante}" >
+                                    </p:inputText>
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-xs-12">
+                                <div class="form-group">
+                                    <p:outputLabel   value="Identificación Representante" />
+                                    <p:inputText styleClass="form-control" value="#{administradoraMB.administradora.numeroDocumentoRepresentante}" >
+                                    </p:inputText>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-3 col-xs-12">
+                                <div class="form-group">
+                                    <p:outputLabel  value="Código RIP"/>
+                                    <p:inputText styleClass="form-control" value="#{administradoraMB.administradora.codigoRip}" >
+                                    </p:inputText>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-xs-12">
+                                <div class="form-group">
+                                    <p:outputLabel   value="Código Ingreso" />
+                                    <p:inputText styleClass="form-control" value="#{administradoraMB.administradora.codigoIngreso}" >
+                                    </p:inputText>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-xs-12">
+                                <div class="form-group">
+                                    <p:outputLabel   value="Código Rubro" />
+                                    <p:inputText styleClass="form-control" value="#{administradoraMB.administradora.codigoRubro}" >
+                                    </p:inputText>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-xs-12">
+                                <div class="form-group">
+                                    <p:outputLabel   value="Código Concepto" />
+                                    <p:inputText styleClass="form-control" value="#{administradoraMB.administradora.codigoConc}" >
+                                    </p:inputText>
+                                </div>
+                            </div>
+                        </div>
+                        <br />
+                          <div class="row">
+                        <div class="col-lg-2 col-xs-12">
+                            <p:commandLink          styleClass="btn btn-lg btn-success btn-block button-prime"
+                                                    update="growl,frmAd:opAd"
+                                                    action="#{administradoraMB.guardar()}"
+                                                    >
+                                <i class="fa fa-save"></i> Guardar
+                            </p:commandLink>
+                        </div>
+                        <div class="col-lg-2 col-xs-12">
+                            <p:commandLink       
+                                                    styleClass="btn btn-lg btn-info btn-block button-prime"
+                                                    action="#{administradoraMB.cancelar()}"
+                                                    update="frmAd:opAd"
+                                                    process="@this"
+                                                    immediate="true"
+                                                    ajax="true"
+                                                    >
+                                <i class="fa fa-close"></i> Cancelar
+                                <p:resetInput target="frmAd:opAd" />
+                            </p:commandLink>
+
+
+
+                        </div>
+                    </div>
+                    </h:panelGroup>
+                </p:outputPanel>
+            </h:form>
+        </div>
+    </ui:define>
+
+</ui:composition>

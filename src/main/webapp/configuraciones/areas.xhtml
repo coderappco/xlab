@@ -1,0 +1,144 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./../template/master.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://java.sun.com/jsf/core">
+
+    <ui:define name="title">
+        Áreas
+    </ui:define>
+
+    <ui:define name="content">
+        #{areasMB.inicializar()}
+        
+        <div class="container-fluid container-fullw">
+            
+        <h:form id="frmArea">
+            
+            <p:outputPanel  id="opArea">
+                <section id="page-title">
+                    <div class="row">
+                        <div class="col-sm-8">
+                            <h1 class="mainTitle">Areas</h1>
+                        </div>
+                        <ol class="breadcrumb">
+                            <li>
+                                <span>Configuraciones</span>
+                            </li>
+                            <li class="active">
+                                <span>Areas</span>
+                            </li>
+                        </ol>
+                    </div>
+                </section>
+                <div class="row">
+                    <div class="col-sm-2 col-xs-12">
+
+                        <p:commandLink       
+                            id="btnNuevo"
+                            styleClass="btn btn-primary btn-block button-prime"
+                            style="margin-top:5%;"
+                            update="frmArea:opArea"
+                            ajax="true"
+                            action="#{areasMB.nuevo}"
+                            rendered="#{!areasMB.renderForm}"
+                            >
+                            <i class="fa fa-plus-circle"></i> Nuevo
+                        </p:commandLink>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12">
+                        <p:dataTable id="pEspecialidad" var="area" 
+                                     value="#{areasMB.lstClasificaciones}"
+                                     emptyMessage="No hay áreas"
+                                     filteredValue="#{areasMB.lstClasificacionesFiltro}"
+                                     rendered="#{!areasMB.renderForm}"
+                                     rows="10" 
+                                     widgetVar="areaTable"
+                                     paginatorPosition="bottom"
+                                     paginator="true"
+                                     tableStyleClass="table-striped table-hover"
+                                     styleClass="table"
+                                     reflow="true"
+                                     >
+                            <f:facet name="header">
+                                <p:outputPanel>
+                                    <h:outputText value="Buscar" />
+                                    <p:inputText id="globalFilter" onkeyup="PF('areaTable').filter()" style="width:150px" placeholder="Ingrese Palabra"/>
+                                </p:outputPanel>
+                            </f:facet>
+                            <p:column headerText="Código" filterMatchMode="startsWith"  filterBy="#{area.codigo}">
+                                <h:outputText value="#{area.codigo}" />
+                            </p:column>
+                            <p:column headerText="Descripción" filterMatchMode="startsWith"  filterBy="#{area.descripcion}">
+                                <h:outputText value="#{area.descripcion}" />
+                            </p:column>
+                            <p:column headerText="" width="50px;">
+                                <p:commandButton icon="ui-icon-search" title="Ver" style="height: 15px;width: 20px;" update=":frmArea:opArea,:frmArea:pgAreas,growl" action="#{areasMB.consultar(area)}"/>
+                                
+                            </p:column>
+                        </p:dataTable>
+
+                    </div>
+                </div>
+                <!-- /.row -->
+                <!--form-->
+                <h:panelGroup id="pgAreas" rendered="#{areasMB.renderForm}">
+                    <div class="row">
+                        <div class="col-lg-3 col-xs-12">
+                            <div class="form-group">
+                                <p:outputLabel for="codigo"  value="Código" id="lbCodigo"/>
+                                <p:inputText id="codigo" required="true" styleClass="form-control" value="#{areasMB.area.codigo}" >
+                                    <f:validateLength minimum="2" />
+                                    <p:ajax update="codigo,lbCodigo " event="blur" />
+                                </p:inputText>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-xs-12">
+                            <div class="form-group">
+                                <p:outputLabel for="nombre"  value="Nombre" id="lbNombre"/>
+                                <p:inputText id="nombre" required="true" styleClass="form-control" value="#{areasMB.area.descripcion}" >
+                                    <f:validateLength minimum="2" />
+                                    <p:ajax update="nombre,lbNombre " event="blur" />
+                                </p:inputText>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- ./row -->
+                    <div class="row">
+                        <div class="col-lg-2 col-xs-12">
+                            <p:commandLink          styleClass="btn btn-lg btn-success btn-block button-prime"
+                                                    update="growl,frmArea:opArea"
+                                                    action="#{areasMB.guardar()}"
+                                                    >
+                                <i class="fa fa-save"></i> Guardar
+                            </p:commandLink>
+                        </div>
+                        <div class="col-lg-2 col-xs-12">
+                            <p:commandLink       
+                                                    styleClass="btn btn-lg btn-info btn-block button-prime"
+                                                    action="#{areasMB.cancelar()}"
+                                                    update="frmArea:opArea"
+                                                    process="@this"
+                                                    immediate="true"
+                                                    ajax="true"
+                                                    >
+                                <i class="fa fa-close"></i> Cancelar
+                                <p:resetInput target="frmArea:opArea" />
+                            </p:commandLink>
+
+
+
+                        </div>
+                    </div>
+                </h:panelGroup>
+            </p:outputPanel>
+        </h:form>
+        </div>
+    </ui:define>
+
+</ui:composition>

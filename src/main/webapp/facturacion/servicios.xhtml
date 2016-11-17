@@ -1,0 +1,292 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./../template/master.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://java.sun.com/jsf/core">
+
+    <ui:define name="title">
+        Servicios
+    </ui:define>
+
+    <ui:define name="content">
+        <div class="container-fluid container-fullw">
+            <h:form id="IdFormServicios">              
+                <p:growl id="IdMensajeServicios" showDetail="true" sticky="false" autoUpdate="true" life="2000"  />            
+                 <section id="page-title">
+                    <div class="row">
+                        <div class="col-sm-8">
+                            <h1 class="mainTitle">Servicios</h1>
+                        </div>
+                        <ol class="breadcrumb">
+                            <li>
+                                <span>Configuración</span>
+                            </li>
+                            <li>
+                                <span>Facturación</span>
+                            </li>
+                            <li class="active">
+                                <span>Servicios</span>
+                            </li>
+                        </ol>
+                    </div>
+                </section>
+                 <p:commandButton 
+                    title="Nuevo servicio" icon="fa fa-fw fa-plus-circle"
+                    styleClass="icon-new fg-lightBlue bg-white no-border"                            
+                    actionListener="#{serviciosMB.limpiarFormularioServicios}"                    
+                    update=":IdFormServicios"
+                     style="font-size: 20px; width: 30px; height: 40px; "/> 
+                &nbsp;
+                <p:commandButton 
+                    title="Buscar servicio" icon="fa fa-fw fa-search"
+                    styleClass="icon-search fg-lightBlue bg-white no-border" 
+                    actionListener="#{serviciosMB.buscarServicio}"
+                     style="font-size: 20px; width: 30px; height: 40px; "/> 
+                &nbsp;
+                <p:commandButton                     
+                    title="Eliminar servicio" icon="fa fa-fw fa-remove"
+                    styleClass="icon-cancel fg-lightBlue bg-white no-border" 
+                    actionListener="#{serviciosMB.eliminarServicio}"
+                     style="font-size: 20px; width: 30px; height: 40px; "/> 
+                &nbsp;
+                <p:commandButton 
+                    title="Guardar servicio" icon="fa fa-fw fa-save"
+                    styleClass="icon-floppy fg-lightBlue bg-white no-border" 
+                    update=":IdFormServicios"
+                    actionListener="#{serviciosMB.guardarServicio}"                    
+                     style="font-size: 20px; width: 30px; height: 40px; "/> 
+                <p:tabView id="IdTabViewServicios" style=" width: 95%;  margin-left: auto; margin-right: auto">  
+                    <p:tab title="#{serviciosMB.tituloTabServicios}">
+                        <div class="row">
+                            <div class="col-lg-3 col-xs-12">
+                                <div class="form-group">
+                                    <p:outputLabel styleClass="campoObligatorio" value="Código interno"/>
+                                    <p:inputText   styleClass="form-control"   disabled="false" value="#{serviciosMB.codigoServicio}" maxlength="20" placeholder="Código Interno"/>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-xs-12">
+                                <div class="form-group">
+                                    <p:outputLabel  styleClass="campoNoObligatorio" value="Valor Particular" />                                
+                                    <p:inputText styleClass="form-control"  value="#{serviciosMB.valorParticular}"  placeholder="Valor Particular"/>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-xs-12">
+                                <div class="form-group">
+                                    <p:outputLabel styleClass="campoObligatorio" value="Nombre Servicio"/>
+                                    <p:inputText   styleClass="form-control" value="#{serviciosMB.nombreServicio}" placeholder="Nombre Servicio"/>                            
+                                </div>
+                            </div>
+                        </div>
+                        <!--.row-->
+                        <div class="row">
+                            <div class="col-lg-3 col-xs-12">
+                                <div class="form-group">
+                                    <p:outputLabel  styleClass="campoNoObligatorio" value="Código SOAT" />
+                                    <p:inputText    styleClass="form-control" disabled="false" value="#{serviciosMB.codigoSoat}" placeholder="Código SOAT"/>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-xs-12">
+                                <div class="form-group">
+                                    <p:outputLabel  styleClass="campoNoObligatorio" value="Factor SOAT" />                                
+                                    <p:inputText styleClass="form-control"  value="#{serviciosMB.factorSOAT}" placeholder="Factor SOAT"/>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-xs-12">
+                                <div class="form-group">
+                                    <p:outputLabel  styleClass="campoNoObligatorio" value="Código CUP"/>
+                                    <p:inputText    styleClass="form-control" disabled="false" value="#{serviciosMB.codigoCup}" placeholder="Código CUP"/>
+                                </div>
+                            </div>
+                        </div>
+                        <!--.row-->
+                        <div class="row">
+                            <div class="col-lg-3 col-xs-12">
+                                <div class="form-group">
+                                    <p:outputLabel  styleClass="campoNoObligatorio" value="Código ISS" />
+                                    <p:inputText    styleClass="form-control" disabled="false" value="#{serviciosMB.codigoIss}" placeholder="Código ISS"/>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-xs-12">
+                                <div class="form-group">
+                                    <p:outputLabel  styleClass="campoNoObligatorio" value="Factor ISS" />                                
+                                    <p:inputText styleClass="form-control" value="#{serviciosMB.factorISS}" placeholder="Factor ISS"/>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-xs-12">
+                                <div class="form-group">
+                                    <p:outputLabel  styleClass="campoNoObligatorio" value="Código CUMS" />
+                                    <p:inputText    styleClass="form-control"  disabled="false" value="#{serviciosMB.codigoCums}" placeholder="Código CUMS"/>
+                                </div>
+                            </div>
+                        </div>
+                        <!--.row-->
+                        <div class="row">
+                            <div class="col-lg-6 col-xs-12">
+                                <div class="form-group">
+                                    <p:outputLabel styleClass="campoNoObligatorio" value="Especialidad"/>                                    
+                                    <p:inputText   styleClass="form-control"    placeholder="Especialidad"/>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-xs-12">
+                                <div class="form-group">
+                                    <p:outputLabel styleClass="campoNoObligatorio" value="Tipo de Servicio"/>
+                                    <p:inputText   styleClass="form-control"  placeholder="Tipo de Servicio"/>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-xs-12">
+                                <div class="form-group">
+                                    <p:outputLabel styleClass="campoNoObligatorio" value="Centro costo"/>
+                                    <p:inputText   styleClass="form-control" placeholder="Centro Costo"/>
+                                </div>
+                            </div>
+                        </div>
+                        <!--.row-->
+                        <div class="row">
+                            <div class="col-lg-3 col-xs-12">
+                                <div class="form-group">
+                                    <p:outputLabel styleClass="campoNoObligatorio" value="Visible"/>                                    
+                                    <p:selectBooleanButton styleClass="campoFormulario" value="#{serviciosMB.visible}" onLabel="SI" offLabel="NO" style="width:40px" />
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-xs-12">
+                                <div class="form-group">
+                                    <p:outputLabel styleClass="campoNoObligatorio" value="Requiere Autorización"/>                                
+                                    <p:selectBooleanButton styleClass="campoFormulario" value="#{serviciosMB.autorizacion}" onLabel="SI" offLabel="NO" style="width:40px" />
+                                </div>
+                            </div>
+                        </div>
+                        <!--.row-->
+                        <div class="row">
+                            <div class="col-lg-3 col-xs-12">
+                                <div class="form-group">
+                                    <p:outputLabel styleClass="campoNoObligatorio" value="Finalidad"/>                                
+                                    <p:selectOneMenu styleClass="campoFormulario"  value="#{serviciosMB.finalidad}">
+                                        <f:selectItems value="#{loginMB.listaFinalidadProcedimiento}"/>
+                                    </p:selectOneMenu>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-xs-12">
+                                <div class="form-group">
+                                    <p:outputLabel styleClass="campoNoObligatorio" value="Ambito"/>                                
+                                    <p:selectOneMenu styleClass="campoFormulario"   value="#{serviciosMB.codigoAmbito}">
+                                        <f:selectItems value="#{loginMB.listaAmbito}"/>
+                                    </p:selectOneMenu>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-xs-12">
+                                <div class="form-group">
+                                    <p:outputLabel styleClass="campoNoObligatorio" value="Acto Qtx"/>                                
+                                    <p:selectOneMenu styleClass="campoFormulario"  value="#{serviciosMB.codigoActQtx}">
+                                        <f:selectItems value="#{loginMB.listaActoQuirurgico}"/>
+                                    </p:selectOneMenu>
+                                </div>
+                            </div>
+                        </div>
+                        <hr />
+                         <!--.row-->
+                        <div class="row">
+                            <div class="col-lg-3 col-xs-12">
+                                <div class="form-group">
+                                    <p:outputLabel styleClass="campoNoObligatorio" value="Aplica a Sexo"/>
+                                    <p:selectOneMenu  value="#{serviciosMB.sexo}">
+                                        <f:selectItems value="#{loginMB.listaGenero3}"/>
+                                    </p:selectOneMenu>                                    
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-xs-12">
+                                <div class="form-group">
+                                    <p:outputLabel styleClass="campoNoObligatorio" value="Zona"/>
+                                    <p:selectOneMenu value="#{serviciosMB.zona}">
+                                        <f:selectItems value="#{loginMB.listaZona}"/>
+                                    </p:selectOneMenu>                                    
+                                </div>
+                            </div>
+                        </div>
+                          <!--.row-->
+                        <div class="row">
+                            <div class="col-lg-3 col-xs-12">
+                                <div class="form-group">
+                                    <p:outputLabel styleClass="campoNoObligatorio" value="Edad Inicial"/>
+                                    <p:inputText styleClass="form-control"   value="#{serviciosMB.edadInicial}"/>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-xs-12">
+                                <div class="form-group">
+                                    <p:outputLabel styleClass="campoNoObligatorio" value="Tipo"/>
+                                    <p:selectOneMenu value="#{serviciosMB.unidadEdadInicial}">
+                                        <f:selectItems value="#{loginMB.listaTipoEdad}"/>
+                                    </p:selectOneMenu>
+                                </div>
+                            </div>
+                        </div>
+                           <!--.row-->
+                        <div class="row">
+                            <div class="col-lg-3 col-xs-12">
+                                <div class="form-group">
+                                    <p:outputLabel styleClass="campoNoObligatorio" value="Edad Final"/>
+                                    <p:inputText styleClass="form-control" value="#{serviciosMB.edadFinal}"/>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-xs-12">
+                                <div class="form-group">
+                                    <p:outputLabel styleClass="campoNoObligatorio" value="Tipo"/>
+                                    <p:selectOneMenu style="width: 135px;" value="#{serviciosMB.unidadEdadFinal}">
+                                        <f:selectItems value="#{loginMB.listaTipoEdad}"/>
+                                    </p:selectOneMenu>
+                                </div>
+                            </div>
+                        </div>
+                    </p:tab>
+                </p:tabView>
+                <p:dialog id="IdDialogoBuscarServicios" header="BUSCAR SERVICIO" widgetVar="dialogoBuscarServicios" resizable="false" modal="true">  
+                <br/>
+                <p:dataTable 
+                    id="IdTablaServicios" 
+                    var="servicio" 
+                    widgetVar="wvTablaServicios"
+                    value="#{serviciosMB.listaServicios}" 
+                    rowKey="#{servicio.idServicio}"  
+                    selection="#{serviciosMB.servicioSeleccionadoTabla}" 
+                    paginator="true"
+                    style="width: 600px; height: 300px;"
+                    rows="10"                                    
+                    paginatorPosition="bottom"                                
+                    emptyMessage="No hay servicios"
+                    scrollable="true" 
+                    currentPageReportTemplate="Mostrando {startRecord}-{endRecord} de {totalRecords}"
+                    paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"                    
+                    pageLinks="5"
+                    selectionMode="single"
+                    resizableColumns="true">
+                    <p:column headerText="ID" width="0" >  
+                        #{servicio.idServicio}  
+                    </p:column>
+                    <p:column headerText="CODIGO" width="10" filterBy="#{servicio.codigoServicio}" filterMatchMode="contains">
+                        #{servicio.codigoServicio}
+                    </p:column>
+                    <p:column headerText="NOMBRE" width="90" filterBy="#{servicio.nombreServicio}" filterMatchMode="contains">
+                        #{servicio.nombreServicio}
+                    </p:column>
+                </p:dataTable>  
+                <br/>
+                <p:commandButton value="Cargar seleccionado" update=":IdFormServicios" actionListener="#{serviciosMB.cargarServicio}"/>
+                <br/>
+            </p:dialog> 
+            <p:dialog id="IdDialogoEliminarServicio" header="ELIMINAR SERVICIO" widgetVar="dialogoEliminarServicio" resizable="false" modal="true">  
+                <p:panelGrid id="panelEliminarServicio" styleClass="panelGridSinBordes" columns="1">
+                    <h:outputText value="¿ Confirma La eliminación de este servicio ?"/>                    
+                    <p:commandButton 
+                        value="Eliminar" 
+                        oncomplete="PF('dialogoEliminarServicio').hide();"
+                        actionListener="#{serviciosMB.confirmarEliminarServicio}"                        
+                        update=":IdFormServicios"/>
+                </p:panelGrid>
+            </p:dialog>
+            </h:form>
+        </div>
+    </ui:define>
+
+</ui:composition>

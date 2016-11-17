@@ -1,0 +1,226 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./../template/master.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://java.sun.com/jsf/core">
+
+    <ui:define name="title">
+        Pruebas
+    </ui:define>
+
+    <ui:define name="content">
+        #{pruebasMB.inicializar()}
+        <div class="container-fluid container-fullw">
+            <h:form id="frmPrueba">
+                <p:outputPanel  id="opPrueba">
+                    <section id="page-title">
+                        <div class="row">
+                            <div class="col-sm-8">
+                                <h1 class="mainTitle">Pruebas</h1>
+                            </div>
+                            <ol class="breadcrumb">
+                                <li>
+                                    <span>Configuraciones</span>
+                                </li>
+                                <li class="active">
+                                    <span>Pruebas</span>
+                                </li>
+                            </ol>
+                        </div>
+                    </section>
+                    <div class="row">
+                        <div class="col-sm-2 col-xs-12">
+
+                            <p:commandLink       
+                                id="btnNuevo"
+                                styleClass="btn btn-primary btn-block button-prime"
+                                style="margin-top:5%;"
+                                update="frmPrueba:opPrueba"
+                                ajax="true"
+                                action="#{pruebasMB.nuevo}"
+                                rendered="#{!pruebasMB.renderForm}"
+                                >
+                                <i class="fa fa-plus-circle"></i> Nuevo
+                            </p:commandLink>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <p:dataTable id="pPrueba" var="prueba" 
+                                         value="#{pruebasMB.listaPruebas}"
+                                         emptyMessage="No hay áreas"
+                                         filteredValue="#{pruebasMB.listaPruebasFiltro}"
+                                         rendered="#{!pruebasMB.renderForm}"
+                                         rows="10" 
+                                         widgetVar="pruebaTable"
+                                         paginatorPosition="bottom"
+                                         paginator="true"
+                                         tableStyleClass="table-striped table-hover"
+                                         styleClass="table"
+                                         reflow="true"
+                                         >
+                                <f:facet name="header">
+                                    <p:outputPanel>
+                                        <h:outputText value="Buscar" />
+                                        <p:inputText id="globalFilter" onkeyup="PF('pruebaTable').filter()" style="width:150px" placeholder="Ingrese Palabra"/>
+                                    </p:outputPanel>
+                                </f:facet>
+                                <p:column headerText="Código" filterMatchMode="startsWith"  filterBy="#{prueba.codigo}">
+                                    <h:outputText value="#{prueba.codigo}" />
+                                </p:column>
+                                <p:column headerText="Nombre" filterMatchMode="startsWith"  filterBy="#{prueba.nombre}">
+                                    <h:outputText value="#{prueba.nombre}" />
+                                </p:column>
+                                <p:column headerText="" width="70px;">
+                                    <p:commandButton icon="ui-icon-search" title="Ver" style="height: 15px;width: 20px;"  update=":frmPrueba:opPrueba,growl" action="#{pruebasMB.consultar(prueba)}"/>
+                                </p:column>
+                            </p:dataTable>
+
+                        </div>
+                    </div>
+                    <!-- /.row -->
+                    <!--form-->
+                <h:panelGroup id="pgAreas" rendered="#{pruebasMB.renderForm}">
+                    <div class="row">
+                        <div class="col-lg-3 col-xs-12">
+                            <div class="form-group">
+                                <p:outputLabel for="codigo"  value="Código" id="lbCodigo"/>
+                                <p:inputText id="codigo" required="true" styleClass="form-control" value="#{pruebasMB.prueba.codigo}" >
+                                    <f:validateLength minimum="2" />
+                                    <p:ajax update="codigo,lbCodigo " event="blur" />
+                                </p:inputText>
+                            </div>
+                        </div>
+                    <div class="col-lg-3 col-xs-12">
+                            <div class="form-group">
+                                <p:outputLabel for="nombre"  value="Nombre" id="lbNombre"/>
+                                <p:inputText id="nombre" required="true" styleClass="form-control" value="#{pruebasMB.prueba.nombre}" >
+                                    <f:validateLength minimum="2" />
+                                    <p:ajax update="nombre,lbNombre " event="blur" />
+                                </p:inputText>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-xs-12">
+                            <div class="form-group">
+                                <p:outputLabel for="formato"  value="Formato Resultado" id="lbFormato" /><br />
+                                <p:selectOneMenu id="formato" value="#{pruebasMB.prueba.formatoResultado}">
+                                    <f:selectItem itemLabel="Númerico" itemValue="N"/>
+                                    <f:selectItem itemLabel="Texto" itemValue="T"/>
+                                    <f:selectItem itemLabel="Compuesto" itemValue="C"/>
+                                    <f:selectItem itemLabel="Fórmula" itemValue="F"/>
+                                    <f:selectItem itemLabel="Gráfico" itemValue="G"/>
+                                    <f:ajax 
+                                        event="change"
+                                        listener="#{pruebasMB.validarTipo}"                                                
+                                        render="frmPrueba"/> 
+                                </p:selectOneMenu>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-xs-12">
+                            <div class="form-group">
+                                <p:outputLabel for="formula"  value="Fórmula" id="lbFormular" rendered="#{pruebasMB.renderFormula}"/>
+                                <p:inputText id="formula" value="#{pruebasMB.prueba.formula}" styleClass="form-control" rendered="#{pruebasMB.renderFormula}"/>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- ./row -->
+                    <div class="row">
+                         <div class="col-lg-3 col-xs-12">
+                            <div class="form-group">
+                                <p:outputLabel for="areaId"  value="Grupo Area" id="lbArea"/>
+                                <p:autoComplete id="areaId" required="true" size="35"  value="#{pruebasMB.codigoArea}" completeMethod="#{pruebasMB.autocompletarPruebas}" forceSelection="true"/>
+                            </div>
+                        </div>   
+                        <div class="col-lg-3 col-xs-12">
+                            <div class="form-group">
+                                <p:outputLabel for="unidad"  value="Unidad de Prueba" id="lbUnidad"/><br />
+                                <p:selectOneMenu id="unidad" required="false" value="#{pruebasMB.prueba.unidadPrueba.id}" filter="true" filterMatchMode="contains">
+                                    <f:selectItems value="#{pruebasMB.lstUnidades}" />
+                                </p:selectOneMenu>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-xs-12">
+                            <div class="form-group">
+                                <p:outputLabel for="nroUnidades"  value="Decimales de Pruebas" id="lbnroUnidades"/>
+                                <p:inputText id="nroUnidades" required="true" styleClass="form-control" value="#{pruebasMB.prueba.decimalesPrueba}" maxlength="1" onkeypress="return permite(event, 'num')">
+                                    <f:validateLength maximum="1" minimum="1" />
+                                    <p:ajax update="nroUnidades,lbnroUnidades " event="blur" />
+                                </p:inputText>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-xs-12">
+                            <div class="form-group">
+                                <p:outputLabel for="tencica"  value="Tipo de Técnica" id="lbTecnica"/><br />
+                                <p:selectOneMenu id="tencica" required="false" value="#{pruebasMB.prueba.tipoTecnica.id}" filter="true" filterMatchMode="contains">
+                                    <f:selectItem itemValue="" itemLabel=""/>
+                                    <f:selectItems value="#{pruebasMB.lstTipoTecnicas}" />
+                                </p:selectOneMenu>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                            <div class="col-sm-8">
+                                <h1 class="mainTitle">Referencias</h1>
+                            </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <p:dataTable id="pdReferencias" var="referencia" value="#{pruebasMB.lstReferencias}" editable="true" editMode="cell" widgetVar="cellReferencia"
+                                     >
+                            <p:column headerText="Tipo">
+                                <h:outputText value="#{referencia.nombreTipo}" />
+                            </p:column>
+                                <p:column headerText="Mínimo Referencia">
+                                    <p:cellEditor>
+                                        <f:facet name="output"><h:outputText value="#{referencia.minimoReferencia}" /></f:facet>
+                                    <f:facet name="input"><p:inputNumber value="#{referencia.minimoReferencia}" style="width:96%" label="Mímimo Refrencia"/></f:facet>
+                                    </p:cellEditor>
+                            </p:column>
+                                <p:column headerText="Máximo Referencia">
+                                <p:cellEditor>
+                                    <f:facet name="output"><h:outputText value="#{referencia.maximoReferencia}" /></f:facet>
+                                    <f:facet name="input"><p:inputNumber value="#{referencia.maximoReferencia}" style="width:96%" label="Máximo Refrencia"/></f:facet>
+                                 </p:cellEditor>
+                            </p:column>
+                                
+                        </p:dataTable>
+                        </div>
+                    </div>
+                    <br />
+                          <div class="row">
+                        <div class="col-lg-2 col-xs-2">
+                            <p:commandLink          styleClass="btn btn-lg btn-success btn-block button-prime"
+                                                    update="growl,frmPrueba:opPrueba"
+                                                    action="#{pruebasMB.guardar()}"
+                                                    >
+                                <i class="fa fa-save"></i> Guardar
+                            </p:commandLink>
+                        </div>
+                        <div class="col-lg-2 col-xs-2">
+                            <p:commandLink       
+                                                    styleClass="btn btn-lg btn-info btn-block button-prime"
+                                                    action="#{pruebasMB.cancelar()}"
+                                                    update="frmPrueba:opPrueba"
+                                                    process="@this"
+                                                    immediate="true"
+                                                    ajax="true"
+                                                    >
+                                <i class="fa fa-close"></i> Cancelar
+                                <p:resetInput target="frmPrueba:opPrueba" />
+                            </p:commandLink>
+
+
+
+                        </div>
+                    </div>
+                </h:panelGroup>
+                </p:outputPanel>
+            </h:form>
+        </div>
+
+    </ui:define>
+
+</ui:composition>

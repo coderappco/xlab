@@ -1,0 +1,148 @@
+<?xml version='1.0' encoding='UTF-8' ?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:c="http://java.sun.com/jsp/jstl/core"
+                xmlns:f="http://java.sun.com/jsf/core">
+    <header class="navbar navbar-default navbar-static-top">
+        <!-- start: NAVBAR HEADER -->
+        <div class="navbar-header">
+            <a href="#" class="sidebar-mobile-toggler pull-left hidden-md hidden-lg btn btn-navbar sidebar-toggle" data-toggle-class="app-slide-off" data-toggle-target="#app" data-toggle-click-outside="#sidebar">
+
+                <i class="ti-align-justify"></i>
+            </a>
+            <a class="navbar-brand" href="index.html">
+                <!--<img src="assets/images/logo.png" alt="Clip-Two"/>-->XLAB
+            </a>
+            <br />
+            <a href="#" class="sidebar-toggler pull-right visible-md visible-lg" data-toggle-class="app-sidebar-closed" data-toggle-target="#app">
+
+                <i class="ti-align-justify"></i>
+            </a>
+            <a class="pull-right menu-toggler visible-xs-block" id="menu-toggler" data-toggle="collapse" href=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <i class="ti-view-grid"></i>
+            </a>
+        </div>
+        <!-- end: NAVBAR HEADER -->
+        <!-- start: NAVBAR COLLAPSE -->
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-right">
+
+                <!-- end: ACTIVITIES DROPDOWN -->
+                <!-- start: LANGUAGE SWITCHER -->
+                <!-- start: USER OPTIONS DROPDOWN -->
+                <li class="dropdown">
+
+                    <a href="#" onclick="PF('wvDialogInformes').show();" class="dropdown-toggle" data-toggle="dropdown"  id="cargarInforme">
+                        <i class="ti-printer"></i> <span>Informes</span>
+                    </a>
+                </li>
+                <li class="dropdown current-user">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        <i class="ti-user"></i><span class="username">#{loginMB.nombreLogin} <i class="ti-angle-down"></i></span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-dark">
+                        <li>
+                            <a href="pages_user_profile.html">
+                                Mi Perfil
+                            </a>
+                        </li>
+                        <li>
+                            <h:form>
+                                <h:commandLink action="#{loginMB.cerrarSession}">
+                                    Cerrar Sesión
+                                </h:commandLink>
+                            </h:form>
+                        </li>
+                    </ul>
+                </li>
+
+                <!-- end: USER OPTIONS DROPDOWN -->
+            </ul>
+        </div>
+        <!-- end: NAVBAR COLLAPSE -->
+    </header>
+
+    <h:form>
+        <p:dialog id="pDialogInformes" widgetVar="wvDialogInformes" modal="true" header="Informes" dynamic="false">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="form-group">
+                        <p:outputLabel for="reporte"  value="Reporte" id="lbReporte"/><br />
+                        <p:selectOneMenu id="reporte" value="#{informesMB.idReporte}" filter="true" filterMatchMode="contains">
+                            <f:selectItems value="#{informesMB.listaReportes}" />
+                        </p:selectOneMenu>
+                    </div>
+                </div>
+                <div class="col-xs-12">
+                    <div class="form-group">
+                        <p:outputLabel for="grupoTrabajo"  value="Grupo Trabajo" id="lbGrupoTrabajo"/><br />
+                        <p:selectOneMenu id="grupoTrabajo" value="#{informesMB.idArea}" filter="true" filterMatchMode="contains">
+                            <f:selectItem itemLabel="" itemValue="" />
+                            <f:selectItems value="#{informesMB.listaAreas}" />
+                        </p:selectOneMenu>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 col-xs-12">
+                    <div class="form-group">
+                        <p:outputLabel for="fechaDesde"  value="Fecha Desde" id="lbfechaDesde"/> <br/>
+                        <p:calendar id="fechaDesde" style="width: 100%;" required="true" styleClass="campoFormulario" navigator="true" mask="true"
+                                    locale="es" pattern="dd/MM/yyyy" value="#{informesMB.fechaDesde}" size="14" />
+                    </div>
+                </div>
+                <div class="col-md-6 col-xs-12">
+                    <div class="form-group">
+                        <p:outputLabel for="fechaHasta"  value="Fecha Hasta" id="lbfechaHasta"/> <br/>
+                        <p:calendar id="fechaHasta" style="width: 100%;" required="true" styleClass="campoFormulario" navigator="true" mask="true"
+                                    locale="es" pattern="dd/MM/yyyy" value="#{informesMB.fechaHasta}" size="14" />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="form-group">
+                         <h:outputText value="Listar sólo código de pruebas " />
+                         &nbsp;<p:selectBooleanCheckbox value="#{informesMB.codigoPruebas}" />
+                    </div>
+                </div>
+                <div class="col-xs-12">
+                    <div class="form-group">
+                         <h:outputText value="Sólo pruebas pendientes" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                         <p:selectBooleanCheckbox value="#{informesMB.pruebasPendientes}" />
+                    </div>
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-md-4 col-xs-12">
+                    <div class="form-actions">
+                        <p:commandLink id="btnModificarDiente"
+                                    styleClass="btn btn-lg btn-success btn-block button-prime"
+                                    actionListener="#{informesMB.printReporte}"
+                                    target="_blank"
+                                    ajax="false"
+                                    style="color: #fff;margin-right: 2px;">
+                                    <i class="fa fa-print"></i> Imprimir
+                                </p:commandLink> 
+                    </div>
+                    
+                </div>
+                <div class="col-md-4 col-xs-12">
+                    <p:commandLink id="btnCancelar"
+					process="@this"
+					styleClass="btn btn-lg btn-info btn-block button-prime"
+                                        style="color: #fff"
+					oncomplete="PF('wvDialogInformes').hide();" >
+                                    <i class="fa fa-close"></i> Cancelar
+                                </p:commandLink>
+                </div>
+            </div>
+        </p:dialog>
+    </h:form>
+
+</ui:composition>

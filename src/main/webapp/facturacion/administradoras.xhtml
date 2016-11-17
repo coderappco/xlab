@@ -1,0 +1,368 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./../template/master.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://java.sun.com/jsf/core">
+
+    <ui:define name="title">
+        Administradoras
+    </ui:define>
+
+    <ui:define name="content">
+        <div class="container-fluid container-fullw">
+            <h:form id="IdFormAdministradoras">   
+                #{administradorasMB.recargarSiHaySeleccionado()}
+                <p:growl id="IdMensajeAdministradoras"  showDetail="true" sticky="false" autoUpdate="true" life="2000"  />            
+                <section id="page-title">
+                    <div class="row">
+                        <div class="col-sm-8">
+                            <h1 class="mainTitle">Administradoras</h1>
+                        </div>
+                        <ol class="breadcrumb">
+                            <li>
+                                <span>Configuración</span>
+                            </li>
+                            <li>
+                                <span>Facturación</span>
+                            </li>
+                            <li class="active">
+                                <span>Administradoras</span>
+                            </li>
+                        </ol>
+                    </div>
+                </section>
+                <p:commandButton 
+                    title="Nueva Administradora" icon="fa fa-fw fa-plus-circle"
+                    styleClass="icon-new fg-lightBlue bg-white no-border"                            
+                    actionListener="#{administradorasMB.limpiarFormularioAdministradoras}"                    
+                    oncomplete="PF('wvTabView').select(0);"
+                    update=":IdFormAdministradoras"
+                    style="font-size: 20px; width: 30px; height: 40px; "/> 
+                &nbsp;
+                <p:commandButton 
+                    title="Buscar Administradora" icon="fa fa-fw fa-search"
+                    styleClass="icon-search fg-lightBlue bg-white no-border" 
+                    actionListener="#{administradorasMB.buscarAdministradoras}"
+                    style="font-size: 20px; width: 30px; height: 40px; "/> 
+                &nbsp;
+                <p:commandButton                     
+                    title="Eliminar Administradora" icon="fa fa-fw fa-remove"
+                    styleClass="icon-cancel fg-lightBlue bg-white no-border"                     
+                    actionListener="#{administradorasMB.eliminarAdministradora}"
+                    style="font-size: 20px; width: 30px; height: 40px; "/> 
+                &nbsp;
+                <p:commandButton 
+                    title="Guardar/Actualizar Administradora" icon="fa fa-fw fa-save"
+                    styleClass="icon-floppy fg-lightBlue bg-white no-border" 
+                    actionListener="#{administradorasMB.guardarAdministradora}"               
+                    style="font-size: 20px; width: 30px; height: 40px; "/>                    
+                <p:tabView id="IdTabView" styleClass="centrar-maximo" widgetVar="wvTabView">  
+                    <p:tab title="#{administradorasMB.tituloTabAdministradora}">                      
+                        <div class="row">
+                            <div class="col-lg-3 col-xs-12">
+                                <div class="form-group">
+                                    <p:outputLabel styleClass="campoObligatorio" value="Código administradora"/>
+                                    <p:inputText   styleClass="form-control" size="20" value="#{administradorasMB.codigoAdminstradora}" placeholder="Código Administradora"/>
+
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-xs-12">
+                                <div class="form-group">
+                                    <p:outputLabel styleClass="campoObligatorio" value="Razón Social"/>
+                                    <p:inputText   styleClass="form-control" size="60" value="#{administradorasMB.razonSocial}" placeholder="Razón Social"/>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-xs-12">
+                                <div class="form-group">
+                                    <p:outputLabel styleClass="campoObligatorio" value="Tipo Entidad"/> 
+                                    <p:selectOneMenu value="#{administradorasMB.tipoAdministradora}">
+                                        <f:selectItems value="#{loginMB.listaTipoAdministradora}" />
+                                    </p:selectOneMenu>
+                                </div>
+                            </div>
+                        </div>
+                        <!--.row-->
+                        <div class="row">
+                            <div class="col-lg-3 col-xs-12">
+                                <div class="form-group">
+                                    <p:outputLabel styleClass="campoObligatorio" value="Tipo Identificación" />
+                                    <p:selectOneMenu styleClass="campoFormulario"  value="#{administradorasMB.tipoDocumento}">                                      
+                                        <f:selectItems value="#{loginMB.listaTipoIdentificacion}" />
+                                    </p:selectOneMenu>                                    
+
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-xs-12">
+                                <div class="form-group">
+                                    <p:outputLabel styleClass="campoObligatorio" value="Número Identificación"/>
+                                    <p:inputText styleClass="form-control" value="#{administradorasMB.numeroIdentificacion}" placeholder="Número Identificación"/>&nbsp;
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-xs-12">
+                                <div class="form-group">
+                                    <p:outputLabel styleClass="campoNoObligatorio" value="Dirección"/>
+                                    <p:inputText   styleClass="form-control" size="40" value="#{administradorasMB.direccion}" placeholder="Dirección"/>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-xs-12">
+                                <div class="form-group">
+                                    <p:outputLabel styleClass="campoNoObligatorio" value="Teléfono"/>
+                                    <p:inputText   styleClass="form-control" size="21" value="#{administradorasMB.telefono1}" placeholder="Teléfono"/>
+                                </div>
+                            </div>
+                        </div>
+                        <!--.row-->
+                        <div class="row">
+                            <div class="col-lg-3 col-xs-12">
+                                <div class="form-group">
+                                    <p:outputLabel styleClass="campoNoObligatorio" value="Teléfono 2"/>                  
+                                    <p:inputText   styleClass="form-control"  value="#{administradorasMB.telefono2}" placeholder="Teléfono 2"/>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-xs-12">
+                                <div class="form-group">
+                                    <p:outputLabel styleClass="campoObligatorio" value="Departamento"/>
+                                    <p:selectOneMenu value="#{administradorasMB.departamento}"  filter="true" filterMatchMode="contains">
+                                        <f:ajax event="change" listener="#{administradorasMB.cargarMunicipios}" render="IdMunicipios"/> 
+                                        <f:selectItem itemLabel="" itemValue=""/>
+                                        <f:selectItems value="#{loginMB.listaDepartamentos}" />
+                                    </p:selectOneMenu>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-xs-12">
+                                <div class="form-group">
+                                    <p:outputLabel styleClass="campoObligatorio" value="Municipio"/>
+                                    <p:selectOneMenu id="IdMunicipios" value="#{administradorasMB.municipio}"  filter="true" filterMatchMode="contains">
+                                        <f:selectItems value="#{administradorasMB.listaMunicipios}" />
+                                    </p:selectOneMenu>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-xs-12">
+                                <div class="form-group">
+                                </div>
+                            </div>
+                        </div>
+                        <!--.row-->
+                        <div class="row">
+                            <div class="col-lg-3 col-xs-12">
+                                <div class="form-group">
+                                    <p:outputLabel styleClass="campoNoObligatorio" value="Tipo Ident. Representante" />
+                                    <p:selectOneMenu  value="#{administradorasMB.tipoDocumentoRepresentante}">                                  
+                                        <f:selectItems value="#{loginMB.listaTipoIdentificacion}" />
+                                    </p:selectOneMenu>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-xs-12">
+                                <div class="form-group">
+                                    <p:outputLabel styleClass="campoNoObligatorio" value="Identificación Representante"/>
+                                    <p:inputText   styleClass="form-control" value="#{administradorasMB.numeroDocumentoRepresentante}" placeholder="Identificación Representante"/>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-xs-12">
+                                <div class="form-group">
+                                    <p:outputLabel styleClass="campoNoObligatorio" value="Nombre Representante" />
+                                    <p:inputText   styleClass="form-control" value="#{administradorasMB.nombreRepresentante}" placeholder="Nombre Representante"/>
+                                </div>
+                            </div>
+                        </div>
+                        <!--.row-->
+                        <div class="row">
+                            <div class="col-lg-3 col-xs-12">
+                                <div class="form-group">
+                                    <p:outputLabel styleClass="campoNoObligatorio" value="Código RIP"/>
+                                    <p:inputText styleClass="form-control"  value="#{administradorasMB.codigoRip}" placeholder="Código RIP"/>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-xs-12">
+                                <div class="form-group">
+                                    <p:outputLabel styleClass="campoNoObligatorio" value="Código Ingreso"/>
+                                    <p:inputText styleClass="form-control" value="#{administradorasMB.codigoIngreso}" placeholder="Código Ingreso"/>
+
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-xs-12">
+                                <div class="form-group">
+                                    <p:outputLabel styleClass="campoNoObligatorio" value="Código Rubro"/>
+                                    <p:inputText styleClass="form-control"  value="#{administradorasMB.codigoRubro}" placeholder="Código Rubro"/>
+
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-xs-12">
+                                <div class="form-group">
+                                    <p:outputLabel styleClass="campoNoObligatorio" value="Código Concepto"/>
+                                    <p:inputText styleClass="form-control" value="#{administradorasMB.codigoConcepto}" placeholder="Código Concepto"/>
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </p:tab>
+                    <p:tab title="#{administradorasMB.tituloTabContratos}" disabled="#{administradorasMB.administradoraSeleccionada == null}">
+                    <br/>
+                    <div style="margin-left: 15px;">
+                        <p:commandButton 
+                            rendered="#{administradorasMB.administradoraSeleccionada != null}"
+                            title="Nuevo contrato" icon="fa fa-fw fa-plus"
+                            styleClass="icon-plus-2 fg-lightBlue bg-white no-border"                             
+                            actionListener="#{administradorasMB.nuevoContrato}"                    
+                            style="font-size: 20px; width: 30px; height: 40px; "/>                            
+                        &nbsp;                        
+                        <p:commandButton 
+                            rendered="#{administradorasMB.administradoraSeleccionada != null}"
+                            title="Editar Contrato" icon="fa fa-fw fa-edit"
+                            styleClass="icon-pencil fg-lightBlue bg-white no-border"                             
+                            actionListener="#{administradorasMB.editarContrato}"
+                            style="font-size: 20px; width: 30px; height: 40px; "/>
+                        &nbsp;                        
+                        <p:commandButton 
+                            title="Copiar contratos" icon="fa fa-fw fa-copy"
+                            styleClass="icon-copy fg-lightBlue bg-white no-border"                             
+                            actionListener="#{administradorasMB.clickBtnCopiarContratos}"               
+                            style="font-size: 20px; width: 30px; height: 40px; "/>                        
+                                            <p:dataTable 
+                        id="IdTablaContratos" 
+                        var="contrato" 
+                        widgetVar="wvTablaContratos"
+                        value="#{administradorasMB.listaContratos}" 
+                        rowKey="#{contrato.idContrato}"  
+                        selection="#{administradorasMB.contratoSeleccionado}" 
+                        paginator="true"
+                        scrollHeight="200"
+                        rows="10"                                    
+                        paginatorPosition="bottom"                                
+                        emptyMessage="No hay contratos"
+                        scrollable="true" 
+                        currentPageReportTemplate="Mostrando {startRecord}-{endRecord} de {totalRecords}"
+                        paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                        pageLinks="5"
+                        selectionMode="single"
+                        resizableColumns="true">  
+                        <f:facet name="header">
+                            CONTRATOS ASOCIADOS
+                        </f:facet>
+                        <p:column headerText="CODIGO" width="20" filterBy="#{contrato.codigoContrato}" filterMatchMode="contains">
+                            #{contrato.codigoContrato}
+                        </p:column>                                
+                        <p:column headerText="NOMBRE" width="90" filterBy="#{contrato.descripcion}" filterMatchMode="contains">
+                            #{contrato.descripcion}
+                        </p:column>                                
+                        <p:column headerText="TIPO CONTRATO" width="90" filterBy="#{contrato.tipoContrato.descripcion}" filterMatchMode="contains">
+                            #{contrato.tipoContrato.descripcion}
+                        </p:column>                                
+                    </p:dataTable>  
+                    <p>Nota: Cuando hay mas de un contrato con igual 'TIPO CONTRATO' en consumos se usar&aacute; el primero que 
+                        se encuentre, y en 'Facturar paciente' se debe escoger cual usuar.</p>
+
+                    </div>
+                
+                    </p:tab>
+                </p:tabView>
+                <p:dialog id="IdDialogoBuscarAdministradoras" header="BUSCAR ADMINISTRADORA" widgetVar="dialogoBuscarAdministradoras" resizable="false" modal="true">                
+                    <table>
+                        <tr>
+                            <td>
+                                <p:dataTable 
+                                    id="IdTablaAdministradoras" 
+                                    var="administradora" 
+                                    widgetVar="wvTablaAdministradoras"
+                                    value="#{administradorasMB.listaAdministradoras}" 
+                                    rowKey="#{administradora.idAdministradora}"  
+                                    selection="#{administradorasMB.administradoraSeleccionadaTabla}" 
+                                    paginator="true"
+                                    style="width: 600px; height: 300px;"
+                                    rows="10"                                    
+                                    paginatorPosition="bottom"                                
+                                    emptyMessage="No hay administradoras"
+                                    scrollable="true" 
+                                    currentPageReportTemplate="Mostrando {startRecord}-{endRecord} de {totalRecords}"
+                                    paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                    pageLinks="5"
+                                    selectionMode="single"
+                                    resizableColumns="true">                                                                                               
+                                    <p:column headerText="CODIGO" width="1" filterBy="#{administradora.codigoAdministradora}" filterMatchMode="contains">
+                                        #{administradora.codigoAdministradora}
+                                    </p:column>                                
+                                    <p:column headerText="NOMBRE" width="90" filterBy="#{administradora.razonSocial}" filterMatchMode="contains">
+                                        #{administradora.razonSocial}
+                                    </p:column>                                
+                                </p:dataTable>  
+                            </td>    
+                        </tr>
+                        <tr>
+                            <td>
+                                <br/>
+                                <p:commandButton 
+                                    value="Cargar Administradora"                                        
+                                    update=":IdFormAdministradoras:IdTabView"
+                                    actionListener="#{administradorasMB.cargarAdministradora}"/>
+                            </td>    
+                        </tr>
+                    </table>
+                </p:dialog> 
+                <p:dialog id="IdDialogoCopiarContratos" header="COPIAR CONTRATOS" widgetVar="dialogoCopiarContratos" resizable="false" modal="true">  
+                    <br/>
+                    <table>
+                        <tr>
+                            <td>
+                                <p:outputLabel styleClass="campoObligatorio" value="Prefijo" style="width: 110px;" title="Se usa para agregarlo a los nombres de contratos y mauales a copiar"/>
+                            </td>
+                            <td>
+                                <p:inputText size="20" value="#{administradorasMB.prefijo}"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p:outputLabel styleClass="campoObligatorio" value="Administradora: " style="width: 110px;"/>
+                            </td>
+                            <td>
+                                <p:selectOneMenu style="width: 480px;" value="#{administradorasMB.idAdministradoraACopiar}"  filter="true" filterMatchMode="contains">
+                                    <f:ajax 
+                                        event="change"
+                                        listener="#{administradorasMB.cambiaAdministradoraCopia}"                                                
+                                        render="IdListaCopiarContratos"/>
+                                    <f:selectItem itemLabel="" itemValue=""/>
+                                    <f:selectItems value="#{aplicacionGeneralMB.listaAdministradoras}" var="administradora" itemLabel="#{administradora.razonSocial}" itemValue="#{administradora.idAdministradora}" />
+                                </p:selectOneMenu>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <p:outputLabel styleClass="campoNoObligatorio" value="Contratos que se copiaran:" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <p:selectOneListbox id="IdListaCopiarContratos" style="width: 600px; height: 200px; overflow: scroll;">
+                                    <f:selectItems value="#{administradorasMB.listaContratosCopia}" var="contrato" itemLabel="#{contrato.codigoContrato} - #{contrato.descripcion}" itemValue="#{contrato.codigoContrato}" />                                
+                                </p:selectOneListbox>                            
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <p:commandButton 
+                                    value="Realizar copia"
+
+                                    actionListener="#{administradorasMB.copiarContratos}"/>
+                            </td>
+                        </tr>
+                    </table>
+                    <br/>
+                </p:dialog>
+                <p:dialog id="IdDialogoEliminarSede" header="ELIMINAR ADMINISTRADORA" widgetVar="dialogoEliminarAdministradora" resizable="false" modal="true">  
+                    <p:panelGrid id="panelEliminarAdministradora" styleClass="panelGridSinBordes" columns="1">
+                        <h:outputText value="¿ Confirma La eliminacion de esta sede?"/>                    
+                        <p:commandButton 
+                            value="Eliminar" 
+                            oncomplete="PF('dialogoEliminarAdministradora').hide();"
+                            actionListener="#{administradorasMB.confirmarEliminarAdministradora}"/>
+                    </p:panelGrid>
+                </p:dialog>            
+
+            </h:form>
+        </div>
+    </ui:define>
+
+</ui:composition>

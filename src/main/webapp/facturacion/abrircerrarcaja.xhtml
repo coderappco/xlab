@@ -1,0 +1,131 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./../template/master.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://java.sun.com/jsf/core">
+
+    <ui:define name="title">
+        Abrir Cerrar Caja
+    </ui:define>
+
+    <ui:define name="content">
+        #{abrirCerrarCajasMB.inicializar()}
+        <div class="container-fluid container-fullw">
+            <h:form id="IdFormCajas">
+                <section id="page-title">
+                    <div class="row">
+                        <div class="col-sm-8">
+                            <h1 class="mainTitle">#{abrirCerrarCajasMB.tituloTab}</h1>
+                        </div>
+                        <ol class="breadcrumb">
+                            <li>
+                                <span>Facturación</span>
+                            </li>
+                            <li class="active">
+                                <span>Abrir / Cerrar Cajas</span>
+                            </li>
+                        </ol>
+                    </div>
+                </section>
+                <div class="row">
+                    <div class="col-xs-12">
+                        <p:outputPanel  rendered="#{abrirCerrarCajasMB.cajaSeleccionada == null}">
+                            <p:outputLabel style="color:red;"  value="El usuario actual no tiene una caja asignada"/>                        
+                    </p:outputPanel>
+                    </div>
+                </div>
+                <p:outputPanel rendered="#{abrirCerrarCajasMB.cajaSeleccionada != null}">
+                    <p:outputLabel rendered="#{abrirCerrarCajasMB.cajaCerrada}">
+                        <div class="row">
+                            <div class="col-xs-12 col-lg-4">
+                                <div class="form-group">
+                                    <p:outputLabel  value="Estado Caja" style="width:150px;"/><br />
+                                    <p:inputText readonly="true" value="CERRADA" styleClass="form-control" style="width:150px;"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12 col-lg-4">
+                                <div class="form-group">
+                                    <p:outputLabel  value="Código Caja" style="width:150px;"/><br />
+                                    <p:inputText readonly="true" value="#{abrirCerrarCajasMB.codigoCaja}" styleClass="form-control" style="width:150px;"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12 col-lg-4">
+                                <div class="form-group">
+                                    <p:outputLabel  value="Nombre Caja" style="width:150px;"/><br />
+                                    <p:inputText readonly="true" value="#{abrirCerrarCajasMB.nombreCaja}" styleClass="form-control" style="width:150px;"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12 col-lg-4">
+                                <div class="form-group">
+                                    <p:outputLabel  value="Valor Apertura" style="width:150px;"/><br />
+                                    <p:inputText  styleClass="form-control" value="#{abrirCerrarCajasMB.valorBaseCaja}" style="width:150px;"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-3">
+                            <p:commandLink          styleClass="btn btn-lg btn-success btn-block button-prime"
+                                                    update="growl"
+                                                    action="#{abrirCerrarCajasMB.abrirCaja}"
+                                                    >
+                                <i class="fa fa-save"></i> Abrir
+                            </p:commandLink>
+                        </div>
+                    </p:outputLabel>
+                    <p:outputLabel rendered="#{!abrirCerrarCajasMB.cajaCerrada}">
+                        <div class="row">
+                            <div class="col-xs-12 col-lg-4">
+                                <div class="form-group">
+                                    <p:outputLabel  value="Estado Caja"/><br />
+                                    <p:inputText readonly="true" value="ABIERTA" styleClass="form-control" style="width:150px;"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12 col-lg-4">
+                                <div class="form-group">
+                                    <p:outputLabel  value="Código Caja" style="width:150px;"/><br />
+                                    <p:inputText readonly="true" value="#{abrirCerrarCajasMB.codigoCaja}" styleClass="form-control" style="width:150px;"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12 col-lg-4">
+                                <div class="form-group">
+                                    <p:outputLabel  value="Nombre Caja" style="width:150px;"/><br />
+                                    <p:inputText readonly="true" value="#{abrirCerrarCajasMB.nombreCaja}" styleClass="form-control" style="width:150px;"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12 col-lg-4">
+                                <div class="form-group">
+                                    <p:outputLabel  value="Valor Apertura" style="width:150px;"/><br />
+                                    <p:inputText  styleClass="form-control" maxlength="15"  value="#{abrirCerrarCajasMB.valorBaseCaja}" style="width:150px;"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-3">
+                            <p:commandLink          styleClass="btn btn-lg btn-success btn-block button-prime"
+                                                    update="growl"
+                                                    action="#{abrirCerrarCajasMB.cerrarCaja}"
+                                                    >
+                                <i class="fa fa-save"></i> CERRAR 
+                            </p:commandLink>
+                        </div>
+                    </p:outputLabel>
+                </p:outputPanel>
+                
+            </h:form>
+        </div>
+    </ui:define>
+
+</ui:composition>

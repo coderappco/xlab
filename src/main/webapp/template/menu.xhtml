@@ -1,0 +1,125 @@
+<?xml version='1.0' encoding='UTF-8' ?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:c="http://java.sun.com/jsp/jstl/core"
+                xmlns:f="http://java.sun.com/jsf/core">
+    <div class="sidebar app-aside" id="sidebar">
+        <div class="sidebar-container perfect-scrollbar">
+            <nav>
+                <!-- start: SEARCH FORM -->
+                <div class="search-form">
+                    <a class="s-open" href="#">
+                        <i class="ti-search"></i>
+                    </a>
+                </div>
+                <!-- end: SEARCH FORM -->
+                <!-- start: MAIN NAVIGATION MENU -->
+                <div class="navbar-title">
+                    <span>Menú de Navegación</span>
+                </div>
+                <ul class="main-navigation-menu">
+                    <li >
+                        <a href="/ordenes/orden.xhtml">
+                            <div class="item-content">
+                                <div class="item-media">
+                                    <i class="ti-home"></i>
+                                </div>
+                                <div class="item-inner">
+                                    <span class="title"> Inicio </span>
+                                </div>
+                            </div>
+                        </a>
+                    </li>
+                    <c:set var="id" value="-1" />
+                    <c:forEach items="#{loginMB.listMenu}" var="item">
+                        <!--Opciones sin padre-->
+                        <c:if test="#{item.idOpcionPadre.idOpcionMenu==0}">
+                            <li>
+                                <h:commandLink action="#{loginMB.irA(item.urlOpcion)}">
+                                    <div class="item-content">
+                                        <div class="item-media">
+                                            <i class="ti-home"></i>
+                                        </div>
+                                        <div class="item-inner">
+                                            <span class="title"> <h:outputText value="#{item.nombreOpcion}" /> </span>
+                                        </div>
+                                    </div>
+                                </h:commandLink>
+                            </li>
+                        </c:if>
+                        <!-- Opciones con padres -->
+                        <c:if test="#{item.idOpcionPadre.idOpcionMenu!=0}">
+                            <c:if test="#{item.idOpcionPadre.idOpcionMenu!=id}">
+                                <c:if test="#{item.idOpcionPadre.idOpcionMenu!=0}">
+                                    <c:if test="#{id>0}">
+                                        <h:outputText value="&lt;/ul&gt;" escape="false" />
+                                        <h:outputText value="&lt;/li&gt;" escape="false" />
+                                    </c:if>
+                                    <!--Cargamos el primer -->
+                                    <h:outputText value="&lt;li&gt;" escape="false" />
+                                    <a href="javascript:void(0)">
+                                        <div class="item-content">
+                                            <div class="item-media">
+                                                <i class="fa #{item.idOpcionPadre.style}"></i>
+                                            </div>
+                                            <div class="item-inner">
+                                                <span class="title"> <h:outputText value="#{item.idOpcionPadre.nombreOpcion}" /> </span><i class="icon-arrow"></i>
+                                            </div>
+                                        </div>
+                                    </a>
+                                    <h:outputText value="&lt;ul class='sub-menu' &gt;" escape="false" />
+                                    <li>
+                                        <h:commandLink action="#{loginMB.irA(item.urlOpcion)}"><h:outputText value="#{item.nombreOpcion}" /></h:commandLink>
+                                    </li>
+                                </c:if>
+                            </c:if>
+                            <c:if test="#{item.idOpcionPadre.idOpcionMenu==id}">
+                                <c:set var="total" value="0" />
+                                <c:set var="idMod" value="0" />
+                                <c:forEach items="#{item.cfgOpcionesMenuList}" var="sub">
+                                    <c:if test="#{idMod==0}">
+                                        <h:outputText value="&lt;li&gt;" escape="false" />
+                                        <a href="javascript:;">
+                                            <span>#{item.nombreOpcion}</span> <i class="icon-arrow"></i>
+                                        </a>
+                                        <h:outputText value="&lt;ul class='sub-menu' &gt;" escape="false" />
+                                        <li>
+                                            <h:commandLink action="#{loginMB.irA(sub.urlOpcion)}"><h:outputText value="#{sub.nombreOpcion}" /></h:commandLink>
+                                        </li>
+                                    </c:if>
+                                    <c:if test="#{idMod!=0}">
+                                        <li>
+                                            <h:commandLink action="#{loginMB.irA(sub.urlOpcion)}"><h:outputText value="#{sub.nombreOpcion}" /></h:commandLink>
+                                        </li>
+                                    </c:if>
+                                    <c:set var="idMod" value="1" />
+                                    <c:set var="total" value="1" />
+
+                                </c:forEach>
+                                <c:if test="#{total==1}">
+                                    <h:outputText value="&lt;/ul&gt;" escape="false" />
+                                    <h:outputText value="&lt;/li&gt;" escape="false" />
+                                </c:if>
+                                <c:if test="#{total==0}">
+                                    <h:outputText value="&lt;li&gt;" escape="false" />
+                                    <h:commandLink action="#{loginMB.irA(item.urlOpcion)}"><h:outputText value="#{item.nombreOpcion}" /></h:commandLink>
+                                    <h:outputText value="&lt;/li&gt;" escape="false" />
+                                </c:if>
+
+
+                            </c:if>							
+                        </c:if>
+                        <c:set var="id" value="#{item.idOpcionPadre.idOpcionMenu}" />
+                    </c:forEach>
+                    <h:outputText value="&lt;/ul&gt;" escape="false" />
+                    <h:outputText value="&lt;/li&gt;" escape="false" />
+                </ul>
+                <!-- end: MAIN NAVIGATION MENU -->
+            </nav>
+        </div>
+    </div>
+
+</ui:composition>

@@ -1,0 +1,405 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./../template/master.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://java.sun.com/jsf/core">
+
+    <ui:define name="title">
+        Usuarios
+    </ui:define>
+
+    <ui:define name="content">
+        #{usuariosMB.inicializar()}
+        <div class="container-fluid container-fullw">
+            <h:form id="frmUsuario">
+                <p:outputPanel  id="opUsuario">
+                    <section id="page-title">
+                        <div class="row">
+                            <div class="col-sm-8">
+                                <h1 class="mainTitle">Usuarios</h1>
+                            </div>
+                            <ol class="breadcrumb">
+                                <li>
+                                    <span>Configuraciones</span>
+                                </li>
+                                <li class="active">
+                                    <span>Usuarios</span>
+                                </li>
+                            </ol>
+                        </div>
+                    </section>
+                    <div class="row">
+                        <div class="col-sm-2 col-xs-12">
+
+                            <p:commandLink       
+                                id="btnNuevo"
+                                styleClass="btn btn-primary btn-block button-prime"
+                                style="margin-top:5%;"
+                                update="frmUsuario:opUsuario"
+                                ajax="true"
+                                action="#{usuariosMB.nuevo}"
+                                rendered="#{!usuariosMB.renderForm}"
+                                >
+                                <i class="fa fa-plus-circle"></i> Nuevo
+                            </p:commandLink>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <p:dataTable id="pUsuarios" var="usuario" 
+                                         value="#{usuariosMB.lstUsuarios}"
+                                         emptyMessage="No hay usuarios"
+                                         filteredValue="#{usuariosMB.lstUsuariosFiltro}"
+                                         rendered="#{!usuariosMB.renderForm}"
+                                         rows="10" 
+                                         widgetVar="usuarioTable"
+                                         paginatorPosition="bottom"
+                                         paginator="true"
+                                         tableStyleClass="table-striped table-hover"
+                                         styleClass="table"
+                                         reflow="true"
+                                         >
+                                <f:facet name="header">
+                                    <p:outputPanel>
+                                        <h:outputText value="Buscar" />
+                                        <p:inputText id="globalFilter" onkeyup="PF('usuarioTable').filter()" style="width:150px" placeholder="Ingrese Palabra"/>
+                                    </p:outputPanel>
+                                </f:facet>
+                                <p:column headerText="Nombre" filterMatchMode="startsWith"  filterBy="#{usuario.primerNombre} #{usuario.primerApellido}">
+                                    <h:outputText value="#{usuario.primerNombre} #{usuario.primerApellido}" />
+                                </p:column>
+                                <p:column headerText="Login" filterMatchMode="startsWith"  filterBy="#{usuario.loginUsuario}">
+                                    <h:outputText value="#{usuario.loginUsuario}" />
+                                </p:column>
+                                <p:column headerText="" width="50px;">
+                                    <p:commandButton icon="ui-icon-search" title="Ver" style="height: 15px;width: 20px;"  update=":frmUsuario:opUsuario,growl" action="#{usuariosMB.consultar(usuario)}"/>
+                                </p:column>
+                            </p:dataTable>
+
+                        </div>
+                    </div>
+                    <!-- /.row -->
+                    <!--form-->
+                    <h:panelGroup id="pgUsuarios" rendered="#{usuariosMB.renderForm}" style="margin-top: -20px;">
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-2">
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <div class="row">
+                                            <div class="col-xs-12 col-md-12">
+                                                <p:graphicImage id="IdFoto" url="#{usuariosMB.urlFoto}" cache="false" style="width: 60%; height: 100px;"/> 
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-xs-3 col-md-1">
+                                                <p:commandButton id="cmdUpload" value="&nbsp;" icon="ui-icon-folder-open" onclick="PF('dlgUploadFoto').show()" type="button" title="Upload archivo foto" />
+                                            </div>
+                                            <div class="col-xs-3 col-md-1">
+                                                <p:commandButton id="cmdWebCam" value="Cam" icon="ui-icon-video" onclick="PF('dlgWebCam').show()" type="button" title="Webcam" />                                                                                                
+                                            </div>
+                                            <p:dialog id="webcam" widgetVar="dlgWebCam" modal="true" dynamic="true" resizable="false" showHeader="false" closable="false" >
+                                                <p:photoCam widgetVar="pcPhoto" listener="#{usuariosMB.tomarFoto}" update="IdFoto"/>
+                                                <br/>
+                                                <p:commandButton type="button" value="Tomar" onclick="PF('pcPhoto').capture()" update="IdFoto" onsuccess="PF('dlgWebCam').hide()"/>
+                                                <p:commandButton type="button" value="Cerrar" onclick="PF('dlgWebCam').hide()"/>                            
+                                            </p:dialog>
+                                            <p:dialog id="upload1" widgetVar="dlgUploadFoto" modal="true" dynamic="true" resizable="false" showHeader="false" closable="false" >
+                                                <p:fileUpload  
+                                                    fileUploadListener="#{usuariosMB.uploadFoto}" sizeLimit="5000000" auto="true"
+                                                    update="IdFoto" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" oncomplete="dlgUpload.hide();"
+                                                    mode="advanced" label="Selecionar" uploadLabel="Enviar" cancelLabel="Cancelar" />                            
+                                                <br/>
+                                                <br/>
+                                                <p:commandButton type="button" value="Cerrar" onclick="PF('dlgUploadFoto').hide()"/>
+                                            </p:dialog>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-xs-12">
+                                                <p:graphicImage id="IdFirma" url="#{usuariosMB.urlFirma}" cache="false" style="width: 100%; height: 40px;"/>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-xs-12 col-md-1">
+                                                <p:commandButton id="cmdUploadFirma" value="&nbsp;" icon="ui-icon-folder-open" onclick="PF('dlgUploadFirma').show()" type="button" title="Upload Archivo firma" />
+                                                <p:dialog id="upload2" widgetVar="dlgUploadFirma" modal="true" dynamic="true" resizable="false" showHeader="false" closable="false" >
+                                                    <p:fileUpload 
+                                                        fileUploadListener="#{usuariosMB.uploadFirma}" sizeLimit="5000000" auto="true"
+                                                        update="IdFirma" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" oncomplete="dlgUpload.hide();"
+                                                        mode="advanced" label="Selecionar" uploadLabel="Enviar" cancelLabel="Cancelar"/>                            
+                                                    <br/>
+                                                    <p:commandButton type="button" value="Cerrar" onclick="PF('dlgUploadFirma').hide()"/>
+                                                </p:dialog>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <!--.row-->
+                            <div class="clearfix visible-xs-block"></div>
+                            <div class="col-xs-12 col-sm-8">
+                                <div class="row">
+                                    <div class="col-lg-3 col-xs-12">
+                                        <div class="form-group">
+                                            <p:outputLabel value="Tipo Identificación" id="lbTipoDoc"/>
+                                            <p:selectOneMenu value="#{usuariosMB.usuario.tipoIdentificacion.id}">
+                                                <f:selectItems value="#{usuariosMB.listaTipoIdentificacion}" />
+                                            </p:selectOneMenu>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3 col-xs-12">
+                                        <div class="form-group">
+                                            <p:outputLabel for="identificacion"  value="Identificación" id="lbidentificacion"/>
+                                            <p:inputText id="identificacion" required="true" styleClass="form-control" value="#{usuariosMB.usuario.identificacion}" >
+                                                <f:validateLength minimum="2" />
+                                                <p:ajax update="identificacion,lbidentificacion " event="blur" />
+                                            </p:inputText>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--.row-->
+                                <div class="row">
+                                    <div class="col-lg-3 col-xs-12">
+                                        <div class="form-group">
+                                            <p:outputLabel for="primerNombre"  value="Primer Nombre" id="lbPrimerNombre"/>
+                                            <p:inputText id="primerNombre" required="true" styleClass="form-control" value="#{usuariosMB.usuario.primerNombre}" >
+                                                <f:validateLength minimum="2" />
+                                                <p:ajax update="primerNombre,lbPrimerNombre " event="blur" />
+                                            </p:inputText>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3 col-xs-12">
+                                        <div class="form-group">
+                                            <p:outputLabel for="segundoNombre"  value="Segundo Nombre" id="lbSegundoNombre"/>
+                                            <p:inputText id="segundoNombre" styleClass="form-control" value="#{usuariosMB.usuario.segundoNombre}" />
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3 col-xs-12">
+                                        <div class="form-group">
+                                            <p:outputLabel for="primerApellido"  value="Primer Apellido" id="lbPrimerApellido"/>
+                                            <p:inputText id="primerApellido" required="true" styleClass="form-control" value="#{usuariosMB.usuario.primerApellido}" >
+                                                <f:validateLength minimum="2" />
+                                                <p:ajax update="primerApellido,lbPrimerApellido " event="blur" />
+                                            </p:inputText>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3 col-xs-12">
+                                        <div class="form-group">
+                                            <p:outputLabel for="segundoApellido"  value="Segundo Apellido" id="lbsegundoApellido"/>
+                                            <p:inputText id="segundoApellido" styleClass="form-control" value="#{usuariosMB.usuario.segundoApellido}" />
+                                            
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--.row-->
+                                <div class="row">
+                                    <div class="col-lg-3 col-xs-12">
+                                        <div class="form-group">
+                                            <p:outputLabel for="idGenero" value="Género" id="lbGenero"/>
+                                            <p:selectOneMenu id="idGenero" value="#{usuariosMB.usuario.genero.id}" required="true">
+                                                <f:selectItems value="#{usuariosMB.listaGenero}" />
+                                            </p:selectOneMenu>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3 col-xs-12">
+                                        <div class="form-group">
+                                            <p:outputLabel value="Departamento" id="lbDpto"/>
+                                            <p:selectOneMenu value="#{usuariosMB.usuario.departamento.id}" filter="true" filterMatchMode="contains">
+                                                <f:ajax 
+                                                    event="change"
+                                                    listener="#{usuariosMB.cargarMunicipios}"                                                
+                                                    render="municipio"/> 
+                                                <f:selectItem itemLabel="" itemValue=""/>
+                                                <f:selectItems value="#{usuariosMB.listaDpto}" />
+                                            </p:selectOneMenu>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3 col-xs-12">
+                                        <div class="form-group">
+                                            <p:outputLabel value="Municipio" id="lbMunicipio"/>
+                                            <p:selectOneMenu  id="municipio" value="#{usuariosMB.usuario.municipio.id}" filter="true" filterMatchMode="contains">
+                                                <f:selectItems value="#{usuariosMB.listaMunicipio}" />
+                                            </p:selectOneMenu>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3 col-xs-12">
+                                        <div class="form-group">
+                                            <p:outputLabel for="direccion"  value="Dirección" id="lbDireccion"/>
+                                            <p:inputText id="direccion" styleClass="form-control" value="#{usuariosMB.usuario.direccion}" />
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--row-->
+                                <div class="row">
+                                    <div class="col-lg-3 col-xs-12">
+                                        <div class="form-group">
+                                            <p:outputLabel for="telefono"  value="Teléfono Residencia" id="lbTelefono"/>
+                                            <p:inputText id="telefono" styleClass="form-control" value="#{usuariosMB.usuario.telefonoResidencia}" />
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3 col-xs-12">
+                                        <div class="form-group">
+                                            <p:outputLabel for="telefonoO"  value="Teléfono Oficina" id="lbTelefonoOficina"/>
+                                            <p:inputText id="telefonoO" styleClass="form-control" value="#{usuariosMB.usuario.telefonoOficina}" />
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3 col-xs-12">
+                                        <div class="form-group">
+                                            <p:outputLabel for="celular"  value="Celular" id="lbCelular"/>
+                                            <p:inputText id="celular" styleClass="form-control" value="#{usuariosMB.usuario.celular}" />
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3 col-xs-12">
+                                        <div class="form-group">
+                                            <p:outputLabel for="email"  value="Email" id="lbEmail"/>
+                                            <p:inputText id="email" styleClass="form-control" value="#{usuariosMB.usuario.email}"  />
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--.row-->
+                                <!--row-->
+                                <div class="row">
+                                    <div class="col-lg-3 col-xs-12">
+                                        <div class="form-group">
+                                            <p:outputLabel value="Tipo Usuario" id="lbTipoUsuario" for="idTipoUsuario"/>
+                                            <p:selectOneMenu value="#{usuariosMB.usuario.tipoUsuario.id}" required="true" id="idTipoUsuario">
+                                                <f:selectItems value="#{usuariosMB.listaTipoUsuario}" />
+                                                <f:ajax 
+                                                    event="change"
+                                                    listener="#{usuariosMB.validarTipoUsuario}"                                                
+                                                    render="frmUsuario:opUsuario"/> 
+                                            </p:selectOneMenu>
+                                        </div>
+                                    </div>
+                                    <p:outputPanel rendered="#{usuariosMB.renderTipoUsuario}" >
+                                        <div class="col-lg-3 col-xs-12">
+                                            <div class="form-group">
+                                                <p:outputLabel value="Especialidad" id="lbEspecialidad" rendered="#{usuariosMB.renderTipoUsuario}"/>
+                                                <p:selectOneMenu value="#{usuariosMB.usuario.especialidad.id}" filter="true" filterMatchMode="contains" rendered="#{usuariosMB.renderTipoUsuario}">
+                                                    <f:selectItems value="#{usuariosMB.listaEspecialidad}" />
+                                                </p:selectOneMenu>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3 col-xs-12">
+                                            <div class="form-group">
+                                                <p:outputLabel for="RegProfesional"  value="Reg Profesional" id="lbRegProfesional" rendered="#{usuariosMB.renderTipoUsuario}"/>
+                                                <p:inputText id="RegProfesional" styleClass="form-control" value="#{usuariosMB.usuario.registroProfesional}" rendered="#{usuariosMB.renderTipoUsuario}">
+                                                    <p:ajax update="RegProfesional,lbRegProfesional " event="blur" />
+                                                </p:inputText>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3 col-xs-12">
+                                            <div class="form-group">
+                                                <p:outputLabel value="Tipo Personal" id="lbPersonal" rendered="#{usuariosMB.renderTipoUsuario}"/>
+                                                <p:selectOneMenu value="#{usuariosMB.usuario.personalAtiende.id}" filter="true" filterMatchMode="contains">
+                                                    <f:selectItems value="#{usuariosMB.listaTipoPersonal}" />
+                                                </p:selectOneMenu>
+                                            </div>
+                                        </div>
+                                    </p:outputPanel>
+                                </div>
+                                <!--.form-->
+                                <!--row-->
+                                <div class="row">
+                                    <div class="col-lg-3 col-xs-12">
+                                        <div class="form-group">
+                                            <p:outputLabel for="login"  value="Login" id="lbLogin"/>
+                                            <p:inputText id="login" required="true" styleClass="form-control" value="#{usuariosMB.usuario.loginUsuario}" >
+                                                <f:validateLength minimum="2" />
+                                                <p:ajax update="login,lbLogin " event="blur" />
+                                            </p:inputText>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3 col-xs-12">
+                                        <div class="form-group">
+                                            <p:outputLabel for="codclave1"  value="Clave" id="lbcodclave1"/>
+                                            <p:password id="codclave1" required="true" match="codclave2" styleClass="form-control" value="#{usuariosMB.usuario.clave}" validatorMessage="Clave usuario : Las claves deben coincidir">
+                                                <f:validateLength minimum="2" />
+
+                                            </p:password>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3 col-xs-12">
+                                        <div class="form-group">
+                                            <p:outputLabel for="codclave2"  value="Confirmar Clave" id="lbcodclave2"/>
+                                            <p:password id="codclave2" required="true" styleClass="form-control" value="#{usuariosMB.password2}" >
+                                                <f:validateLength minimum="2" />
+                                            </p:password>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3 col-xs-12">
+                                        <div class="form-group">
+                                            <p:outputLabel value="Perfil" id="lbPerfil" for="idPerfil"/>
+                                            <p:selectOneMenu value="#{usuariosMB.usuario.idPerfil.idPerfil}" id="idPerfil" required="true">
+                                                <f:selectItems value="#{usuariosMB.listaPerfil}" />
+                                            </p:selectOneMenu>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--.row-->
+                                <div class="row">
+                                    <div class="col-lg-1 col-xs-12">
+                                        <div class="form-group">
+                                            <p:outputLabel  value="Activa"/><br />
+                                            <p:selectBooleanButton value="#{usuariosMB.usuario.estadoCuenta}" onLabel="SI" offLabel="NO" />
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-2 col-xs-12">
+                                        <div class="form-group">
+                                            <p:outputLabel  value="Visible"/><br />
+                                            <p:selectBooleanButton value="#{usuariosMB.usuario.visible}" onLabel="SI" offLabel="NO" />
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3 col-xs-12">
+                                        <div class="form-group">
+                                            <p:outputLabel for="cargoActual"  value="Cargo Actual" id="lbCargoActual"/>
+                                            <p:inputText id="cargoActual"  styleClass="form-control" value="#{usuariosMB.usuario.cargoActual}" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            </div><!--Principal row-->
+                            <br />
+                            <div class="row">
+                                <div class="col-lg-1 col-lg-offset-2 col-xs-12">
+                                    <p:commandLink          styleClass="btn btn-lg btn-success btn-block button-prime"
+                                                            update="growl,frmUsuario:opUsuario"
+                                                            onstart="PF('statusDialog').show()" 
+                                                            onsuccess="PF('statusDialog').hide()" 
+                                                            action="#{usuariosMB.guardar}"
+                                                            >
+                                        <i class="fa fa-save"></i> Guardar
+                                    </p:commandLink>
+                                </div>
+                            
+
+                            <div class="col-lg-1 col-xs-12">
+                                <p:commandLink       
+                                    styleClass="btn btn-lg btn-info btn-block button-prime"
+                                    action="#{usuariosMB.cancelar}"
+                                    update="frmUsuario:opUsuario"
+                                    process="@this"
+                                    immediate="true"
+                                    ajax="true"
+                                    >
+                                    <i class="fa fa-close"></i> Cancelar
+                                    <p:resetInput target="frmUsuario:opUsuario" />
+                                </p:commandLink>
+
+
+
+                            </div>
+                        </div>
+
+                    </h:panelGroup>
+                    <!---.form-->
+                </p:outputPanel>
+            </h:form>
+        </div>
+    </ui:define>
+
+</ui:composition>
