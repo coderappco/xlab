@@ -14,6 +14,7 @@ import coderappco.xlab.entidades.CfgPacientes;
 import coderappco.xlab.entidades.CfgUsuarios;
 import coderappco.xlab.entidades.FacAdministradora;
 import coderappco.xlab.entidades.FacConsecutivo;
+import coderappco.xlab.entidades.XlabConsecutivos;
 import coderappco.xlab.entidades.XlabEstudio;
 import coderappco.xlab.entidades.XlabOrden;
 import coderappco.xlab.entidades.XlabOrdenEstudioPruebaResultados;
@@ -27,12 +28,14 @@ import coderappco.xlab.facades.CfgPacientesFacade;
 import coderappco.xlab.facades.CfgUsuariosFacade;
 import coderappco.xlab.facades.FacAdministradoraFacade;
 import coderappco.xlab.facades.FacConsecutivoFacade;
+import coderappco.xlab.facades.XlabConsecutivosFacade;
 import coderappco.xlab.facades.XlabEstudioFacade;
 import coderappco.xlab.facades.XlabOrdenEstudioPruebaResultadosFacade;
 import coderappco.xlab.facades.XlabOrdenEstudiosPruebasFacade;
 import coderappco.xlab.facades.XlabOrdenFacade;
 import coderappco.xlab.utilidades.ClasificacionesEnum;
 import coderappco.xlab.utilidades.Constante;
+import coderappco.xlab.utilidades.DBConnector;
 import coderappco.xlab.utilidades.SessionUtil;
 import coderappco.xlab.utilidades.Utilidades;
 import java.io.File;
@@ -42,6 +45,8 @@ import java.io.InputStream;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
+import java.sql.Connection;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -58,7 +63,14 @@ import org.primefaces.event.FileUploadEvent;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.model.UploadedFile;
 import javax.annotation.Resource;
+import javax.faces.context.FacesContext;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
 import javax.transaction.UserTransaction;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
 import org.primefaces.model.chart.Axis;
 import org.primefaces.model.chart.AxisType;
 import org.primefaces.model.chart.CategoryAxis;
@@ -79,7 +91,7 @@ public class OrdenMB extends Controlador implements Serializable {
     @EJB
     private CfgPacientesFacade pacienteFacade;
     @EJB
-    private FacConsecutivoFacade consecutivoFacade;
+    private XlabConsecutivosFacade consecutivoFacade;
     @EJB
     private CfgUsuariosFacade usuarioFacade;
     @EJB
@@ -226,7 +238,7 @@ public class OrdenMB extends Controlador implements Serializable {
         disableCampoPrueba = false;
         disableCampoPruebaCompuesta = false;
         lineModelEvolutivo = new LineChartModel();
-        
+        observaciones="";
         
         ChartSeries boys = new ChartSeries();
                     boys.setLabel("Boys");
@@ -308,9 +320,11 @@ public class OrdenMB extends Controlador implements Serializable {
             }
             if(diagnostico==null)orden.setDiagnosticoId(null);
             else if(diagnostico.equals(""))orden.setDiagnosticoId(null);
-            FacConsecutivo con =  consecutivoFacade.buscarPorTipoDocumento(SessionUtil.getTipoDocumentoOrden()).get(0);
-            orden.setNroOrden(String.format("%09d", con.getActual()+1));
-            con.setActual(con.getActual()+1);
+            XlabConsecutivos con = consecutivoFacade.getName(Constante.ORDEN);
+            SimpleDateFormat formato = new SimpleDateFormat("yyMMdd");
+            String format = "%0"+con.getDecimales()+"d";
+            orden.setNroOrden(formato.format(new Date())+String.format(format, con.getNumeroActual()+1));
+            con.setNumeroActual(con.getNumeroActual()+1);
             consecutivoFacade.edit(con);
             CfgEmpresa empresa  = new CfgEmpresa();
             empresa.setCodEmpresa(SessionUtil.getEmpresa());
@@ -406,6 +420,7 @@ public class OrdenMB extends Controlador implements Serializable {
         disableObservacionesPrueba = false;
         disableCampoPrueba = false;
         disableCampoPruebaCompuesta = false;
+        observaciones="";
     }
 
     @Override
@@ -459,7 +474,8 @@ public class OrdenMB extends Controlador implements Serializable {
         }
     }
     public void validarIdentificacion() {//verifica si existe la identificacion de lo contrario abre un dialogo para seleccionar el paciente de una tabla
-        pacientes = pacienteFacade.buscarPorIdentificacion(identificacionPaciente);
+        try{
+        pacientes = pacienteFacade.findPacienteByTipIden(tipoIdentificacion, identificacionPaciente);
         if(pacientes==null){
             pacientes = new CfgPacientes();
             SessionUtil.addWarningMessage("Paciente no existe", "Se creará como nuevo registro");
@@ -472,30 +488,48 @@ public class OrdenMB extends Controlador implements Serializable {
             cargarMunicipios();
             //Cargamos fotos del paciente
             if(pacientes.getFirma()!=null){
-            Utilidades.moverArchivo(SessionUtil.getUrlImagen()+pacientes.getFirma().getUrlImagen(), SessionUtil.getUrlPath()+"imagenesOpenmedical/"+pacientes.getFirma().getNombreEnServidor(),false);
-            urlFirma = "../imagenesOpenmedical/"+pacientes.getFirma().getNombreEnServidor();
-        }
-        if(pacientes.getFoto()!=null){
-            Utilidades.moverArchivo(SessionUtil.getUrlImagen()+pacientes.getFoto().getUrlImagen(), SessionUtil.getUrlPath()+"imagenesOpenmedical/"+pacientes.getFoto().getNombreEnServidor(),false);
-            urlFoto = "../imagenesOpenmedical/"+pacientes.getFoto().getNombreEnServidor();
-        }
+                Utilidades.moverArchivo(SessionUtil.getUrlImagen()+pacientes.getFirma().getUrlImagen(), SessionUtil.getUrlPath()+"imagenesOpenmedical/"+pacientes.getFirma().getNombreEnServidor(),false);
+                urlFirma = "../imagenesOpenmedical/"+pacientes.getFirma().getNombreEnServidor();
+            }else{
+                urlFirma = this.firmaPorDefecto;
+            }
+            if(pacientes.getFoto()!=null){
+                Utilidades.moverArchivo(SessionUtil.getUrlImagen()+pacientes.getFoto().getUrlImagen(), SessionUtil.getUrlPath()+"imagenesOpenmedical/"+pacientes.getFoto().getNombreEnServidor(),false);
+                urlFoto = "../imagenesOpenmedical/"+pacientes.getFoto().getNombreEnServidor();
+            }else{
+                urlFoto = this.fotoPorDefecto;
+            }
+                
         }
         establecerOrden();
+        }catch(Exception ex){
+            SessionUtil.addErrorMessage("Error al cargar", ex.toString());
+        }
     }
 
     public void validarEdad(){
-        if(pacientes.getFechaNacimiento()!=null)
-        edad = calcularEdad(pacientes.getFechaNacimiento());
+        try{
+            if(pacientes.getFechaNacimiento()!=null)
+            edad = calcularEdad(pacientes.getFechaNacimiento());
+        }catch(Exception ex){
+            
+        }
             
     }
     private void establecerOrden(){
-        orden = new XlabOrden();
-        orden.setFechaOrden(new Date());
-        //Validamos si se genera automaticamente
-        if(SessionUtil.getConsecutivoAutomatico().equals("S")){
-            FacConsecutivo con =  consecutivoFacade.buscarPorTipoDocumento(SessionUtil.getTipoDocumentoOrden()).get(0);
-            orden.setNroOrden(String.format("%09d", con.getActual()+1));
-            lecturaOrden = true;
+        try{
+            orden = new XlabOrden();
+            orden.setFechaOrden(new Date());
+            //Validamos si se genera automaticamente
+            if(SessionUtil.getConsecutivoAutomatico().equals("S")){
+                XlabConsecutivos con = consecutivoFacade.getName(Constante.ORDEN);
+                SimpleDateFormat formato = new SimpleDateFormat("yyMMdd");
+                String format = "%0"+con.getDecimales()+"d";
+                orden.setNroOrden(formato.format(new Date())+String.format(format, con.getNumeroActual()+1));
+                lecturaOrden = true;
+            }
+        }catch(Exception ex){
+            ex.printStackTrace();
         }
     }
     public String getFirmaPorDefecto() {
@@ -751,7 +785,14 @@ public class OrdenMB extends Controlador implements Serializable {
 
     public List<String> autocompletarDiagnostico(String txt) {//retorna una lista con los diagnosticos que contengan el parametro txt
         if (txt != null && txt.length() > 2) {
-            return diagnosticoFacade.autocompletarDiagnostico(txt);
+            return diagnosticoFacade.autocompletarDiagnostico(txt.toUpperCase());
+        } else {
+            return null;
+        }
+    }
+    public List<String> autocompletarOrden(String txt) {//retorna una lista con los diagnosticos que contengan el parametro txt
+        if (txt != null && txt.length() > 2) {
+            return ordenFacade.autocompletarOrden(txt);
         } else {
             return null;
         }
@@ -796,17 +837,21 @@ public class OrdenMB extends Controlador implements Serializable {
     }
     
     public void cargarMunicipios() {
-        listaMunicipio = new ArrayList<>();
-        if (pacientes.getDepartamento().getId() != 0) {
-            List<CfgClasificaciones> listaM = clasificacionFacade.buscarMunicipioPorDepartamento(clasificacionFacade.find(pacientes.getDepartamento().getId()).getCodigo());
-            listaMunicipio.clear();
-            int i = 0;
-            for (CfgClasificaciones mun : listaM) {
-                if(i==0)pacientes.setMunicipio(mun);
-                listaMunicipio.add(new SelectItem(mun.getId(), mun.getDescripcion()));
-                i++;
+        try{
+            listaMunicipio = new ArrayList<>();
+            if (pacientes.getDepartamento().getId() != 0) {
+                List<CfgClasificaciones> listaM = clasificacionFacade.buscarMunicipioPorDepartamento(clasificacionFacade.find(pacientes.getDepartamento().getId()).getCodigo());
+                listaMunicipio.clear();
+                int i = 0;
+                for (CfgClasificaciones mun : listaM) {
+                    if(i==0)pacientes.setMunicipio(mun);
+                    listaMunicipio.add(new SelectItem(mun.getId(), mun.getDescripcion()));
+                    i++;
+                }
+
             }
-            
+        }catch(Exception ex){
+            ex.printStackTrace();
         }
     }
     public void cargarDialogEstudio(){
@@ -846,6 +891,13 @@ public class OrdenMB extends Controlador implements Serializable {
     public void validarDiagnostico(SelectEvent event){
         try {
             orden.setDiagnosticoId(diagnosticoFacade.buscarPorNombre(event.getObject().toString()));
+        } catch (Exception e) {
+        }
+    }
+    public void validarOrden(SelectEvent event){
+        try {
+            orden.setNroOrden(event.getObject().toString()); 
+            cargarOrden();
         } catch (Exception e) {
         }
     }
@@ -963,7 +1015,6 @@ public class OrdenMB extends Controlador implements Serializable {
                 renderDatosCompuestos = true;
                 labelDatosPrueba = "";
                 valoresPruebaCompuesta = "";
-                observaciones = "";
                 c1=0d;
                 c2=0d;
                 c3=0d;
@@ -1004,7 +1055,6 @@ public class OrdenMB extends Controlador implements Serializable {
             renderDatosAlfanumericos = true;
             renderDatosCompuestos = false;
             labelDatosPrueba = pruebaValidada.getPruebaId().getCodigo() +" - "+pruebaValidada.getPruebaId().getNombre() + " ("+ pruebaValidada.getPruebaId().getUnidadPrueba().getCodigo()+")";
-            observaciones = "";
             if(pruebaValidada.getResultado()!=null){
                 if(!pruebaValidada.equals(""))
                     datosPrueba=pruebaValidada.getResultado();
@@ -1199,9 +1249,11 @@ public class OrdenMB extends Controlador implements Serializable {
             ordenEstudioPruebaFacade.edit(xo);
             pruebaSeleccionada.set(i, xo);
             i++;
+            observaciones = xo.getNota();
         }
         disableBtnValidar =true;
         disableBtnConfirmar=true;
+        
         RequestContext.getCurrentInstance().update(":IdFormPanel:tabV");
     }
     public void btnEvolutivo(){
@@ -1464,6 +1516,35 @@ public class OrdenMB extends Controlador implements Serializable {
             return false;
         }
         return true;
+    }
+    public void reporteXId(){
+        try {
+            
+            FacesContext facesContext = FacesContext.getCurrentInstance();
+            HttpServletResponse httpServletResponse = (HttpServletResponse) facesContext.getExternalContext().getResponse();
+            try (ServletOutputStream servletOutputStream = httpServletResponse.getOutputStream()) {
+            httpServletResponse.setContentType("application/pdf");
+                ServletContext servletContext = (ServletContext) facesContext.getExternalContext().getContext();
+            String ruta ;
+            ruta = servletContext.getRealPath("/informes/listatrabajos/r_master_pruebas_por_orden.jasper");
+            Map<String, Object> parametros = new HashMap<>();
+            parametros.put("P_EMPRESA", SessionUtil.getEmpresa());
+            parametros.put("P_ORDEN", orden.getNroOrden());
+            parametros.put("SUBREPORT_DIR", "r_prueba_orden_grupo_alfa_num_orden.jasper");
+            try{
+                Connection con = DBConnector.getInstance().getConnection();
+                JasperPrint jasperPrint = JasperFillManager.fillReport(ruta, parametros, con);
+                JasperExportManager.exportReportToPdfStream(jasperPrint, servletOutputStream);
+                FacesContext.getCurrentInstance().responseComplete();
+                if(con!=null)con.close();
+                DBConnector.getInstance().closeConnection();
+            }catch(Exception e){
+                e.printStackTrace();
+            }
+        }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public List<XlabOrdenEstudiosPruebas> getPruebaSeleccionada() {

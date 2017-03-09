@@ -132,4 +132,18 @@ public class CfgPacientesFacade extends AbstractFacade<CfgPacientes> {
     public EntityManager obtenerEntityManager() {
         return getEntityManager();
     }
+    
+    public List<String> autocompletarPaciente(String txt) {
+        try {
+            return getEntityManager().createNativeQuery("select primer_nombre||' '||segundo_nombre||' '||primer_apellido||' '||segundo_apellido from cfg_pacientes where primer_nombre||' '||segundo_nombre||' '||primer_apellido||' '||segundo_apellido ilike '%" + txt + "%' limit 10").getResultList();
+        } catch (Exception e) {                          
+            return null;
+        }
+    }
+    
+     public CfgPacientes buscarPorNombre(String txt) {
+        Query q = getEntityManager().createQuery("select x from CfgPacientes x where concat(x.primerNombre,' ',x.segundoNombre,' ',x.primerApellido,' ',x.segundoApellido) =:desc");
+            q.setParameter("desc", txt);
+            return (CfgPacientes)q.getSingleResult();
+    }
 }

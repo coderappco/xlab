@@ -20,4 +20,6 @@ public class Constante {
     public static String PRUEBA_PENDIENTE ="P";
     public static String PRUEBA_VALIDADA ="V";
     public static String PRUEBA_CONFIRMADA ="C";
+    
+    public static String ORDEN = "ORDEN";
 }

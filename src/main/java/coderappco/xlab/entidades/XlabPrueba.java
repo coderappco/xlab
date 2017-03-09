@@ -91,6 +91,7 @@ public class XlabPrueba implements Serializable {
     public XlabPrueba() {
         unidadPrueba = new CfgUnidad();
         tipoTecnica = new XlabTipoTecnica();
+        tipoTecnica.setId(0);
     }
 
     public XlabPrueba(Integer id) {

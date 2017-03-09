@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="r_master_pruebas_por_orden" language="groovy" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="56d6c1fd-75c2-4d6f-9449-8f6566e947cf">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="P_EMPRESA" class="java.lang.Integer"/>
+	<parameter name="P_LOGO" class="java.lang.String"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="P_ORDEN" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[select     razon_social,
+      	 concat(direccion,' Teléfono:',telefono_1,' ',cc.descripcion,' - ',dep.descripcion)as ubicacion
+from 	cfg_empresa c
+inner join cfg_clasificaciones cc on cc.id = c.cod_municipio
+inner join cfg_clasificaciones dep on dep.id = c.cod_departamento
+where cod_empresa= $P{P_EMPRESA}]]>
+	</queryString>
+	<field name="razon_social" class="java.lang.String">
+		<fieldDescription><![CDATA[NOMBRE DE LA EMPRESA QUE COMPRA EL SOFTWARE]]></fieldDescription>
+	</field>
+	<field name="ubicacion" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="65" splitType="Stretch">
+			<image onErrorType="Blank">
+				<reportElement x="0" y="0" width="103" height="65" uuid="9b56ed6d-b743-48a4-bcbe-d660d6c64347"/>
+				<imageExpression><![CDATA[$P{P_LOGO}]]></imageExpression>
+			</image>
+			<textField>
+				<reportElement x="0" y="0" width="572" height="20" uuid="227e59e0-2483-417f-8d43-51dc1972dcca"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{razon_social}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="20" width="572" height="20" uuid="f068557d-1a51-4a5b-b062-08e9af9356aa"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{ubicacion}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="41" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="14" splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="17" splitType="Stretch">
+			<subreport>
+				<reportElement positionType="Float" isPrintRepeatedValues="false" x="0" y="0" width="572" height="17" uuid="ed6ad6fc-d788-4561-9c65-1419463abf73"/>
+				<subreportParameter name="P_EMPRESA">
+					<subreportParameterExpression><![CDATA[$P{P_EMPRESA}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="P_ORDEN">
+					<subreportParameterExpression><![CDATA[$P{P_ORDEN}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportExpression>
+			</subreport>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="20">
+			<staticText>
+				<reportElement x="386" y="0" width="44" height="20" uuid="07ed00d1-99bc-456f-ad86-b10998caf51e"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[Impreso:]]></text>
+			</staticText>
+			<textField pattern="dd/MM/yy - HH:mm:ss">
+				<reportElement x="430" y="0" width="94" height="20" uuid="8f6e04f4-c7af-4cc0-b384-092ea7ff1065"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="545" y="0" width="27" height="20" uuid="15e6f434-3079-491e-856e-ef9e724b9d32"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="525" y="0" width="21" height="20" uuid="fbad4aa5-1fd6-446a-8a72-3a809fbb0e23"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[Pág.]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="0" y="0" width="386" height="20" uuid="5db92873-e7eb-4014-b240-2beb74ca46ea"/>
+				<box leftPadding="3"/>
+				<textElement verticalAlignment="Middle">
+					<font size="11" isItalic="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{razon_social}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+</jasperReport>

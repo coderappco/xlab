@@ -8,6 +8,7 @@ package coderappco.xlab.beans.seguridad;
 import coderappco.xlab.entidades.*;
 import coderappco.xlab.facades.*;
 import coderappco.xlab.utilidades.ClasificacionesEnum;
+import coderappco.xlab.utilidades.Constante;
 import coderappco.xlab.utilidades.SessionUtil;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
@@ -73,7 +74,8 @@ public class LoginMB implements Serializable {
     CfgConfiguracionesFacade configuracionesFacade;
     @EJB
     CfgCopiasSeguridadFacade copiasSeguridadFacade;
-
+    @EJB
+    XlabConsecutivosFacade consecutivoFacade;
     //---------------------------------------------------
     //-----------------ENTIDADES ------------------------
     //---------------------------------------------------
@@ -194,7 +196,10 @@ public class LoginMB implements Serializable {
         this.usuarioActual = usuarioActual;
     }
     
-    public void iniciarSesion(){
+    public String carga(){
+        return "otra";
+    }
+    public String iniciarSesion(){
         try {
             try {
                 usuarioActual = usuarioFacade.buscarPorLoginClave(this.usuario, this.password);
@@ -206,13 +211,16 @@ public class LoginMB implements Serializable {
                 CfgConfiguraciones cf = configuracionFacade.find(1);
                 SessionUtil.setUrlImage(cf.getRutaImagenes());
                 //Consecutivo orden
-                CfgClasificaciones ordenConsecutivo = clasificacionFacade.buscarPorCodigo("1",ClasificacionesEnum.Ordenes.toString());
-                SessionUtil.setConsecutivoAutomatico(ordenConsecutivo.getDescripcion());
+                //CfgClasificaciones ordenConsecutivo = clasificacionFacade.buscarPorCodigo("1",ClasificacionesEnum.Ordenes.toString());
+                XlabConsecutivos consecutivos = consecutivoFacade.getName(Constante.ORDEN);
+                SessionUtil.setConsecutivoAutomatico(consecutivos!=null?(consecutivos.getAutomatico()?"S":"N"):"N");
                 //obtenemos tipo documento
                 CfgClasificaciones tipoDocumento = clasificacionFacade.buscarPorCodigo("01", ClasificacionesEnum.ConsecutivoOrden.toString());
                 SessionUtil.setTipoDocumentoOrden(tipoDocumento.getId());
-                SessionUtil.redirectTo("/faces/ordenes/orden.xhtml", false);        
+                //SessionUtil.redirectTo("/faces/index.xhtml", false);        
+                
                 inicializar();
+                return "ordenes/orden";
             }else{
                 SessionUtil.addErrorMessage("Error al iniciar sesión", "email y/o clave incorrecta");
             }
@@ -222,16 +230,11 @@ public class LoginMB implements Serializable {
         }
         } catch (Exception e) {
         }
+        return "";
     }
     
-    public void irA(String action) {
-        ExternalContext ctx = FacesContext.getCurrentInstance().getExternalContext();
-        String ctxPath = ((ServletContext) ctx.getContext()).getContextPath();
-      try { 
-            ctx.redirect(ctxPath + "/faces/"+action); 
-        }
-        catch (IOException ex) {  
-        }
+    public String irA(String action) {
+        return "/"+action+"?faces-redirect=true";
     }
 
     public String getNombreLogin() {

@@ -25,19 +25,21 @@
         <link href="http://fonts.googleapis.com/css?family=Lato:300,400,400italic,600,700|Raleway:300,400,500,600,700|Crete+Round:400italic" rel="stylesheet" type="text/css" />
         <!-- end: GOOGLE FONTS -->
         <!-- start: MAIN CSS -->
-        <h:outputStylesheet library="vendor/bootstrap/css/" name="bootstrap.min.css"  /> 
+        <link rel="stylesheet" href="../resources/vendor/bootstrap/css/bootstrap.min.css" />
         <link rel="stylesheet" href="../resources/vendor/fontawesome/css/font-awesome.min.css" />
         <link rel="stylesheet" href="../resources/vendor/themify-icons/themify-icons.min.css" />
-        <h:outputStylesheet library="vendor/animate.css/" name="animate.min.css"  /> 
-        <h:outputStylesheet library="vendor/perfect-scrollbar/" name="perfect-scrollbar.min.css"  /> 
-        <h:outputStylesheet library="vendor/switchery/" name="switchery.min.css"  /> 
+        <link rel="stylesheet" href="../resources/vendor/animate.css/animate.min.css" />
+        <link rel="stylesheet" href="../resources/vendor/animate.css/animate.min.css" />
+        <link rel="stylesheet" href="../resources/vendor/perfect-scrollbar/perfect-scrollbar.min.css" />
+        <link rel="stylesheet" href="../resources/vendor/switchery/switchery.min.css" />
         
         <!-- end: MAIN CSS -->
         <!-- start: CLIP-TWO CSS -->
-        <h:outputStylesheet library="assets/css/" name="styles.css"  /> 
-        <h:outputStylesheet library="assets/css/" name="plugins.css"  /> 
-        <h:outputStylesheet library="assets/css/" name="estilos.css"  /> 
-        <h:outputStylesheet library="assets/css/themes/" name="theme-3.css" id="skin_color"  /> 
+        <link rel="stylesheet" href="../resources/assets/css/styles.css" />
+        <link rel="stylesheet" href="../resources/assets/css/plugins.css" />
+        <link rel="stylesheet" href="../resources/assets/css/estilos.css" />
+        <link rel="stylesheet" href="../resources/assets/css/themes/theme-3.css" id="skin_color" />
+        
         
         
         
@@ -182,14 +184,15 @@
             </div>
         </div>
         <!--end: app-->
+        <script src="../resources/assets/js/scripts.js"></script>
+        <script src="../resources/vendor/bootstrap/js/bootstrap.min.js"></script>
+        <script src="../resources/vendor/modernizr/modernizr.js"></script>
+        <script src="../resources/vendor/jquery-cookie/jquery.cookie.js"></script>
+        <script src="../resources/vendor/perfect-scrollbar/perfect-scrollbar.min.js"></script>
+        <script src="../resources/vendor/switchery/switchery.min.js"></script>
+        <script src="../resources/vendor/jquery-ui/jquery-ui-1.10.2.custom.min.js"></script>
         
-        <h:outputScript library="assets/js/"  name="scripts.js" />
-        <h:outputScript library="vendor/bootstrap/js/"  name="bootstrap.min.js" />
-        <h:outputScript library="vendor/modernizr/"  name="modernizr.js" />
-        <h:outputScript library="vendor/jquery-cookie/"  name="jquery.cookie.js" />
-        <h:outputScript library="vendor/perfect-scrollbar/"  name="perfect-scrollbar.min.js" />
-        <h:outputScript library="vendor/switchery/"  name="switchery.min.js" />
-        <h:outputScript library="vendor/jquery-ui/"  name="jquery-ui-1.10.2.custom.min.js" />
+        
         
         <!-- end: MAIN JAVASCRIPTS -->
         <!-- start: JAVASCRIPTS REQUIRED FOR THIS PAGE ONLY -->
@@ -199,8 +202,8 @@
 
         <!-- end: JAVASCRIPTS REQUIRED FOR THIS PAGE ONLY -->
         <!-- start: CLIP-TWO JAVASCRIPTS -->
-        <h:outputScript library="assets/js/"  name="main.js" />
-        <h:outputScript library="assets/js/"  name="index.js" />
+        <script src="../resources/assets/js/main.js"></script>
+        <script src="../resources/assets/js/index.js"></script>
         <script>
             jQuery(document).ready(function () {
                 Main.init();
@@ -212,3 +215,4 @@
     </h:body>
 
 </html>
+

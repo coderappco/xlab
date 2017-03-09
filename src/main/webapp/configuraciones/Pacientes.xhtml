@@ -1,0 +1,331 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./../template/master.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://java.sun.com/jsf/core">
+
+    <ui:define name="title">
+        Pacientes
+    </ui:define>
+
+    <ui:define name="content">
+        #{pacientesMB.inicializar()}
+        <div class="container-fluid container-fullw">
+            <h:form id="frmPaciente">
+                <section id="page-title">
+                    <div class="row">
+                        <div class="col-sm-8">
+                            <h1 class="mainTitle">Pacientes</h1>
+                        </div>
+                        <ol class="breadcrumb">
+                            <li>
+                                <span>Pacientes</span>
+                            </li>
+                            <li class="active">
+                                <span>Configuración</span>
+                            </li>
+                        </ol>
+                    </div>
+                </section>
+                <div class="row">
+                    <div class="col-xs-12 col-sm-3">
+                        <div class="form-group">
+                            <p:outputLabel for="tipoIdentificacionB"  value="Tipo Identificación" id="lbIdentificacionB"/>
+                            <p:selectOneMenu id="tipoIdentificacionB" value="#{pacientesMB.tipoIdentificacion}">
+                                <f:selectItems value="#{pacientesMB.listaTipoIdentificacion}" />
+                            </p:selectOneMenu>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-3">
+                        <div class="form-group">
+                            <p:outputLabel for="nroIdentificacionB"  value="Número Identificación" id="lbIdentiB"/>
+                            <p:inputText id="nroIdentificacionB" styleClass="form-control" value="#{pacientesMB.nroIdentificacion}"  placeholder="Identificación del Paciente">
+                                    <p:ajax update="frmPaciente" listener="#{pacientesMB.validarIdentificacion}" onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />
+                            </p:inputText>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-3">
+                        <div class="form-group">
+                            <p:outputLabel for="nombrePacienteB"   value="Nombre Paciente" id="lbNombrePacienteB"/><br/>
+                            <p:autoComplete id="nombrePacienteB" size="40"  value="#{pacientesMB.nombrePaciente}" completeMethod="#{pacientesMB.autocompletarDiagnostico}" forceSelection="true" placeholder="Digite Nombre Paciente">
+                                <p:ajax listener="#{pacientesMB.validarDiagnostico}" event="itemSelect" update="frmPaciente" onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()"/>
+                              </p:autoComplete>
+                                <p:tooltip id="toolombrePacienteB" for="nombrePacienteB" value="Digite Nombre Paciente" position="top"/>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Datos form-->
+            <p:outputPanel rendered="#{pacientesMB.renderForm}">
+                <div class="row">
+                    
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-2">
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <p:graphicImage id="IdFoto" url="#{pacientesMB.urlFoto}" cache="false" style="width: 90%; height: 120px;" rendered="#{pacientesMB.renderForm}"/> 
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-3">
+                                    <p:commandButton id="cmdUpload" value="&nbsp;" icon="ui-icon-folder-open" onclick="PF('dlgUploadFoto').show()" type="button" rendered="#{pacientesMB.renderForm}"/>
+                                    <p:tooltip id="toolFoto" for="cmdUpload" value="Upload archivo foto" position="right" />
+                                </div>
+                                <div class="col-xs-3">
+                                    <p:commandButton rendered="#{pacientesMB.renderForm}" id="cmdWebCam" value="Cam" icon="ui-icon-video" onclick="PF('dlgWebCam').show()" type="button" title="Webcam" />                                                                                                
+                                    <p:tooltip id="toolTipFade" for="cmdWebCam" value="Web cam" position="top"/>
+                                </div>
+                                <p:dialog id="webcam" widgetVar="dlgWebCam" modal="true" dynamic="true" resizable="false" showHeader="false" closable="false" >
+                                    <p:photoCam rendered="#{pacientesMB.renderForm}" widgetVar="pcPhoto" listener="#{pacientesMB.tomarFoto}" update="IdFoto"/>
+                                    <br/>
+                                    <p:commandButton rendered="#{pacientesMB.renderForm}" type="button" value="Tomar" onclick="PF('pcPhoto').capture()" update="IdFoto" onsuccess="PF('dlgWebCam').hide()"/>
+                                    <p:commandButton rendered="#{pacientesMB.renderForm}" type="button" value="Cerrar" onclick="PF('dlgWebCam').hide()"/>                            
+                                </p:dialog>
+                                <p:dialog id="upload1" widgetVar="dlgUploadFoto" modal="true" dynamic="true" resizable="false" showHeader="false" closable="false" >
+                                    <p:fileUpload rendered="#{pacientesMB.renderForm}"
+                                        fileUploadListener="#{pacientesMB.uploadFoto}" sizeLimit="5000000" auto="true"
+                                        update="IdFoto" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" oncomplete="dlgUpload.hide();"
+                                        mode="advanced" label="Selecionar" uploadLabel="Enviar" cancelLabel="Cancelar" />                            
+                                    <br/>
+                                    <br/>
+                                    <p:commandButton type="button" value="Cerrar" onclick="PF('dlgUploadFoto').hide()" rendered="#{pacientesMB.renderForm}"/>
+                                </p:dialog>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <p:graphicImage id="IdFirma" url="#{pacientesMB.urlFirma}" cache="false" style="width: 100%; height: 40px;" rendered="#{pacientesMB.renderForm}"/>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <p:commandButton id="cmdUploadFirma" value="&nbsp;" icon="ui-icon-folder-open" onclick="PF('dlgUploadFirma').show()" type="button"  rendered="#{pacientesMB.renderForm}"/>
+                                    <p:tooltip id="toolFirma" for="cmdUploadFirma" value="Upload Archivo firma" position="right"/>
+                                    <p:dialog id="upload2" widgetVar="dlgUploadFirma" modal="true" dynamic="true" resizable="false" showHeader="false" closable="false" >
+                                        <p:fileUpload  
+                                            fileUploadListener="#{pacientesMB.uploadFirma}" sizeLimit="5000000" auto="true"
+                                            update="IdFirma" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" oncomplete="dlgUpload.hide();"
+                                            mode="advanced" label="Selecionar" uploadLabel="Enviar" cancelLabel="Cancelar"/>                            
+                                        <br/>
+                                        <p:commandButton type="button" value="Cerrar" onclick="PF('dlgUploadFirma').hide()"/>
+                                    </p:dialog>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="clearfix visible-xs-block"></div>
+                        <div class="col-xs-12 col-sm-8">
+                            <div class="row">
+                                <div class="col-lg-3">
+                                    <div class="form-group">
+                                        <p:outputLabel for="tipoIdentificacion"  value="Tipo Identificación" id="lbIdentificacion"/>
+                                        <p:selectOneMenu id="tipoIdentificacion" value="#{pacientesMB.paciente.tipoIdentificacion.id}">
+                                            <f:selectItems value="#{pacientesMB.listaTipoIdentificacion}" />
+                                        </p:selectOneMenu>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="form-group">
+                                        <p:outputLabel for="nroIdentificacion"  value="Número Identificación" id="lbIdenti"/>
+                                        <p:inputText id="nroIdentificacion" required="true" styleClass="form-control" value="#{pacientesMB.paciente.identificacion}"  placeholder="Identificación del Paciente">
+                                            
+                                        </p:inputText>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <p:outputLabel for="administradoraPaciente"  value="Administradora" id="lbadministradoraPaciente"/>
+                                        <p:selectOneMenu id="administradoraPaciente" required="true" value="#{pacientesMB.paciente.idAdministradora.idAdministradora}" filter="true" filterMatchMode="contains">
+                                            <f:selectItem itemLabel="" itemValue="" />
+                                            <f:ajax 
+                                                event="change"/> 
+                                            <f:selectItems value="#{pacientesMB.listaAdministradora}" />
+                                        </p:selectOneMenu>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-3">
+                                    <div class="form-group">
+                                        <p:outputLabel for="primerNombre"  value="Primer Nombre" id="lbPrimerNombre"/>
+                                        <p:inputText id="primerNombre" required="true" styleClass="form-control" value="#{pacientesMB.paciente.primerNombre}" placeholder="Primer Nombre del Paciente" style="text-transform: uppercase">
+                                            <p:ajax update="primerNombre,lbPrimerNombre " event="blur" />
+                                        </p:inputText>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="form-group">
+                                        <p:outputLabel for="segundoNombre"  value="Segundo Nombre" id="lbSegundoNombre"/>
+                                        <p:inputText id="segundoNombre"  styleClass="form-control" value="#{pacientesMB.paciente.segundoNombre}" placeholder="Segundo Nombre del Paciente" style="text-transform: uppercase">
+                                            <p:ajax update="segundoNombre,lbSegundoNombre " event="blur" />
+                                        </p:inputText>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="form-group">
+                                        <p:outputLabel for="primerApellido"  value="Primer Apellido" id="lbPrimerApellido"/>
+                                        <p:inputText id="primerApellido" required="true" styleClass="form-control" value="#{pacientesMB.paciente.primerApellido}" placeholder="Primer Apellido del Paciente" style="text-transform: uppercase">
+                                            <f:validateLength minimum="2" />
+                                            <p:ajax update="primerApellido,lbPrimerApellido " event="blur" />
+                                        </p:inputText>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="form-group">
+                                        <p:outputLabel for="segundoApellido"  value="Segundo Apellido" id="lbSegundoApellido"/>
+                                        <p:inputText id="segundoApellido" styleClass="form-control" value="#{pacientesMB.paciente.segundoApellido}" placeholder="Segundo Apellido del Paciente" style="text-transform: uppercase">
+                                            <p:ajax update="segundoApellido,lbSegundoApellido " event="blur" />
+                                        </p:inputText>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--./row -->
+                            <div class="row">
+                                <div class="col-lg-3">
+                                    <div class="form-group">
+                                        <p:outputLabel for="fechaNacimiento"  value="Fecha Nacimiento" id="lbFechaNacimiento"/> <br/>
+                                        <p:calendar id="fechaNacimiento" style="width: 100%;" required="true" styleClass="campoFormulario" navigator="true" mask="true" locale="es" pattern="dd/MM/yyyy" value="#{pacientesMB.paciente.fechaNacimiento}" size="14" placeholder="fecha nacimiento">
+                                        </p:calendar>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="form-group">
+                                        <p:outputLabel for="genero"  value="Género" id="lbgenero"/>
+                                        <p:selectOneMenu id="genero" value="#{pacientesMB.paciente.genero.id}">
+                                            <f:selectItems value="#{pacientesMB.listaGenero}" />
+                                        </p:selectOneMenu>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="form-group">
+                                        <p:outputLabel for="rh"  value="RH" id="lbrh"/>
+                                        <p:selectOneMenu id="rh" value="#{pacientesMB.paciente.grupoSanguineo.id}">
+                                            <f:selectItems value="#{pacientesMB.listaGrupoSanguineo}" />
+                                        </p:selectOneMenu>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="form-group">
+                                        <p:outputLabel for="estadoCivil"  value="Estado Civil" id="lbEstadoCivil"/>
+                                        <p:selectOneMenu id="estadoCivil" value="#{pacientesMB.paciente.estadoCivil.id}">
+                                            <f:selectItems value="#{pacientesMB.listaEstadoCivil}" />
+                                        </p:selectOneMenu>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--./row-->
+                            <div class="row">
+                                <div class="col-lg-3">
+                                    <div class="form-group">
+                                        <p:outputLabel for="depto"  value="Departamento" id="lbDpto"/>
+                                        <p:selectOneMenu id="depto"  value="#{pacientesMB.paciente.departamento.id}" filter="true" filterMatchMode="contains">
+                                            <f:ajax 
+                                                event="change"
+                                                listener="#{pacientesMB.cargarMunicipios}"                                                
+                                                render="municipio"/> 
+                                            <f:selectItem itemLabel="" itemValue=""/>
+                                            <f:selectItems value="#{pacientesMB.listaDpto}" />
+                                        </p:selectOneMenu>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="form-group">
+                                        <p:outputLabel for="municipio"  value="Municipio" id="lbmunicipio"/>
+                                        <p:selectOneMenu  id="municipio" value="#{pacientesMB.paciente.municipio.id}" filter="true" filterMatchMode="contains">
+                                            <f:selectItems value="#{pacientesMB.listaMunicipio}" />
+                                            <p:ajax process="@this" event="change" />
+                                        </p:selectOneMenu>
+
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="form-group">
+                                        <p:outputLabel for="zona"  value="Zona" id="lbZona"/>
+                                        <p:selectOneMenu id="zona" value="#{pacientesMB.paciente.zona.id}">
+                                            <f:selectItems value="#{pacientesMB.listaZona}" />
+                                        </p:selectOneMenu>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="form-group">
+                                        <p:outputLabel for="vereda"  value="Vereda/Barrio" id="lbvereda"/>
+                                        <p:inputText id="vereda" styleClass="form-control" value="#{pacientesMB.paciente.barrio}"  placeholder="Barrio del Paciente" style="text-transform: uppercase">
+                                        </p:inputText>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--./row-->
+                            <div class="row">
+                                <div class="col-lg-3">
+                                    <div class="form-group">
+                                        <p:outputLabel for="direccion"  value="Dirección" id="lbdireccion"/>
+                                        <p:inputText id="direccion" required="true" styleClass="form-control" value="#{pacientesMB.paciente.direccion}" placeholder="Dirección Residencia del Paciente" style="text-transform: uppercase">
+                                            <p:ajax update="direccion,lbdireccion " event="blur" />
+                                        </p:inputText>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="form-group">
+                                        <p:outputLabel for="telefono"  value="Teléfono" id="lbTelefono"/>
+                                        <p:inputText id="telefono"  styleClass="form-control" value="#{pacientesMB.paciente.telefonoResidencia}" placeholder="Teléfono del Paciente">
+                                        </p:inputText>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="form-group">
+                                        <p:outputLabel for="email"  value="Email" id="lbemail"/>
+                                        <p:inputText id="email" styleClass="form-control" value="#{pacientesMB.paciente.email}" placeholder="Email del Paciente">
+                                        </p:inputText>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="form-group">
+                                        <p:outputLabel for="ocupacion"  value="Ocupación" id="lbocupacion"/>
+                                        <p:selectOneMenu id="ocupacion" value="#{pacientesMB.paciente.ocupacion.id}">
+                                            <f:selectItems value="#{pacientesMB.listaOcupacion}" />
+                                        </p:selectOneMenu>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--./row-->
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="row">
+                            <div class="col-lg-2 col-xs-12">
+                                <p:commandLink  styleClass="btn btn-lg btn-success btn-block button-prime"
+                                                actionListener="#{pacientesMB.guardar}"
+                                                process="@form"
+                                                update="frmPaciente">
+                                    <i class="fa fa-save"></i> Guardar
+                                </p:commandLink>
+                            </div>
+                        <div class="col-lg-1 col-xs-12">
+                    <p:commandLink          styleClass="btn btn-lg btn-info btn-block button-prime"
+                                            update=":frmPaciente"
+                                            action="#{pacientesMB.cancelar}"
+                                            process="@this"
+                                            immediate="true"
+                                            ajax="false"
+                                            id="btnCancelar"
+                                            >
+                        <i class="fa fa-close"></i> Cancelar
+                        <p:resetInput target=":frmPaciente" />
+                    </p:commandLink>
+                    <p:tooltip id="toolbtnCancelar" for="btnCancelar" value="Cancelar Actualización" position="top"/>
+                </div>
+                        </div>
+                </div>
+        
+                </p:outputPanel>
+        
+                <!-- ./Datos form-->
+            </h:form>
+        </div>
+
+    </ui:define>
+
+</ui:composition>

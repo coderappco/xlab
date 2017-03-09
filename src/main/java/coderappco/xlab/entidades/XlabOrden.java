@@ -76,7 +76,7 @@ public class XlabOrden implements Serializable {
     @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
-    @Size(max = 9)
+    @Size(max = 50)
     @Column(name = "nro_orden")
     private String nroOrden;
     @Column(name = "fecha_orden")

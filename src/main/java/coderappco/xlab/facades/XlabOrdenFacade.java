@@ -86,13 +86,21 @@ public class XlabOrdenFacade extends AbstractFacade<XlabOrden> {
             li.setGenero(o[8].toString());
             li.setTelefono(o[9].toString());
             li.setEstudio(o[10].toString());
-            li.setResultado(o[11].toString());
-            li.setUnidad(o[12].toString());
-            li.setFechaPrueba(Utilidades.DeStringADate(o[13].toString()));
-            li.setEntidad(o[14].toString());
+            li.setResultado(o[11]!=null?o[11].toString():"");
+            li.setUnidad(o[12]!=null?o[12].toString():"");
+            li.setFechaPrueba(o[13]!=null?Utilidades.DeStringADate(o[13].toString()):null);
+            li.setEntidad(o[14]!=null?o[14].toString():"");
             lst.add(li);
         }
         return lst;
         
+    }
+      
+    public List<String> autocompletarOrden(String txt) {
+        try {
+            return getEntityManager().createNativeQuery("select nro_orden from xlab_orden where nro_orden ilike '%" + txt + "%' limit 10").getResultList();
+        } catch (Exception e) {                          
+            return null;
+        }
     }
 }

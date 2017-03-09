@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Scene Scope="Project" version="2">
+    <Scope Scope="Faces Configuration Only"/>
+    <Scope Scope="Project">
+        <Node id="resources/vendor/ckeditor/samples/inlineall.html" x="650" y="150" zoom="true"/>
+        <Node id="ordenes/orden.xhtml" x="650" y="450" zoom="true"/>
+        <Node id="configuraciones/Pacientes.xhtml" x="150" y="450" zoom="true"/>
+        <Node id="facturacion/servicios.xhtml" x="150" y="1500" zoom="true"/>
+        <Node id="resources/vendor/ckeditor/samples/uicolor.html" x="650" y="300" zoom="true"/>
+        <Node id="configuraciones/consecutivoOrden.xhtml" x="400" y="150" zoom="true"/>
+        <Node id="resources/vendor/ckeditor/samples/divreplace.html" x="900" y="600" zoom="true"/>
+        <Node id="resources/vendor/ckeditor/samples/appendto.html" x="900" y="300" zoom="true"/>
+        <Node id="template/menu.xhtml" x="2150" y="450" zoom="true"/>
+        <Node id="facturacion/contratos.xhtml" x="900" y="150" zoom="true"/>
+        <Node id="configuraciones/usuarios.xhtml" x="150" y="1200" zoom="true"/>
+        <Node id="resources/vendor/ckeditor/samples/plugins/dialog/dialog.html" x="1400" y="600" zoom="true"/>
+        <Node id="resources/vendor/ckeditor/samples/plugins/toolbar/toolbar.html" x="900" y="450" zoom="true"/>
+        <Node id="resources/vendor/ckeditor/samples/jquery.html" x="1150" y="1050" zoom="true"/>
+        <Node id="ordenes/informesResultado.xhtml" x="900" y="1050" zoom="true"/>
+        <Node id="resources/vendor/ckeditor/samples/inlinebycode.html" x="400" y="1350" zoom="true"/>
+        <Node id="configuraciones/pruebas.xhtml" x="400" y="450" zoom="true"/>
+        <Node id="facturacion/consecutivos.xhtml" x="150" y="900" zoom="true"/>
+        <Node id="facturacion/administradoras.xhtml" x="900" y="1200" zoom="true"/>
+        <Node id="configuraciones/empresa.xhtml" x="1900" y="450" zoom="true"/>
+        <Node id="informes/resultadoorden.xhtml" x="400" y="1050" zoom="true"/>
+        <Node id="facturacion/periodos.xhtml" x="1150" y="150" zoom="true"/>
+        <Node id="imagenesOpenmedical/image.xhtml" x="1900" y="600" zoom="true"/>
+        <Node id="resources/vendor/ckeditor/samples/datafiltering.html" x="150" y="1350" zoom="true"/>
+        <Node id="resources/vendor/ckeditor/skins/bootstrapck/sample/bootstrapck-sample.html" x="1650" y="750" zoom="true"/>
+        <Node id="configuraciones/areas.xhtml" x="1650" y="150" zoom="true"/>
+        <Node id="facturacion/consumos.xhtml" x="400" y="600" zoom="true"/>
+        <Node id="configuraciones/estudios.xhtml" x="1150" y="300" zoom="true"/>
+        <Node id="resources/vendor/ckeditor/samples/plugins/wysiwygarea/fullpage.html" x="650" y="750" zoom="true"/>
+        <Node id="configuraciones/email.xhtml" x="1400" y="900" zoom="true"/>
+        <Node id="resources/vendor/ckeditor/samples/replacebyclass.html" x="1150" y="750" zoom="true"/>
+        <Node id="resources/vendor/ckeditor/samples/plugins/htmlwriter/outputhtml.html" x="2400" y="150" zoom="true"/>
+        <Node id="facturacion/facturarAdministradora.xhtml" x="400" y="750" zoom="true"/>
+        <Node id="facturacion/manualestarifarios.xhtml" x="1400" y="300" zoom="true"/>
+        <Node id="resources/vendor/ckeditor/plugins/wsc/dialogs/tmpFrameset.html" x="1150" y="600" zoom="true"/>
+        <Node id="facturacion/cajas.xhtml" x="1400" y="750" zoom="true"/>
+        <Node id="facturacion/medicamentos.xhtml" x="150" y="1050" zoom="true"/>
+        <Node id="resources/vendor/ckeditor/samples/replacebycode.html" x="150" y="150" zoom="true"/>
+        <Node id="configuraciones/ordenes.xhtml" x="1150" y="450" zoom="true"/>
+        <Node id="resources/vendor/ckeditor/samples/plugins/htmlwriter/outputforflash.html" x="2400" y="300" zoom="true"/>
+        <Node id="configuraciones/administradora.xhtml" x="150" y="750" zoom="true"/>
+        <Node id="principal/index.xhtml" x="1900" y="300" zoom="true"/>
+        <Node id="facturacion/abrircerrarcaja.xhtml" x="400" y="1500" zoom="true"/>
+        <Node id="resources/vendor/ckeditor/samples/tabindex.html" x="400" y="900" zoom="true"/>
+        <Node id="resources/vendor/ckeditor/samples/xhtmlstyle.html" x="400" y="1200" zoom="true"/>
+        <Node id="template/nav.xhtml" x="1400" y="450" zoom="true"/>
+        <Node id="resources/vendor/ckeditor/samples/index.html" x="1900" y="150" zoom="true"/>
+        <Node id="resources/vendor/ckeditor/samples/ajax.html" x="150" y="300" zoom="true"/>
+        <Node id="resources/vendor/ckeditor/samples/plugins/enterkey/enterkey.html" x="900" y="900" zoom="true"/>
+        <Node id="template/master.xhtml" x="400" y="300" zoom="true"/>
+        <Node id="facturacion/facturarPacientes.xhtml" x="650" y="600" zoom="true"/>
+        <Node id="login.xhtml" x="650" y="900" zoom="true"/>
+        <Node id="resources/vendor/ckeditor/samples/api.html" x="1650" y="450" zoom="true"/>
+        <Node id="facturacion/paquetes.xhtml" x="1650" y="600" zoom="true"/>
+        <Node id="facturacion/impuestos.xhtml" x="900" y="750" zoom="true"/>
+        <Node id="resources/vendor/ckeditor/plugins/wsc/dialogs/ciframe.html" x="650" y="1050" zoom="true"/>
+        <Node id="facturacion/unidadvalor.xhtml" x="2650" y="150" zoom="true"/>
+        <Node id="resources/vendor/ckeditor/samples/plugins/magicline/magicline.html" x="650" y="1350" zoom="true"/>
+        <Node id="index.xhtml" x="150" y="600" zoom="true"/>
+        <Node id="facturacion/insumos.xhtml" x="2150" y="300" zoom="true"/>
+        <Node id="resources/vendor/ckeditor/samples/uilanguages.html" x="1650" y="300" zoom="true"/>
+        <Node id="configuraciones/copiaseguridad.xhtml" x="1400" y="150" zoom="true"/>
+        <Node id="resources/vendor/ckeditor/samples/readonly.html" x="2150" y="150" zoom="true"/>
+        <Node id="resources/vendor/ckeditor/samples/inlinetextarea.html" x="1150" y="900" zoom="true"/>
+    </Scope>
+    <Scope Scope="All Faces Configurations"/>
+</Scene>

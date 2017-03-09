@@ -1,0 +1,86 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./../template/master.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://java.sun.com/jsf/core">
+
+    <ui:define name="title">
+        Consecutivo Orden
+    </ui:define>
+
+    <ui:define name="content">
+        #{consecutivoOrdenMB.inicializar()}
+        <div class="container-fluid container-fullw">
+            <h:form id="frmEmail">
+                <section id="page-title">
+                    <div class="row">
+                        <div class="col-sm-8">
+                            <h1 class="mainTitle">Consecutivo Orden</h1>
+                        </div>
+                        <ol class="breadcrumb">
+                            <li>
+                                <span>Consecutivo Orden</span>
+                            </li>
+                            <li class="active">
+                                <span>Configuración</span>
+                            </li>
+                        </ol>
+                    </div>
+                </section>
+                
+                <div class="row">
+                    <div class="col-xs-12 col-sm3">
+                        <div class="form-group">
+                            <p:outputLabel value="Nombre"  /> 
+                            <p:inputText styleClass="form-control" value="#{consecutivoOrdenMB.consecutivo.nombre}" placeholder="Dígite Nombre" style="text-transform: uppercase" />
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm3">
+                        <div class="form-group">
+                            <p:outputLabel value="Número actual"  /> 
+                            <p:inputText styleClass="form-control" value="#{consecutivoOrdenMB.consecutivo.numeroActual}" placeholder="Dígite Número actual"  onkeypress="return permite(event, 'num')"/>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm3">
+                        <div class="form-group">
+                            <p:outputLabel value="Número de decimales"  /> 
+                            <p:inputText styleClass="form-control" value="#{consecutivoOrdenMB.consecutivo.decimales}" placeholder="Dígite Longitud de decimales"  onkeypress="return permite(event, 'num')"/>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm3">
+                        <div class="form-group">
+                            <p:outputLabel value="Prefijo"  /> 
+                            <p:inputText styleClass="form-control" value="#{consecutivoOrdenMB.consecutivo.prefijo}" placeholder="Dígite Prefijo" style="text-transform: uppercase" />
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm3">
+                        <div class="form-group">
+                            <p:outputLabel value="Generación Automática"  /> <br />
+                            <p:selectBooleanCheckbox value="#{consecutivoOrdenMB.consecutivo.automatico}" /> 
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm3">
+                        <div class="form-group">
+                            <p:outputLabel value="Observación"  /> 
+                            <p:inputTextarea rows="5"  styleClass="form-control" value="#{consecutivoOrdenMB.consecutivo.texto}" placeholder="Dígite Observación" style="text-transform: uppercase" />
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-1 col-xs-12">
+                        <p:commandLink  styleClass="btn btn-lg btn-success btn-block button-prime"
+                                        actionListener="#{consecutivoOrdenMB.guardar}">
+                            <i class="fa fa-save"></i> Guardar
+                        </p:commandLink>
+                    </div>
+                </div>
+            </h:form>
+        </div>
+
+    </ui:define>
+
+</ui:composition>
+

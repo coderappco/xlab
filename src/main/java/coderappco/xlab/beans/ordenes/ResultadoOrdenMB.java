@@ -22,7 +22,6 @@ import java.io.File;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
-import java.net.URL;
 import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -82,6 +81,7 @@ public class ResultadoOrdenMB implements Serializable {
     private int tipoIdentificacion;
     private boolean resultadosConfirmado;
     private boolean renderInfo;
+    private String emails;
     
     private List<XlabOrdenEstudiosPruebas> listaPruebas;
     private List<SelectItem> listaTipoIdentificacion;
@@ -99,6 +99,7 @@ public class ResultadoOrdenMB implements Serializable {
         identificacionPaciente="";
         resultadosConfirmado =true;
         correo = correoFacade.find(1);
+        emails="";
     }
     public void cargarOrden(){
         if(orden.getNroOrden()!=null){
@@ -177,8 +178,8 @@ public class ResultadoOrdenMB implements Serializable {
     }
     public void email(){
         if (resultadosConfirmado) {
-            if (pacientes.getEmail() != null) {
-                if (!pacientes.getEmail().equals("")) {
+            if (emails != null) {
+                if (!emails.equals("")) {
                     if (correo != null) {
                         if (!correo.getEmail().equals("")) {
                             JasperReport jasperReport;
@@ -202,28 +203,30 @@ public class ResultadoOrdenMB implements Serializable {
                                 props.put("mail.smtp.host", correo.getHost());
                                 props.put("mail.smtp.ssl.trust", correo.getHost());
                                 props.put("mail.smtp.port", correo.getPort());
-       
-                                Authenticator auth = new MyAuthenticator();  
-                                Session smtpSession = Session.getInstance(props, auth);  
-                                smtpSession.setDebug(false);  
-
-                                MimeMessage message = new MimeMessage(smtpSession);  
-                                message.setFrom(new InternetAddress(correo.getEmail(),"XLAB - Resultados Laboratorios["+pacientes.getPrimerNombre()+" "+pacientes.getSegundoNombre()+" "+pacientes.getPrimerApellido()+" "+pacientes.getSegundoApellido()+"]"));  
-                                message.addRecipient(Message.RecipientType.TO, new InternetAddress(pacientes.getEmail()));
-                                final String encoding = "UTF-8";
-                                BodyPart adjunto = new MimeBodyPart();
-                                adjunto.setDataHandler(new DataHandler(new FileDataSource(SessionUtil.getUrlPath()+"/reporte_"+pacientes.getIdentificacion()+".pdf")));
-                                adjunto.setFileName("resultado_"+pacientes.getIdentificacion()+".pdf");
-                                
-                                message.setSubject("XLAB - Resultados Laboratorios["+pacientes.getPrimerNombre()+" "+pacientes.getSegundoNombre()+" "+pacientes.getPrimerApellido()+" "+pacientes.getSegundoApellido()+"]", encoding);
-                                BodyPart mbp = new MimeBodyPart();
-                                mbp.setContent("Buen día, adjunto econtrará informe de resultados de laboratorio", "text/html"); 
-                                multipart.addBodyPart(mbp);
-                                multipart.addBodyPart(adjunto);
-                                message.setContent(multipart);
-                                Transport.send(message);
+                                //Recorremos los email a enviar
+                                String[] destinos = emails.split(",");
+                                for (String destino : destinos) {
+                                    Authenticator auth = new MyAuthenticator();
+                                    Session smtpSession = Session.getInstance(props, auth);
+                                    smtpSession.setDebug(false);
+                                    MimeMessage message = new MimeMessage(smtpSession);
+                                    message.setFrom(new InternetAddress(correo.getEmail(),"XLAB - Resultados Laboratorios["+pacientes.getPrimerNombre()+" "+pacientes.getSegundoNombre()+" "+pacientes.getPrimerApellido()+" "+pacientes.getSegundoApellido()+"]"));
+                                    message.addRecipient(Message.RecipientType.TO, new InternetAddress(destino));
+                                    final String encoding = "UTF-8";
+                                    BodyPart adjunto = new MimeBodyPart();
+                                    adjunto.setDataHandler(new DataHandler(new FileDataSource(SessionUtil.getUrlPath()+"/reporte_"+pacientes.getIdentificacion()+".pdf")));
+                                    adjunto.setFileName("resultado_"+pacientes.getIdentificacion()+".pdf");
+                                    message.setSubject("XLAB - Resultados Laboratorios["+pacientes.getPrimerNombre()+" "+pacientes.getSegundoNombre()+" "+pacientes.getPrimerApellido()+" "+pacientes.getSegundoApellido()+"]", encoding);
+                                    BodyPart mbp = new MimeBodyPart();
+                                    mbp.setContent("Buen día, adjunto econtrará informe de resultados de laboratorio", "text/html"); 
+                                    multipart.addBodyPart(mbp);
+                                    multipart.addBodyPart(adjunto);
+                                    message.setContent(multipart);
+                                    Transport.send(message);
+                                }
                                 File pdf = new File(SessionUtil.getUrlPath()+"/reporte_"+pacientes.getIdentificacion()+".pdf");
                                 pdf.delete();
+                                
                                 SessionUtil.addInfoMessage("Enviado", "Enviado Correctamente");
                             } catch (Exception e) {
                                 logger.error("Error en la clase "+ ResultadoOrdenMB.class.getName() + ", mensaje: " + e.getMessage(),e);
@@ -298,6 +301,14 @@ public class ResultadoOrdenMB implements Serializable {
 
     public void setListaTipoIdentificacion(List<SelectItem> listaTipoIdentificacion) {
         this.listaTipoIdentificacion = listaTipoIdentificacion;
+    }
+
+    public String getEmails() {
+        return emails;
+    }
+
+    public void setEmails(String emails) {
+        this.emails = emails;
     }
 
     public boolean isRenderInfo() {

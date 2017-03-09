@@ -86,7 +86,7 @@
                             <div class="form-group">
                                 <p:outputLabel for="nroIdentificacion"  value="Número Identificación" id="lbIdenti"/>
                                 <p:inputText id="nroIdentificacion" required="true" styleClass="form-control" value="#{ordenMB.identificacionPaciente}"  placeholder="Identificación del Paciente">
-                                    <p:ajax update="nroIdentificacion,lbIdenti,IdFormPanel" listener="#{ordenMB.validarIdentificacion}" onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />
+                                    <p:ajax update="nroIdentificacion,lbIdenti,estudioPanel,ordenPanel,administradoraPaciente,primerNombre,segundoNombre,primerApellido,segundoApellido,fechaNacimiento,genero,rh,estadoCivil,depto,municipio,zona,vereda,direccion,telefono,email,ocupacion,notasPaciente" listener="#{ordenMB.validarIdentificacion}" onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />
                                 </p:inputText>
                             </div>
                         </div>
@@ -106,7 +106,7 @@
                         <div class="col-lg-3">
                             <div class="form-group">
                                 <p:outputLabel for="primerNombre"  value="Primer Nombre" id="lbPrimerNombre"/>
-                                <p:inputText id="primerNombre" required="true" styleClass="form-control" value="#{ordenMB.pacientes.primerNombre}" placeholder="Primer Nombre del Paciente">
+                                <p:inputText id="primerNombre" required="true" styleClass="form-control" value="#{ordenMB.pacientes.primerNombre}" placeholder="Primer Nombre del Paciente" style="text-transform: uppercase">
                                     <p:ajax update="primerNombre,lbPrimerNombre " event="blur" />
                                 </p:inputText>
                             </div>
@@ -114,7 +114,7 @@
                         <div class="col-lg-3">
                             <div class="form-group">
                                 <p:outputLabel for="segundoNombre"  value="Segundo Nombre" id="lbSegundoNombre"/>
-                                <p:inputText id="segundoNombre"  styleClass="form-control" value="#{ordenMB.pacientes.segundoNombre}" placeholder="Segundo Nombre del Paciente">
+                                <p:inputText id="segundoNombre"  styleClass="form-control" value="#{ordenMB.pacientes.segundoNombre}" placeholder="Segundo Nombre del Paciente" style="text-transform: uppercase">
                                     <p:ajax update="segundoNombre,lbSegundoNombre " event="blur" />
                                 </p:inputText>
                             </div>
@@ -122,7 +122,7 @@
                         <div class="col-lg-3">
                             <div class="form-group">
                                 <p:outputLabel for="primerApellido"  value="Primer Apellido" id="lbPrimerApellido"/>
-                                <p:inputText id="primerApellido" required="true" styleClass="form-control" value="#{ordenMB.pacientes.primerApellido}" placeholder="Primer Apellido del Paciente">
+                                <p:inputText id="primerApellido" required="true" styleClass="form-control" value="#{ordenMB.pacientes.primerApellido}" placeholder="Primer Apellido del Paciente" style="text-transform: uppercase">
                                     <f:validateLength minimum="2" />
                                     <p:ajax update="primerApellido,lbPrimerApellido " event="blur" />
                                 </p:inputText>
@@ -131,7 +131,7 @@
                         <div class="col-lg-3">
                             <div class="form-group">
                                 <p:outputLabel for="segundoApellido"  value="Segundo Apellido" id="lbSegundoApellido"/>
-                                <p:inputText id="segundoApellido" styleClass="form-control" value="#{ordenMB.pacientes.segundoApellido}" placeholder="Segundo Apellido del Paciente">
+                                <p:inputText id="segundoApellido" styleClass="form-control" value="#{ordenMB.pacientes.segundoApellido}" placeholder="Segundo Apellido del Paciente" style="text-transform: uppercase">
                                     <p:ajax update="segundoApellido,lbSegundoApellido " event="blur" />
                                 </p:inputText>
                             </div>
@@ -207,7 +207,7 @@
                         <div class="col-lg-3">
                             <div class="form-group">
                                 <p:outputLabel for="vereda"  value="Vereda/Barrio" id="lbvereda"/>
-                                <p:inputText id="vereda" styleClass="form-control" value="#{ordenMB.pacientes.barrio}"  placeholder="Barrio del Paciente">
+                                <p:inputText id="vereda" styleClass="form-control" value="#{ordenMB.pacientes.barrio}"  placeholder="Barrio del Paciente" style="text-transform: uppercase">
                                 </p:inputText>
                             </div>
                         </div>
@@ -217,7 +217,7 @@
                         <div class="col-lg-3">
                             <div class="form-group">
                                 <p:outputLabel for="direccion"  value="Dirección" id="lbdireccion"/>
-                                <p:inputText id="direccion" required="true" styleClass="form-control" value="#{ordenMB.pacientes.direccion}" placeholder="Dirección Residencia del Paciente">
+                                <p:inputText id="direccion" required="true" styleClass="form-control" value="#{ordenMB.pacientes.direccion}" placeholder="Dirección Residencia del Paciente" style="text-transform: uppercase">
                                     <p:ajax update="direccion,lbdireccion " event="blur" />
                                 </p:inputText>
                             </div>
@@ -246,11 +246,90 @@
                         </div>
                     </div>
                     <!--./row-->
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="form-group">
+                                <p:outputLabel value="Notas Pacientes" />
+                                <p:inputTextarea id="notasPaciente" styleClass="form-control" rows="2"  value="#{ordenMB.pacientes.observaciones}" style="text-transform: uppercase"/>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <!--./panel-->
             </div>
+            <br />
             <!--./panel-->
-            <div class="row" style="margin-top: 2%;">
+            <h:panelGrid columns="10" style="margin-left:20%;">
+                <h:panelGroup>
+                    <p:commandLink          styleClass="btn btn-lg btn-success btn-block button-prime"
+                                            action="#{ordenMB.guardar}"
+                                            update="@parent"
+                                            id="btnGuardar"
+                                            rendered="#{ordenMB.renderAccion}"
+                                            onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()"
+                                            >
+                        <i class="fa fa-save"></i> Guardar
+                    </p:commandLink>
+                    <p:tooltip id="toolbtnGuardar" for="btnGuardar" value="Guardar Orden" position="top"/>
+                </h:panelGroup>
+                <h:panelGroup>&nbsp;&nbsp;</h:panelGroup>
+                <h:panelGroup>
+                    <p:commandLink id="btnModificarDiente"
+                                    styleClass="btn btn-lg btn-success btn-block button-prime"
+                                    actionListener="#{ordenMB.reporteXId}"
+                                    target="_blank"
+                                    ajax="false"
+                                    rendered="#{!ordenMB.renderAccion}"
+                                    style="color: #fff;margin-right: 2px;">
+                                    <i class="fa fa-print"></i> Imprimir
+                    </p:commandLink>
+                </h:panelGroup>
+                <h:panelGroup>&nbsp;&nbsp;</h:panelGroup>
+                <h:panelGroup>
+                    <p:commandLink          styleClass="btn btn-lg btn-success btn-block button-prime"
+                                            update="@parent"
+                                            action="#{ordenMB.editar}"
+                                            id="btnEditar"
+                                            rendered="#{!ordenMB.renderAccion}"
+                                            >
+                        <i class="fa fa-edit"></i> Editar
+                    </p:commandLink>
+                    <p:tooltip id="toolbtnEditar" for="btnEditar" value="Editar Orden" position="top"/>
+                </h:panelGroup>
+                <h:panelGroup>&nbsp;&nbsp;</h:panelGroup>
+                <h:panelGroup>
+                    <p:commandLink          styleClass="btn btn-lg btn-danger btn-block button-prime"
+                                            update="@parent"
+                                            id="btnEliminar"
+                                            rendered="#{!ordenMB.renderAccion}"
+                                            actionListener="#{ordenMB.eliminar(null)}"
+                                            >
+                        <i class="fa fa-remove"></i> Eliminar
+                         <p:confirm header="Confirmación" message="¿Esta seguro de eliminar la orden?" icon="ui-icon-alert" />
+                    </p:commandLink>
+                    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                            <p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                            <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                        </p:confirmDialog>
+                    <p:tooltip id="toolbtnEliminar" for="btnEliminar" value="Eliminar Orden" position="top"/>
+                </h:panelGroup>
+                <h:panelGroup>&nbsp;&nbsp;</h:panelGroup>
+                <h:panelGroup>
+                    <p:commandLink          styleClass="btn btn-lg btn-info btn-block button-prime"
+                                            update=":IdFormPanel"
+                                            action="#{ordenMB.cancelar}"
+                                            process="@this"
+                                            immediate="true"
+                                            ajax="false"
+                                            id="btnCancelar"
+                                            >
+                        <i class="fa fa-close"></i> Cancelar
+                        <p:resetInput target=":IdFormPanel" />
+                    </p:commandLink>
+                    <p:tooltip id="toolbtnCancelar" for="btnCancelar" value="Cancelar Orden" position="top"/>
+                </h:panelGroup>
+            </h:panelGrid>
+        <div class="row" style="margin-top: 2%;">
                 <!--Orden-->
                 <div class="col-xs-12 col-sm-4">
                     <div class="panel panel-white" id="panel1">
@@ -259,14 +338,16 @@
 
                         </div>
                         <div class="panel-body">
-
+                            <p:outputPanel id="ordenPanel">
                             <div class="row">
                                 <div class="col-xs-12 col-sm-5">
                                     <div class="form-group">
-                                        <p:outputLabel for="orden"  value="Orden" id="lbOrden"/>
-                                        <p:inputText id="orden" styleClass="form-control" value="#{ordenMB.orden.nroOrden}" disabled="#{ordenMB.lecturaOrden}">
-                                            <p:ajax update="IdFormPanel" listener="#{ordenMB.cargarOrden}" onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />
-                                        </p:inputText>
+                                        <p:outputLabel for="orden"  value="Orden" id="lbOrden"/><br />
+                                        <p:autoComplete id="orden" size="15"  value="#{ordenMB.orden.nroOrden}" completeMethod="#{ordenMB.autocompletarOrden}" forceSelection="true" placeholder="Digite Orden">
+                                            <p:ajax listener="#{ordenMB.validarOrden}" event="itemSelect" update=":IdFormPanel" onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()"/>
+                                        </p:autoComplete>
+                                        <p:tooltip id="toolNroOden" for="orden" value="Digite Orden a buscar" position="top"/>
+                                        
                                     </div>
                                 </div>
                                 <div class="col-xs-6 col-sm-4">
@@ -288,16 +369,16 @@
                             </div>
                             <!--./row-->
                             <div class="row">
-                                <div class="col-sm-3 col-xs-6">
+                                <div class="col-sm-4 col-xs-6">
                                     <div class="form-group">
                                         <p:outputLabel for="embarazo"  value="Embarazo" id="lbEmbarazo"/>
-                                        <p:inputText id="embarazo" styleClass="form-control" value="#{ordenMB.orden.embarazo}" placeholder="Meses de embarazo">
+                                        <p:inputText id="embarazo" styleClass="form-control" value="#{ordenMB.orden.embarazo}" placeholder="Semanas de embarazo">
                                             <f:ajax 
                                         event="change"/> 
                                         </p:inputText>
                                     </div>
                                 </div>
-                                <div class="col-sm-9 col-xs-6">
+                                <div class="col-sm-8 col-xs-6">
                                     <div class="form-group">
                                         <p:outputLabel for="origen"  value="Origen" id="lbOrigen"/>
                                         <p:selectOneMenu id="origen" required="true" value="#{ordenMB.orden.origenId.idAdministradora}" filter="true" filterMatchMode="contains">
@@ -326,14 +407,14 @@
                                 </div>
                                 <div class="col-xs-12 col-sm-4">
                                     <div class="form-group">
-                                        <p:outputLabel for="fechaAut"  value="Fec. Autorización" id="lbfechaAut"/>
+                                        <p:outputLabel for="fechaAut"  value="F. Autorización" id="lbfechaAut"/>
                                         <p:calendar id="fechaAut" styleClass="campoFormulario" navigator="true" mask="true" locale="es" pattern="dd/MM/yyyy" value="#{ordenMB.orden.fechaAutorizacion}" size="14" placeholder="Fecha de autorización">
                                         </p:calendar>
                                     </div>
                                 </div>
                                 <div class="col-xs-12 col-sm-3">
                                     <div class="form-group">
-                                        <p:outputLabel for="nroExterno"  value="Nro Externo" id="lnNroExterno"/>
+                                        <p:outputLabel for="nroExterno"  value="# Externo" id="lnNroExterno"/>
                                         <p:inputText id="nroExterno" styleClass="form-control" value="#{ordenMB.orden.nroExteno}" placeholder="Número Externo">
                                             <f:ajax 
                                                 event="change"/> 
@@ -368,7 +449,7 @@
                                 <div class="col-xs-12">
                                     <div class="form-group">
                                         <p:outputLabel for="diagnostico"  value="Diagnóstico" id="lbdiagnostico"/><br />
-                                        <p:autoComplete id="diagnostico" size="65"  value="#{ordenMB.diagnostico}" completeMethod="#{ordenMB.autocompletarDiagnostico}" forceSelection="true" placeholder="Digite Diagnóstico">
+                                        <p:autoComplete id="diagnostico" size="50"  value="#{ordenMB.diagnostico}" completeMethod="#{ordenMB.autocompletarDiagnostico}" forceSelection="true" placeholder="Digite Diagnóstico">
                                             <p:ajax listener="#{ordenMB.validarDiagnostico}" event="itemSelect"/>
                                         </p:autoComplete>
                                         <p:tooltip id="tooldiagnostico" for="diagnostico" value="Digite Diágnotico Orden" position="top"/>
@@ -400,6 +481,7 @@
                                 
                             </div>
                             <!--./row-->
+                            </p:outputPanel>
                         </div>
                     </div>
                 </div>
@@ -408,6 +490,7 @@
                 <!--Estudio-->
                 <div class="col-xs-12 col-sm-8">
                     <div class="panel panel-white" id="panel1">
+                        <p:outputPanel id="estudioPanel">
                         <p:tabView activeIndex="#{ordenMB.tabIndex}" dynamic="true" id="tabV">
                             <p:tab title="Estudios">
                                 <div class="panel-body">
@@ -415,7 +498,7 @@
                                         <div class="col-xs-12 col-sm-10">
                                             <div class="form-group">
                                                 <p:outputLabel for="estudio"  value="Estudio a Programar" id="lbEstudio"/><br />
-                                                <p:autoComplete id="estudio" size="110"  value="#{ordenMB.estudio}" completeMethod="#{ordenMB.autocompletarEstudio}" forceSelection="true" placeholder="Digite Estudios a realizar">
+                                                <p:autoComplete id="estudio" size="100"  value="#{ordenMB.estudio}" completeMethod="#{ordenMB.autocompletarEstudio}" forceSelection="true" placeholder="Digite Estudios a realizar">
                                                     <p:ajax listener="#{ordenMB.validarEstudio}" event="itemSelect" update=":IdFormPanel,@this"/>
                                                 </p:autoComplete>
                                             </div>
@@ -483,7 +566,7 @@
                                             <div class="form-group">
                                                 <p:outputLabel value="Observaciones" />
                                                 <p:inputTextarea id="observacionesNota" styleClass="form-control" placeholder="Notas Resultados" value="#{ordenMB.observaciones}" disabled="#{ordenMB.disableObservacionesPrueba}">
-                                                    <f:ajax event="change" render=":IdFormPanel:tabV"/> 
+                                                    <f:ajax event="blur" render=":IdFormPanel:tabV"/> 
                                                 </p:inputTextarea>
                                             </div>
                                         </div>
@@ -567,6 +650,7 @@
                                                 title="Guardar/Actualizar Administradora" icon="fa fa-fw fa-check"
                                                 styleClass="icon-floppy fg-lightBlue bg-white no-border" 
                                                 id="btn5"
+                                                process=":IdFormPanel:tabV"
                                                 update=":IdFormPanel:tabV"
                                                 disabled="#{ordenMB.disableBtnValidar}"
                                                 actionListener="#{ordenMB.btnValidar}"
@@ -596,7 +680,7 @@
                                                          
                                                          selection="#{ordenMB.pruebaSeleccionada}"
                                                          >
-                                                <p:ajax event="rowSelect" listener="#{ordenMB.onSelectPrueba}" update=":IdFormPanel:tabV" />
+                                                <p:ajax event="rowSelect" listener="#{ordenMB.onSelectPrueba}" update=":IdFormPanel:tabV" process=":IdFormPanel:tabV"/>
                                                 <p:column  style="width: 50px;font-size: 10px;" headerText="Estado" filterMatchMode="startsWith"  filterBy="" >
                                                     <h:outputText value="#{prueba.estado}" style="font-size: 10px;"/>
                                                 </p:column>
@@ -629,6 +713,7 @@
                                     </div>
                             </p:tab>
                         </p:tabView>
+                        </p:outputPanel>
                     </div>
                     <!--panel estudio-->
 
@@ -636,62 +721,6 @@
                 <!--Fin Estudio-->
             </div>
             <!--./panel-->
-            <div class="row">
-                <div class="col-lg-1 col-xs-12">
-                    <p:commandLink          styleClass="btn btn-lg btn-success btn-block button-prime"
-                                            action="#{ordenMB.guardar}"
-                                            update="@parent"
-                                            rendered="#{ordenMB.renderAccion}"
-                                            id="btnGuardar"
-                                            onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()"
-                                            >
-                        <i class="fa fa-save"></i> Guardar
-                    </p:commandLink>
-                    <p:tooltip id="toolbtnGuardar" for="btnGuardar" value="Guardar Orden" position="top"/>
-                </div>
-                <div class="col-lg-1 col-xs-12">
-                    <p:commandLink          styleClass="btn btn-lg btn-success btn-block button-prime"
-                                            update="@parent"
-                                            rendered="#{!ordenMB.renderAccion}"
-                                            action="#{ordenMB.editar}"
-                                            id="btnEditar"
-                                            >
-                        <i class="fa fa-edit"></i> Editar
-                    </p:commandLink>
-                    <p:tooltip id="toolbtnEditar" for="btnEditar" value="Editar Orden" position="top"/>
-                </div>
-                <div class="col-lg-1 col-xs-12">
-                    <p:commandLink          styleClass="btn btn-lg btn-danger btn-block button-prime"
-                                            update="@parent"
-                                            rendered="#{!ordenMB.renderAccion}"
-                                            id="btnEliminar"
-                                            actionListener="#{ordenMB.eliminar(null)}"
-                                            >
-                        <i class="fa fa-remove"></i> Eliminar
-                         <p:confirm header="Confirmación" message="¿Esta seguro de eliminar la orden?" icon="ui-icon-alert" />
-                    </p:commandLink>
-                    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
-                            <p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
-                            <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
-                        </p:confirmDialog>
-                    <p:tooltip id="toolbtnEliminar" for="btnEliminar" value="Eliminar Orden" position="top"/>
-                </div>
-                <div class="col-lg-1 col-xs-12">
-                    <p:commandLink          styleClass="btn btn-lg btn-info btn-block button-prime"
-                                            update=":IdFormPanel"
-                                            action="#{ordenMB.cancelar}"
-                                            process="@this"
-                                            immediate="true"
-                                            ajax="false"
-                                            id="btnCancelar"
-                                            >
-                        <i class="fa fa-close"></i> Cancelar
-                        <p:resetInput target=":IdFormPanel" />
-                    </p:commandLink>
-                    <p:tooltip id="toolbtnCancelar" for="btnCancelar" value="Cancelar Orden" position="top"/>
-                </div>
-            </div>
-
             <!---Dialog-->
             <p:dialog widgetVar="wVEvolutivo" modal="true" width="15%;" resizable="true" closable="true"  responsive="true" style="margin-left:10%;width: 30% !important;" >
                 <p:chart type="line" model="#{ordenMB.lineModelEvolutivo}" style="height:250px;width:350px;"/>
