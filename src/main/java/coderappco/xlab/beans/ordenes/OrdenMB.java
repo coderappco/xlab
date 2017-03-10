@@ -402,7 +402,7 @@ public class OrdenMB extends Controlador implements Serializable {
                 } else {
                     pacienteFacade.edit(pacientes);
                 }
-                /*if(!listaEstudioSeleccionados.isEmpty()){
+                if(!listaEstudioSeleccionados.isEmpty()){
                 orden.setXlabEstudioList(listaEstudioSeleccionados);
             }
             if(diagnostico==null)orden.setDiagnosticoId(null);
@@ -411,8 +411,6 @@ public class OrdenMB extends Controlador implements Serializable {
             SimpleDateFormat formato = new SimpleDateFormat("yyMMdd");
             String format = "%0"+con.getDecimales()+"d";
             orden.setNroOrden(formato.format(new Date())+String.format(format, con.getNumeroActual()+1));
-            con.setNumeroActual(con.getNumeroActual()+1);
-            consecutivoFacade.edit(con);
             CfgEmpresa empresa  = new CfgEmpresa();
             empresa.setCodEmpresa(SessionUtil.getEmpresa());
             orden.setEmpresaId(empresa);
@@ -456,8 +454,10 @@ public class OrdenMB extends Controlador implements Serializable {
                             }//fin for pruebas
                         }
                     }
+                    con.setNumeroActual(con.getNumeroActual()+1);
+                    consecutivoFacade.edit(con);
             
-                 */
+                
                 //actualizamos 
                 SessionUtil.addInfoMessage("Guardado", "Guardado Correctamente Nro de orden " + orden.getNroOrden());
                 inicializarVariables();
@@ -618,8 +618,6 @@ public class OrdenMB extends Controlador implements Serializable {
             if(pacientes.getFechaNacimiento()!=null){
                 edad = calcularEdad(pacientes.getFechaNacimiento());
             }
-            
-            System.out.println(edad);
             
         }catch(Exception ex){
             ex.printStackTrace();
@@ -984,7 +982,17 @@ public class OrdenMB extends Controlador implements Serializable {
                         urlFoto = "../imagenesOpenmedical/"+pacientes.getFoto().getNombreEnServidor();
                     }
                     
+                    //Cargamos informacion del paciente
+                    if (pacientes.getGenero() != null) {
+                        disableEmbarazo = !pacientes.getGenero().getObservacion().equals("F");
+                        genero = pacientes.getGenero().getId();
+                    }
+                    rh = pacientes.getGrupoSanguineo() != null ? pacientes.getGrupoSanguineo().getId() : 0;
+                    estadoCivil = pacientes.getEstadoCivil() != null ? pacientes.getEstadoCivil().getId() : 0;
+                    dpto = pacientes.getDepartamento() != null ? pacientes.getDepartamento().getId() : 0;
                     cargarMunicipios();
+                    mun = pacientes.getMunicipio() != null ? pacientes.getMunicipio().getId() : 0;
+                    
                     identificacionPaciente = pacientes.getIdentificacion();
                     renderAccion = false;
                     tabIndex =1;

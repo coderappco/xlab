@@ -263,7 +263,7 @@
                                                 update="IdFormPanel:opFormulario"
                                                 id="btnGuardar"
                                                 rendered="#{ordenMB.renderAccion}"
-                                                process="@this,IdFormPanel:opFormulario"
+                                                process="@this,IdFormPanel:opFormulario,IdFormPanel:ordenPanel"
                                                 onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()"
                                                 >
                             <i class="fa fa-save"></i> Guardar
@@ -406,8 +406,9 @@
                                         <div class="col-xs-12 col-sm-4">
                                             <div class="form-group">
                                                 <p:outputLabel for="fechaAut"  value="F. Autorización" id="lbfechaAut"/>
-                                                <p:calendar id="fechaAut" styleClass="campoFormulario" navigator="true" mask="true" locale="es" pattern="dd/MM/yyyy" value="#{ordenMB.orden.fechaAutorizacion}" size="14" placeholder="Fecha de autorización">
-                                                </p:calendar>
+                                            
+                                                <p:calendar id="fechaAut" styleClass="campoFormulario" navigator="true" mask="true" locale="es" pattern="dd/MM/yyyy" value="#{ordenMB.orden.fechaAutorizacion}" size="14" placeholder="Fecha de autorización" />
+                                            
                                             </div>
                                         </div>
                                         <div class="col-xs-12 col-sm-3">
@@ -497,7 +498,7 @@
                                                     <div class="form-group">
                                                         <p:outputLabel for="estudio"  value="Estudio a Programar" id="lbEstudio"/><br />
                                                         <p:autoComplete id="estudio" size="90"  value="#{ordenMB.estudio}" completeMethod="#{ordenMB.autocompletarEstudio}" forceSelection="true" placeholder="Digite Estudios a realizar" style="text-transform: uppercase">
-                                                            <p:ajax listener="#{ordenMB.validarEstudio}" event="itemSelect" update=":IdFormPanel,@this"/>
+                                                            <p:ajax listener="#{ordenMB.validarEstudio}" event="itemSelect" update=":IdFormPanel:estudioPanel,@this"/>
                                                         </p:autoComplete>
                                                     </div>
                                                 </div>
