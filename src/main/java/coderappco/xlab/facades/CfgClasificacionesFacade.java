@@ -39,7 +39,6 @@ public class CfgClasificacionesFacade extends AbstractFacade<CfgClasificaciones>
             query.setParameter("codigo", codigo);
             return (CfgClasificaciones)query.getSingleResult();
         } catch (Exception e) {
-            e.printStackTrace();
             return null;
         }
     }

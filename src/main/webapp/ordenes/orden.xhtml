@@ -18,877 +18,876 @@
     <ui:define name="content">
         #{ordenMB.inicializar()}
         <h:form id="IdFormPanel">    
-            <div class="row">
-                <div class="col-xs-12 col-sm-2">
-                    <div class="row">
-                        <div class="col-xs-12">
-                            <p:graphicImage id="IdFoto" url="#{ordenMB.urlFoto}" cache="false" style="width: 90%; height: 120px;"/> 
+            <p:outputPanel id="opFormulario">
+                <div class="row">
+                    <div class="col-xs-12 col-sm-2">
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <p:graphicImage id="IdFoto" url="#{ordenMB.urlFoto}" cache="false" style="width: 90%; height: 120px;"/> 
+                            </div>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-xs-3">
-                            <p:commandButton id="cmdUpload" value="&nbsp;" icon="ui-icon-folder-open" onclick="PF('dlgUploadFoto').show()" type="button" />
-                            <p:tooltip id="toolFoto" for="cmdUpload" value="Upload archivo foto" position="right"/>
-                        </div>
-                        <div class="col-xs-3">
-                            <p:commandButton id="cmdWebCam" value="Cam" icon="ui-icon-video" onclick="PF('dlgWebCam').show()" type="button" title="Webcam" />                                                                                                
-                            <p:tooltip id="toolTipFade" for="cmdWebCam" value="Web cam" position="top"/>
-                        </div>
-                        <p:dialog id="webcam" widgetVar="dlgWebCam" modal="true" dynamic="true" resizable="false" showHeader="false" closable="false" >
-                            <p:photoCam widgetVar="pcPhoto" listener="#{ordenMB.tomarFoto}" update="IdFoto"/>
-                            <br/>
-                            <p:commandButton type="button" value="Tomar" onclick="PF('pcPhoto').capture()" update="IdFoto" onsuccess="PF('dlgWebCam').hide()"/>
-                            <p:commandButton type="button" value="Cerrar" onclick="PF('dlgWebCam').hide()"/>                            
-                        </p:dialog>
-                        <p:dialog id="upload1" widgetVar="dlgUploadFoto" modal="true" dynamic="true" resizable="false" showHeader="false" closable="false" >
-                            <p:fileUpload 
-                                fileUploadListener="#{ordenMB.uploadFoto}" sizeLimit="5000000" auto="true"
-                                update="IdFoto" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" oncomplete="dlgUpload.hide();"
-                                mode="advanced" label="Selecionar" uploadLabel="Enviar" cancelLabel="Cancelar" />                            
-                            <br/>
-                            <br/>
-                            <p:commandButton type="button" value="Cerrar" onclick="PF('dlgUploadFoto').hide()"/>
-                        </p:dialog>
-                    </div>
-                    <div class="row">
-                        <div class="col-xs-12">
-                            <p:graphicImage id="IdFirma" url="#{ordenMB.urlFirma}" cache="false" style="width: 100%; height: 40px;"/>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-xs-12">
-                            <p:commandButton id="cmdUploadFirma" value="&nbsp;" icon="ui-icon-folder-open" onclick="PF('dlgUploadFirma').show()" type="button"  />
-                            <p:tooltip id="toolFirma" for="cmdUploadFirma" value="Upload Archivo firma" position="right"/>
-                            <p:dialog id="upload2" widgetVar="dlgUploadFirma" modal="true" dynamic="true" resizable="false" showHeader="false" closable="false" >
-                                <p:fileUpload 
-                                    fileUploadListener="#{ordenMB.uploadFirma}" sizeLimit="5000000" auto="true"
-                                    update="IdFirma" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" oncomplete="dlgUpload.hide();"
-                                    mode="advanced" label="Selecionar" uploadLabel="Enviar" cancelLabel="Cancelar"/>                            
+                        <div class="row">
+                            <div class="col-xs-3">
+                                <p:commandButton id="cmdUpload" value="&nbsp;" icon="ui-icon-folder-open" onclick="PF('dlgUploadFoto').show()" type="button" />
+                                <p:tooltip id="toolFoto" for="cmdUpload" value="Upload archivo foto" position="right"/>
+                            </div>
+                            <div class="col-xs-3">
+                                <p:commandButton id="cmdWebCam" value="Cam" icon="ui-icon-video" onclick="PF('dlgWebCam').show()" type="button" title="Webcam" />                                                                                                
+                                <p:tooltip id="toolTipFade" for="cmdWebCam" value="Web cam" position="top"/>
+                            </div>
+                            <p:dialog id="webcam" widgetVar="dlgWebCam" modal="true" dynamic="true" resizable="false" showHeader="false" closable="false" >
+                                <p:photoCam widgetVar="pcPhoto" listener="#{ordenMB.tomarFoto}" update="IdFoto"/>
                                 <br/>
-                                <p:commandButton type="button" value="Cerrar" onclick="PF('dlgUploadFirma').hide()"/>
+                                <p:commandButton type="button" value="Tomar" onclick="PF('pcPhoto').capture()" update="IdFoto" onsuccess="PF('dlgWebCam').hide()"/>
+                                <p:commandButton type="button" value="Cerrar" onclick="PF('dlgWebCam').hide()"/>                            
+                            </p:dialog>
+                            <p:dialog id="upload1" widgetVar="dlgUploadFoto" modal="true" dynamic="true" resizable="false" showHeader="false" closable="false" >
+                                <p:fileUpload 
+                                    fileUploadListener="#{ordenMB.uploadFoto}" sizeLimit="5000000" auto="true"
+                                    update="IdFoto" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" oncomplete="dlgUpload.hide();"
+                                    mode="advanced" label="Selecionar" uploadLabel="Enviar" cancelLabel="Cancelar" />                            
+                                <br/>
+                                <br/>
+                                <p:commandButton type="button" value="Cerrar" onclick="PF('dlgUploadFoto').hide()"/>
                             </p:dialog>
                         </div>
-                    </div>
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <p:graphicImage id="IdFirma" url="#{ordenMB.urlFirma}" cache="false" style="width: 100%; height: 40px;"/>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <p:commandButton id="cmdUploadFirma" value="&nbsp;" icon="ui-icon-folder-open" onclick="PF('dlgUploadFirma').show()" type="button"  />
+                                <p:tooltip id="toolFirma" for="cmdUploadFirma" value="Upload Archivo firma" position="right"/>
+                                <p:dialog id="upload2" widgetVar="dlgUploadFirma" modal="true" dynamic="true" resizable="false" showHeader="false" closable="false" >
+                                    <p:fileUpload 
+                                        fileUploadListener="#{ordenMB.uploadFirma}" sizeLimit="5000000" auto="true"
+                                        update="IdFirma" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" oncomplete="dlgUpload.hide();"
+                                        mode="advanced" label="Selecionar" uploadLabel="Enviar" cancelLabel="Cancelar"/>                            
+                                    <br/>
+                                    <p:commandButton type="button" value="Cerrar" onclick="PF('dlgUploadFirma').hide()"/>
+                                </p:dialog>
+                            </div>
+                        </div>
 
-                </div>
-                <div class="clearfix visible-xs-block"></div>
-                <div class="col-xs-12 col-sm-8">
-                    <div class="row">
-                        <div class="col-lg-3">
-                            <div class="form-group">
-                                <p:outputLabel for="tipoIdentificacion"  value="Tipo Identificación" id="lbIdentificacion"/>
-                                <p:selectOneMenu id="tipoIdentificacion" value="#{ordenMB.tipoIdentificacion}">
-                                    <f:selectItems value="#{ordenMB.listaTipoIdentificacion}" />
-                                </p:selectOneMenu>
-                            </div>
-                        </div>
-                        <div class="col-lg-3">
-                            <div class="form-group">
-                                <p:outputLabel for="nroIdentificacion"  value="Número Identificación" id="lbIdenti"/>
-                                <p:inputText id="nroIdentificacion" required="true" styleClass="form-control" value="#{ordenMB.identificacionPaciente}"  placeholder="Identificación del Paciente">
-                                    <p:ajax update="nroIdentificacion,lbIdenti,estudioPanel,ordenPanel,administradoraPaciente,primerNombre,segundoNombre,primerApellido,segundoApellido,fechaNacimiento,genero,rh,estadoCivil,depto,municipio,zona,vereda,direccion,telefono,email,ocupacion,notasPaciente" listener="#{ordenMB.validarIdentificacion}" onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />
-                                </p:inputText>
-                            </div>
-                        </div>
-                        <div class="col-lg-6">
-                            <div class="form-group">
-                                        <p:outputLabel for="administradoraPaciente"  value="Administradora" id="lbadministradoraPaciente"/>
-                                        <p:selectOneMenu id="administradoraPaciente" required="true" value="#{ordenMB.pacientes.idAdministradora.idAdministradora}" filter="true" filterMatchMode="contains">
-                                            <f:selectItem itemLabel="" itemValue="" />
-                                            <f:ajax 
-                                        event="change"/> 
-                                            <f:selectItems value="#{ordenMB.listaAdministradora}" />
-                                        </p:selectOneMenu>
-                                    </div>
-                        </div>
                     </div>
-                    <div class="row">
-                        <div class="col-lg-3">
-                            <div class="form-group">
-                                <p:outputLabel for="primerNombre"  value="Primer Nombre" id="lbPrimerNombre"/>
-                                <p:inputText id="primerNombre" required="true" styleClass="form-control" value="#{ordenMB.pacientes.primerNombre}" placeholder="Primer Nombre del Paciente" style="text-transform: uppercase">
-                                    <p:ajax update="primerNombre,lbPrimerNombre " event="blur" />
-                                </p:inputText>
+                    <div class="clearfix visible-xs-block"></div>
+                    <div class="col-xs-12 col-sm-8">
+                        <div class="row">
+                            <div class="col-lg-3">
+                                <div class="form-group">
+                                    <p:outputLabel for="tipoIdentificacion"  value="Tipo Identificación" id="lbIdentificacion"/>
+                                    <p:selectOneMenu id="tipoIdentificacion" value="#{ordenMB.tipoIdentificacion}">
+                                        <f:selectItems value="#{ordenMB.listaTipoIdentificacion}" var="c" itemLabel="#{c.observacion}" itemValue="#{c.id}"/>
+                                    </p:selectOneMenu>
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <div class="form-group">
+                                    <p:outputLabel for="nroIdentificacion" styleClass="campoObligatorio2"  value="Número Identificación" id="lbIdenti"/>
+                                    <p:inputText id="nroIdentificacion"  styleClass="form-control" value="#{ordenMB.identificacionPaciente}"  placeholder="Identificación del Paciente">
+                                        <p:ajax process="@this,tipoIdentificacion" update="IdFormPanel:opFormulario" listener="#{ordenMB.validarIdentificacion}" onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />
+                                    </p:inputText>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <p:outputLabel for="administradoraPaciente" styleClass="campoObligatorio2"  value="Administradora" id="lbadministradoraPaciente"/>
+                                    <p:selectOneMenu id="administradoraPaciente"  value="#{ordenMB.pacientes.idAdministradora.idAdministradora}" filter="true" filterMatchMode="contains">
+                                        <f:selectItem itemLabel="" itemValue="" />
+                                        <f:ajax 
+                                            event="change"/> 
+                                        <f:selectItems value="#{ordenMB.listaAdministradora}" />
+                                    </p:selectOneMenu>
+                                </div>
                             </div>
                         </div>
-                        <div class="col-lg-3">
-                            <div class="form-group">
-                                <p:outputLabel for="segundoNombre"  value="Segundo Nombre" id="lbSegundoNombre"/>
-                                <p:inputText id="segundoNombre"  styleClass="form-control" value="#{ordenMB.pacientes.segundoNombre}" placeholder="Segundo Nombre del Paciente" style="text-transform: uppercase">
-                                    <p:ajax update="segundoNombre,lbSegundoNombre " event="blur" />
-                                </p:inputText>
+                        <div class="row">
+                            <div class="col-lg-3">
+                                <div class="form-group">
+                                    <p:outputLabel for="primerNombre" styleClass="campoObligatorio2"  value="Primer Nombre" id="lbPrimerNombre"/>
+                                    <p:inputText id="primerNombre"  styleClass="form-control" value="#{ordenMB.pacientes.primerNombre}" placeholder="Primer Nombre del Paciente" style="text-transform: uppercase">
+                                    </p:inputText>
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <div class="form-group">
+                                    <p:outputLabel for="segundoNombre"  value="Segundo Nombre" id="lbSegundoNombre"/>
+                                    <p:inputText id="segundoNombre"  styleClass="form-control" value="#{ordenMB.pacientes.segundoNombre}" placeholder="Segundo Nombre del Paciente" style="text-transform: uppercase">
+                                    </p:inputText>
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <div class="form-group">
+                                    <p:outputLabel for="primerApellido"  styleClass="campoObligatorio2"  value="Primer Apellido" id="lbPrimerApellido"/>
+                                    <p:inputText id="primerApellido"  styleClass="form-control" value="#{ordenMB.pacientes.primerApellido}" placeholder="Primer Apellido del Paciente" style="text-transform: uppercase">
+                                    </p:inputText>
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <div class="form-group">
+                                    <p:outputLabel for="segundoApellido"  value="Segundo Apellido" id="lbSegundoApellido"/>
+                                    <p:inputText id="segundoApellido" styleClass="form-control" value="#{ordenMB.pacientes.segundoApellido}" placeholder="Segundo Apellido del Paciente" style="text-transform: uppercase">
+                                    </p:inputText>
+                                </div>
                             </div>
                         </div>
-                        <div class="col-lg-3">
-                            <div class="form-group">
-                                <p:outputLabel for="primerApellido"  value="Primer Apellido" id="lbPrimerApellido"/>
-                                <p:inputText id="primerApellido" required="true" styleClass="form-control" value="#{ordenMB.pacientes.primerApellido}" placeholder="Primer Apellido del Paciente" style="text-transform: uppercase">
-                                    <f:validateLength minimum="2" />
-                                    <p:ajax update="primerApellido,lbPrimerApellido " event="blur" />
-                                </p:inputText>
+                        <!--./row -->
+                        <div class="row">
+                            <div class="col-lg-3">
+                                <div class="form-group">
+                                    <p:outputLabel for="fechaNacimiento" styleClass="campoObligatorio2"  value="Fecha Nacimiento" id="lbFechaNacimiento"/> <br/>
+                                    <p:calendar id="fechaNacimiento" style="width: 100%;"  styleClass="campoFormulario" navigator="true" mask="true" locale="es" pattern="dd/MM/yyyy" value="#{ordenMB.pacientes.fechaNacimiento}" size="14" placeholder="fecha nacimiento">
+                                        <p:ajax listener="#{ordenMB.validarEdad}" event="change" update="edad"/>
+                                    </p:calendar>
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <div class="form-group">
+                                    <p:outputLabel for="genero" styleClass="campoObligatorio2"  value="Género" id="lbgenero"/>
+                                    <p:selectOneMenu id="genero" value="#{ordenMB.genero}">
+                                        <f:selectItems value="#{ordenMB.listaGenero}" var="c" itemLabel="#{c.descripcion}" itemValue="#{c.id}"/>
+                                        <f:ajax event="change" listener="#{ordenMB.validarGenero}" render="embarazo" />
+                                    </p:selectOneMenu>
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <div class="form-group">
+                                    <p:outputLabel for="rh"  value="RH" id="lbrh"/>
+                                    <p:selectOneMenu id="rh" value="#{ordenMB.rh}">
+                                        <f:selectItems value="#{ordenMB.listaGrupoSanguineo}" var="c" itemLabel="#{c.descripcion}" itemValue="#{c.id}"/>
+                                    </p:selectOneMenu>
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <div class="form-group">
+                                    <p:outputLabel for="estadoCivil"  value="Estado Civil" id="lbEstadoCivil"/>
+                                    <p:selectOneMenu id="estadoCivil" value="#{ordenMB.estadoCivil}">
+                                        <f:selectItems value="#{ordenMB.listaEstadoCivil}" var="c" itemLabel="#{c.descripcion}" itemValue="#{c.id}"/>
+                                    </p:selectOneMenu>
+                                </div>
                             </div>
                         </div>
-                        <div class="col-lg-3">
-                            <div class="form-group">
-                                <p:outputLabel for="segundoApellido"  value="Segundo Apellido" id="lbSegundoApellido"/>
-                                <p:inputText id="segundoApellido" styleClass="form-control" value="#{ordenMB.pacientes.segundoApellido}" placeholder="Segundo Apellido del Paciente" style="text-transform: uppercase">
-                                    <p:ajax update="segundoApellido,lbSegundoApellido " event="blur" />
-                                </p:inputText>
+                        <!--./row-->
+                        <div class="row">
+                            <div class="col-lg-3">
+                                <div class="form-group">
+                                    <p:outputLabel for="depto" styleClass="campoObligatorio2"  value="Departamento" id="lbDpto"/>
+                                    <p:selectOneMenu id="depto"  value="#{ordenMB.dpto}" filter="true" filterMatchMode="contains">
+                                        <f:ajax 
+                                            event="change"
+                                            listener="#{ordenMB.cargarMunicipios}"                                                
+                                            render="municipio"/> 
+                                        <f:selectItem itemLabel="" itemValue=""/>
+                                        <f:selectItems value="#{ordenMB.listaDpto}" var="c" itemLabel="#{c.descripcion}" itemValue="#{c.id}"/>
+                                    </p:selectOneMenu>
+                                </div>
                             </div>
-                        </div>
-                    </div>
-                    <!--./row -->
-                    <div class="row">
-                        <div class="col-lg-3">
-                            <div class="form-group">
-                                <p:outputLabel for="fechaNacimiento"  value="Fecha Nacimiento" id="lbFechaNacimiento"/> <br/>
-                                <p:calendar id="fechaNacimiento" style="width: 100%;" required="true" styleClass="campoFormulario" navigator="true" mask="true" locale="es" pattern="dd/MM/yyyy" value="#{ordenMB.pacientes.fechaNacimiento}" size="14" placeholder="fecha nacimiento">
-                                    <p:ajax listener="#{ordenMB.validarEdad}" event="change" update=":IdFormPanel"/>
-                                </p:calendar>
-                            </div>
-                        </div>
-                        <div class="col-lg-3">
-                            <div class="form-group">
-                                <p:outputLabel for="genero"  value="Género" id="lbgenero"/>
-                                <p:selectOneMenu id="genero" value="#{ordenMB.pacientes.genero.id}">
-                                    <f:selectItems value="#{ordenMB.listaGenero}" />
-                                </p:selectOneMenu>
-                            </div>
-                        </div>
-                        <div class="col-lg-3">
-                            <div class="form-group">
-                                <p:outputLabel for="rh"  value="RH" id="lbrh"/>
-                                <p:selectOneMenu id="rh" value="#{ordenMB.pacientes.grupoSanguineo.id}">
-                                    <f:selectItems value="#{ordenMB.listaGrupoSanguineo}" />
-                                </p:selectOneMenu>
-                            </div>
-                        </div>
-                        <div class="col-lg-3">
-                            <div class="form-group">
-                                <p:outputLabel for="estadoCivil"  value="Estado Civil" id="lbEstadoCivil"/>
-                                <p:selectOneMenu id="estadoCivil" value="#{ordenMB.pacientes.estadoCivil.id}">
-                                    <f:selectItems value="#{ordenMB.listaEstadoCivil}" />
-                                </p:selectOneMenu>
-                            </div>
-                        </div>
-                    </div>
-                    <!--./row-->
-                    <div class="row">
-                        <div class="col-lg-3">
-                            <div class="form-group">
-                                <p:outputLabel for="depto"  value="Departamento" id="lbDpto"/>
-                                <p:selectOneMenu id="depto"  value="#{ordenMB.pacientes.departamento.id}" filter="true" filterMatchMode="contains">
-                                    <f:ajax 
-                                        event="change"
-                                        listener="#{ordenMB.cargarMunicipios}"                                                
-                                        render="municipio"/> 
-                                    <f:selectItem itemLabel="" itemValue=""/>
-                                    <f:selectItems value="#{ordenMB.listaDpto}" />
-                                </p:selectOneMenu>
-                            </div>
-                        </div>
-                        <div class="col-lg-3">
-                            <div class="form-group">
-                                <p:outputLabel for="municipio"  value="Municipio" id="lbmunicipio"/>
-                                <p:selectOneMenu  id="municipio" value="#{ordenMB.pacientes.municipio.id}" filter="true" filterMatchMode="contains">
-                                    <f:selectItems value="#{ordenMB.listaMunicipio}" />
-                                </p:selectOneMenu>
+                            <div class="col-lg-3">
+                                <div class="form-group">
+                                    <p:outputLabel for="municipio" styleClass="campoObligatorio2"  value="Municipio" id="lbmunicipio"/>
+                                    <p:selectOneMenu  id="municipio" value="#{ordenMB.mun}" filter="true" filterMatchMode="contains">
+                                        <f:selectItems value="#{ordenMB.listaMunicipio}" var="c" itemLabel="#{c.descripcion}" itemValue="#{c.id}"/>
+                                    </p:selectOneMenu>
 
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <div class="form-group">
+                                    <p:outputLabel for="vereda"  value="Vereda/Barrio" id="lbvereda" />
+                                    <p:inputText id="vereda" styleClass="form-control" value="#{ordenMB.pacientes.barrio}"  placeholder="Barrio del Paciente" style="text-transform: uppercase">
+                                    </p:inputText>
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <div class="form-group">
+                                    <p:outputLabel for="zona"  value="Zona" id="lbZona" rendered="false"/>
+                                    <p:selectOneMenu id="zona" value="#{ordenMB.zona}" rendered="false">
+                                        <f:selectItems value="#{ordenMB.listaZona}" var="c" itemLabel="#{c.descripcion}" itemValue="#{c.id}" rendered="false"/>
+                                    </p:selectOneMenu>
+                                </div>
+                            </div>
+                            
+                        </div>
+                        <!--./row-->
+                        <div class="row">
+                            <div class="col-lg-3">
+                                <div class="form-group">
+                                    <p:outputLabel for="direccion" styleClass="campoObligatorio2" value="Dirección" id="lbdireccion"/>
+                                    <p:inputText id="direccion" styleClass="form-control" value="#{ordenMB.pacientes.direccion}" placeholder="Dirección Residencia del Paciente" style="text-transform: uppercase">
+                                    </p:inputText>
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <div class="form-group">
+                                    <p:outputLabel for="telefono"  value="Teléfono" id="lbTelefono"/>
+                                    <p:inputText id="telefono"  styleClass="form-control" value="#{ordenMB.pacientes.telefonoResidencia}" placeholder="Teléfono del Paciente">
+                                    </p:inputText>
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <div class="form-group">
+                                    <p:outputLabel for="email"  value="Email" id="lbemail"/>
+                                    <p:inputText id="email" styleClass="form-control" value="#{ordenMB.pacientes.email}" placeholder="Email del Paciente">
+                                    </p:inputText>
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <div class="form-group">
+                                    <p:outputLabel for="ocupacion"  value="Ocupación" id="lbocupacion" rendered="false"/>
+                                    <p:selectOneMenu id="ocupacion" value="#{ordenMB.ocupacion}" rendered="false">
+                                        <f:selectItems value="#{ordenMB.listaOcupacion}" var="c" itemLabel="#{c.descripcion}" itemValue="#{c.id}"/>
+                                    </p:selectOneMenu>
+                                </div>
                             </div>
                         </div>
-                        <div class="col-lg-3">
-                            <div class="form-group">
-                                <p:outputLabel for="zona"  value="Zona" id="lbZona"/>
-                                <p:selectOneMenu id="zona" value="#{ordenMB.pacientes.zona.id}">
-                                    <f:selectItems value="#{ordenMB.listaZona}" />
-                                </p:selectOneMenu>
-                            </div>
-                        </div>
-                        <div class="col-lg-3">
-                            <div class="form-group">
-                                <p:outputLabel for="vereda"  value="Vereda/Barrio" id="lbvereda"/>
-                                <p:inputText id="vereda" styleClass="form-control" value="#{ordenMB.pacientes.barrio}"  placeholder="Barrio del Paciente" style="text-transform: uppercase">
-                                </p:inputText>
+                        <!--./row-->
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <div class="form-group">
+                                    <p:outputLabel value="Notas Pacientes" />
+                                    <p:inputTextarea id="notasPaciente" styleClass="form-control" rows="2"  value="#{ordenMB.pacientes.observaciones}" style="text-transform: uppercase"/>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <!--./row-->
-                    <div class="row">
-                        <div class="col-lg-3">
-                            <div class="form-group">
-                                <p:outputLabel for="direccion"  value="Dirección" id="lbdireccion"/>
-                                <p:inputText id="direccion" required="true" styleClass="form-control" value="#{ordenMB.pacientes.direccion}" placeholder="Dirección Residencia del Paciente" style="text-transform: uppercase">
-                                    <p:ajax update="direccion,lbdireccion " event="blur" />
-                                </p:inputText>
-                            </div>
-                        </div>
-                        <div class="col-lg-3">
-                            <div class="form-group">
-                                <p:outputLabel for="telefono"  value="Teléfono" id="lbTelefono"/>
-                                <p:inputText id="telefono"  styleClass="form-control" value="#{ordenMB.pacientes.telefonoResidencia}" placeholder="Teléfono del Paciente">
-                                </p:inputText>
-                            </div>
-                        </div>
-                        <div class="col-lg-3">
-                            <div class="form-group">
-                                <p:outputLabel for="email"  value="Email" id="lbemail"/>
-                                <p:inputText id="email" styleClass="form-control" value="#{ordenMB.pacientes.email}" placeholder="Email del Paciente">
-                                </p:inputText>
-                            </div>
-                        </div>
-                        <div class="col-lg-3">
-                            <div class="form-group">
-                                <p:outputLabel for="ocupacion"  value="Ocupación" id="lbocupacion"/>
-                                <p:selectOneMenu id="ocupacion" value="#{ordenMB.pacientes.ocupacion.id}">
-                                    <f:selectItems value="#{ordenMB.listaOcupacion}" />
-                                </p:selectOneMenu>
-                            </div>
-                        </div>
-                    </div>
-                    <!--./row-->
-                    <div class="row">
-                        <div class="col-xs-12">
-                            <div class="form-group">
-                                <p:outputLabel value="Notas Pacientes" />
-                                <p:inputTextarea id="notasPaciente" styleClass="form-control" rows="2"  value="#{ordenMB.pacientes.observaciones}" style="text-transform: uppercase"/>
-                            </div>
-                        </div>
-                    </div>
+                    <!--./panel-->
                 </div>
+                <br />
                 <!--./panel-->
-            </div>
-            <br />
-            <!--./panel-->
-            <h:panelGrid columns="10" style="margin-left:20%;">
-                <h:panelGroup>
-                    <p:commandLink          styleClass="btn btn-lg btn-success btn-block button-prime"
-                                            action="#{ordenMB.guardar}"
-                                            update="@parent"
-                                            id="btnGuardar"
-                                            rendered="#{ordenMB.renderAccion}"
-                                            onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()"
-                                            >
-                        <i class="fa fa-save"></i> Guardar
-                    </p:commandLink>
-                    <p:tooltip id="toolbtnGuardar" for="btnGuardar" value="Guardar Orden" position="top"/>
-                </h:panelGroup>
-                <h:panelGroup>&nbsp;&nbsp;</h:panelGroup>
-                <h:panelGroup>
-                    <p:commandLink id="btnModificarDiente"
-                                    styleClass="btn btn-lg btn-success btn-block button-prime"
-                                    actionListener="#{ordenMB.reporteXId}"
-                                    target="_blank"
-                                    ajax="false"
-                                    rendered="#{!ordenMB.renderAccion}"
-                                    style="color: #fff;margin-right: 2px;">
-                                    <i class="fa fa-print"></i> Imprimir
-                    </p:commandLink>
-                </h:panelGroup>
-                <h:panelGroup>&nbsp;&nbsp;</h:panelGroup>
-                <h:panelGroup>
-                    <p:commandLink          styleClass="btn btn-lg btn-success btn-block button-prime"
-                                            update="@parent"
-                                            action="#{ordenMB.editar}"
-                                            id="btnEditar"
-                                            rendered="#{!ordenMB.renderAccion}"
-                                            >
-                        <i class="fa fa-edit"></i> Editar
-                    </p:commandLink>
-                    <p:tooltip id="toolbtnEditar" for="btnEditar" value="Editar Orden" position="top"/>
-                </h:panelGroup>
-                <h:panelGroup>&nbsp;&nbsp;</h:panelGroup>
-                <h:panelGroup>
-                    <p:commandLink          styleClass="btn btn-lg btn-danger btn-block button-prime"
-                                            update="@parent"
-                                            id="btnEliminar"
-                                            rendered="#{!ordenMB.renderAccion}"
-                                            actionListener="#{ordenMB.eliminar(null)}"
-                                            >
-                        <i class="fa fa-remove"></i> Eliminar
-                         <p:confirm header="Confirmación" message="¿Esta seguro de eliminar la orden?" icon="ui-icon-alert" />
-                    </p:commandLink>
-                    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                <h:panelGrid columns="10" style="margin-left:20%;">
+                    <h:panelGroup>
+                        <p:commandLink          styleClass="btn btn-lg btn-success btn-block button-prime"
+                                                actionListener="#{ordenMB.guardar}"
+                                                update="IdFormPanel:opFormulario"
+                                                id="btnGuardar"
+                                                rendered="#{ordenMB.renderAccion}"
+                                                process="@this,IdFormPanel:opFormulario"
+                                                onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()"
+                                                >
+                            <i class="fa fa-save"></i> Guardar
+                        </p:commandLink>
+                        <p:tooltip id="toolbtnGuardar" for="btnGuardar" value="Guardar Orden" position="top"/>
+                    </h:panelGroup>
+                    <h:panelGroup>&nbsp;&nbsp;</h:panelGroup>
+                    <h:panelGroup>
+                        <p:commandLink id="btnModificarDiente"
+                                       styleClass="btn btn-lg btn-success btn-block button-prime"
+                                       actionListener="#{ordenMB.reporteXId}"
+                                       target="_blank"
+                                       ajax="false"
+                                       rendered="#{!ordenMB.renderAccion}"
+                                       style="color: #fff;margin-right: 2px;">
+                            <i class="fa fa-print"></i> Imprimir
+                        </p:commandLink>
+                    </h:panelGroup>
+                    <h:panelGroup>&nbsp;&nbsp;</h:panelGroup>
+                    <h:panelGroup>
+                        <p:commandLink          styleClass="btn btn-lg btn-success btn-block button-prime"
+                                                update="@parent"
+                                                action="#{ordenMB.editar}"
+                                                id="btnEditar"
+                                                rendered="#{!ordenMB.renderAccion}"
+                                                >
+                            <i class="fa fa-edit"></i> Editar
+                        </p:commandLink>
+                        <p:tooltip id="toolbtnEditar" for="btnEditar" value="Editar Orden" position="top"/>
+                    </h:panelGroup>
+                    <h:panelGroup>&nbsp;&nbsp;</h:panelGroup>
+                    <h:panelGroup>
+                        <p:commandLink          styleClass="btn btn-lg btn-danger btn-block button-prime"
+                                                update="@parent"
+                                                id="btnEliminar"
+                                                rendered="#{!ordenMB.renderAccion}"
+                                                actionListener="#{ordenMB.eliminar(null)}"
+                                                >
+                            <i class="fa fa-remove"></i> Eliminar
+                            <p:confirm header="Confirmación" message="¿Esta seguro de eliminar la orden?" icon="ui-icon-alert" />
+                        </p:commandLink>
+                        <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
                             <p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
                             <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
                         </p:confirmDialog>
-                    <p:tooltip id="toolbtnEliminar" for="btnEliminar" value="Eliminar Orden" position="top"/>
-                </h:panelGroup>
-                <h:panelGroup>&nbsp;&nbsp;</h:panelGroup>
-                <h:panelGroup>
-                    <p:commandLink          styleClass="btn btn-lg btn-info btn-block button-prime"
-                                            update=":IdFormPanel"
-                                            action="#{ordenMB.cancelar}"
-                                            process="@this"
-                                            immediate="true"
-                                            ajax="false"
-                                            id="btnCancelar"
-                                            >
-                        <i class="fa fa-close"></i> Cancelar
-                        <p:resetInput target=":IdFormPanel" />
-                    </p:commandLink>
-                    <p:tooltip id="toolbtnCancelar" for="btnCancelar" value="Cancelar Orden" position="top"/>
-                </h:panelGroup>
-            </h:panelGrid>
-        <div class="row" style="margin-top: 2%;">
-                <!--Orden-->
-                <div class="col-xs-12 col-sm-4">
-                    <div class="panel panel-white" id="panel1">
-                        <div class="panel-heading">
-                            <h1 class="mainTitle">Orden</h1>
-
-                        </div>
-                        <div class="panel-body">
-                            <p:outputPanel id="ordenPanel">
-                            <div class="row">
-                                <div class="col-xs-12 col-sm-5">
-                                    <div class="form-group">
-                                        <p:outputLabel for="orden"  value="Orden" id="lbOrden"/><br />
-                                        <p:autoComplete id="orden" size="15"  value="#{ordenMB.orden.nroOrden}" completeMethod="#{ordenMB.autocompletarOrden}" forceSelection="true" placeholder="Digite Orden">
-                                            <p:ajax listener="#{ordenMB.validarOrden}" event="itemSelect" update=":IdFormPanel" onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()"/>
-                                        </p:autoComplete>
-                                        <p:tooltip id="toolNroOden" for="orden" value="Digite Orden a buscar" position="top"/>
-                                        
-                                    </div>
-                                </div>
-                                <div class="col-xs-6 col-sm-4">
-                                    <div class="form-group">
-                                        <p:outputLabel for="fechaOrden"  value="Fecha Orden" id="lbFechaOrden"/>
-                                        <p:inputText id="fechaOrden" styleClass="form-control" value="#{ordenMB.orden.fechaOrden}" readonly="true">
-                                            <f:convertDateTime pattern="dd/MM/yyyy" />
-                                        </p:inputText>
-                                    </div>
-                                </div>
-                                <div class="col-xs-6 col-sm-3">
-                                    <div class="form-group">
-                                        <p:outputLabel for="edad"  value="Edad" id="lbedad"/>
-                                        <p:inputText id="edad" styleClass="form-control" value="#{ordenMB.edad}" readonly="true" placeholder="Edad del Paciente">
-                                        </p:inputText>
-                                    </div>
-                                </div>
+                        <p:tooltip id="toolbtnEliminar" for="btnEliminar" value="Eliminar Orden" position="top"/>
+                    </h:panelGroup>
+                    <h:panelGroup>&nbsp;&nbsp;</h:panelGroup>
+                    <h:panelGroup>
+                        <p:commandLink          styleClass="btn btn-lg btn-info btn-block button-prime"
+                                                update=":IdFormPanel"
+                                                action="#{ordenMB.cancelar}"
+                                                process="@this"
+                                                immediate="true"
+                                                ajax="false"
+                                                id="btnCancelar"
+                                                >
+                            <i class="fa fa-close"></i> Cancelar
+                            <p:resetInput target=":IdFormPanel" />
+                        </p:commandLink>
+                        <p:tooltip id="toolbtnCancelar" for="btnCancelar" value="Cancelar Orden" position="top"/>
+                    </h:panelGroup>
+                </h:panelGrid>
+                <div class="row" style="margin-top: 2%;">
+                    <!--Orden-->
+                    <div class="col-xs-12 col-sm-4">
+                        <div class="panel panel-white" id="panel1">
+                            <div class="panel-heading">
+                                <h1 class="mainTitle">Orden</h1>
 
                             </div>
-                            <!--./row-->
-                            <div class="row">
-                                <div class="col-sm-4 col-xs-6">
-                                    <div class="form-group">
-                                        <p:outputLabel for="embarazo"  value="Embarazo" id="lbEmbarazo"/>
-                                        <p:inputText id="embarazo" styleClass="form-control" value="#{ordenMB.orden.embarazo}" placeholder="Semanas de embarazo">
-                                            <f:ajax 
-                                        event="change"/> 
-                                        </p:inputText>
-                                    </div>
-                                </div>
-                                <div class="col-sm-8 col-xs-6">
-                                    <div class="form-group">
-                                        <p:outputLabel for="origen"  value="Origen" id="lbOrigen"/>
-                                        <p:selectOneMenu id="origen" required="true" value="#{ordenMB.orden.origenId.idAdministradora}" filter="true" filterMatchMode="contains">
-                                            <f:selectItem itemLabel="" itemValue="" />
-                                            <f:ajax 
-                                        event="change"/> 
-                                            <f:selectItems value="#{ordenMB.listaAdministradora}" />
-                                        </p:selectOneMenu>
-                                    </div>
-                                </div>
-                            </div>
-                            <!--./row-->
-                            <div class="row">
-
-                            </div>
-                            <!--./row-->
-                            <div class="row">
-                                <div class="col-xs-12 col-sm-5">
-                                    <div class="form-group">
-                                        <p:outputLabel for="autorizacion"  value="Autorización" id="lbAutorizacion"/>
-                                        <p:inputText id="autorizacion" styleClass="form-control" value="#{ordenMB.orden.autorizacion}" placeholder="Número de Autorización">
-                                            <f:ajax 
-                                                event="change"/> 
-                                        </p:inputText>
-                                    </div>
-                                </div>
-                                <div class="col-xs-12 col-sm-4">
-                                    <div class="form-group">
-                                        <p:outputLabel for="fechaAut"  value="F. Autorización" id="lbfechaAut"/>
-                                        <p:calendar id="fechaAut" styleClass="campoFormulario" navigator="true" mask="true" locale="es" pattern="dd/MM/yyyy" value="#{ordenMB.orden.fechaAutorizacion}" size="14" placeholder="Fecha de autorización">
-                                        </p:calendar>
-                                    </div>
-                                </div>
-                                <div class="col-xs-12 col-sm-3">
-                                    <div class="form-group">
-                                        <p:outputLabel for="nroExterno"  value="# Externo" id="lnNroExterno"/>
-                                        <p:inputText id="nroExterno" styleClass="form-control" value="#{ordenMB.orden.nroExteno}" placeholder="Número Externo">
-                                            <f:ajax 
-                                                event="change"/> 
-                                        </p:inputText>
-                                    </div>
-                                </div>
-                            </div>
-                            <!--./row-->
-                            <div class="row">
-
-                                <div class="col-xs-12 col-sm-6">
-                                    <div class="form-group">
-                                        <p:outputLabel for="medico"  value="Médico" id="lbMedico"/>
-                                        <p:selectOneMenu id="medico" value="#{ordenMB.orden.medicoId.idUsuario}" filter="true" filterMatchMode="contains">
-                                            <f:ajax event="change" />
-                                            <f:selectItem itemLabel="" itemValue="" />
-                                            <f:selectItems value="#{ordenMB.listaMedicos}" />
-                                        </p:selectOneMenu>
-                                    </div>
-                                </div>
-                                <div class="col-xs-12 col-sm-6">
-                                    <div class="form-group">
-                                        <p:outputLabel for="servicio"  value="Servicio" id="lbServicio"/>
-                                        <p:selectOneMenu id="servicio" value="#{ordenMB.orden.servicioId.id}" filter="true" filterMatchMode="contains">
-                                            <f:selectItems value="#{ordenMB.listaServicios}" />
-                                        </p:selectOneMenu>
-                                    </div>
-                                </div>
-                            </div>
-                            <!--./row-->
-                            <div class="row">
-                                <div class="col-xs-12">
-                                    <div class="form-group">
-                                        <p:outputLabel for="diagnostico"  value="Diagnóstico" id="lbdiagnostico"/><br />
-                                        <p:autoComplete id="diagnostico" size="50"  value="#{ordenMB.diagnostico}" completeMethod="#{ordenMB.autocompletarDiagnostico}" forceSelection="true" placeholder="Digite Diagnóstico">
-                                            <p:ajax listener="#{ordenMB.validarDiagnostico}" event="itemSelect"/>
-                                        </p:autoComplete>
-                                        <p:tooltip id="tooldiagnostico" for="diagnostico" value="Digite Diágnotico Orden" position="top"/>
-                                    </div>
-                                </div>
-                                 <div class="col-xs-2 col-sm-2">
-                                    <div class="form-group">
-                                        <p:outputLabel for="cama"  value="Cama" id="lbCama"/>
-                                        <p:inputText id="cama" styleClass="form-control" value="#{ordenMB.orden.cama}" placeholder="nro cama">
-                                            <f:ajax 
-                                                event="change"/> 
-                                        </p:inputText>
-                                    </div>
-                                </div>
-                                <div class="col-xs-10">
-                                    <div class="form-group">
-                                        <p:outputLabel for="nota"  value="Nota" id="lbNota"/>
-                                        <p:inputTextarea id="nota" styleClass="form-control" value="#{ordenMB.orden.nota}" placeholder="Notas de la orden">
-                                            <f:ajax 
-                                                event="change"/> 
-                                        </p:inputTextarea>
-                                        
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <!--./row-->
-                            <div class="row">
-                                
-                            </div>
-                            <!--./row-->
-                            </p:outputPanel>
-                        </div>
-                    </div>
-                </div>
-                <!--Fin Orden-->
-                <div class="clearfix visible-xs-block"></div>
-                <!--Estudio-->
-                <div class="col-xs-12 col-sm-8">
-                    <div class="panel panel-white" id="panel1">
-                        <p:outputPanel id="estudioPanel">
-                        <p:tabView activeIndex="#{ordenMB.tabIndex}" dynamic="true" id="tabV">
-                            <p:tab title="Estudios">
-                                <div class="panel-body">
+                            <div class="panel-body">
+                                <p:outputPanel id="ordenPanel">
                                     <div class="row">
-                                        <div class="col-xs-12 col-sm-10">
+                                        <div class="col-xs-12 col-sm-5">
                                             <div class="form-group">
-                                                <p:outputLabel for="estudio"  value="Estudio a Programar" id="lbEstudio"/><br />
-                                                <p:autoComplete id="estudio" size="100"  value="#{ordenMB.estudio}" completeMethod="#{ordenMB.autocompletarEstudio}" forceSelection="true" placeholder="Digite Estudios a realizar">
-                                                    <p:ajax listener="#{ordenMB.validarEstudio}" event="itemSelect" update=":IdFormPanel,@this"/>
+                                                <p:outputLabel for="orden" styleClass="campoObligatorio2"  value="Orden" id="lbOrden"/><br />
+                                                <p:autoComplete id="orden" size="15"  value="#{ordenMB.orden.nroOrden}" completeMethod="#{ordenMB.autocompletarOrden}" forceSelection="true" placeholder="Digite Orden">
+                                                    <p:ajax listener="#{ordenMB.validarOrden}" event="itemSelect" update=":IdFormPanel" onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()"/>
                                                 </p:autoComplete>
+                                                <p:tooltip id="toolNroOden" for="orden" value="Digite Orden a buscar" position="top"/>
+
                                             </div>
                                         </div>
-                                        <div class="col-sm-2 col-xs-12">
+                                        <div class="col-xs-6 col-sm-4">
                                             <div class="form-group">
-                                                <br />
-                                                <p:commandLink process="@this" onclick="PF('dlgSeleccionarEstudio').show();" >
-                                                    <li class="fa fa-search" style="margin-top: 5px !important;" />
-                                                </p:commandLink>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!--./row-->
-                                    <br />
-                                    <div class="row">
-                                        <div class="col-xs-12">
-                                            <p:dataTable id="pEspecialidad" var="estudi" 
-                                                         value="#{ordenMB.listaEstudioSeleccionados}"
-                                                         emptyMessage=""
-                                                         rows="20" 
-                                                         widgetVar="estudioTable"
-                                                         paginatorPosition="bottom"
-                                                         paginator="true"
-                                                         tableStyleClass="table-striped table-hover"
-                                                         styleClass="table"
-                                                         reflow="true"
-                                                         
-                                                         >
-                                                <p:column  style="width: 120px;" headerText="Código" filterMatchMode="startsWith"  filterBy="#{estudi.codigo}">
-                                                    <h:outputText value="#{estudi.codigo}" style="font-size: 10px;"/>
-                                                </p:column>
-                                                <p:column headerText="Estudio" filterMatchMode="startsWith"  filterBy="#{estudi.nombre}">
-                                                    <h:outputText value="#{estudi.nombre}" style="font-size: 10px;"/>
-                                                </p:column>
-                                                <p:column headerText="" width="50px;">
-                                                    <p:commandButton icon="ui-icon-close" id="btnEliminarEstudio"  style="height: 15px;width: 20px;"  update="pEspecialidad" />
-                                                    <p:tooltip id="toolbtnGuardar" for="btnEliminarEstudio" value="Eliminar Estudio" position="top"/>
-                                                </p:column>
-                                                
-                                            </p:dataTable>
-                                        </div>
-                                    </div>
-                                    <!--./row-->
-                                </div>
-                            </p:tab>
-                            <p:tab title="Pruebas">
-                                <!--recuadros por tipo-->
-                                <p:outputPanel id="datosAlfaNumericos" rendered="#{ordenMB.renderDatosAlfanumericos}">
-                                    <div class="row">
-                                        <div class="col-lg-12 col-xs-3">
-                                            <div class="form-group">
-                                                <p:outputLabel value="#{ordenMB.labelDatosPrueba}" />
-                                            </div>
-                                        </div>
-                                        <div class="clearfix" />
-                                        <div class="col-lg-12 col-xs-3">
-                                            <div class="form-group">
-                                                <p:inputText styleClass="form-control" value="#{ordenMB.datosPrueba}" placeholder="Ingrese resultados de la prueba" disabled="#{ordenMB.disableCampoPrueba}">
-                                                    <f:ajax event="blur" listener="#{ordenMB.valorAlfaNumericoDigitado}" render=":IdFormPanel:tabV"/>
+                                                <p:outputLabel for="fechaOrden"  value="Fecha Orden" id="lbFechaOrden"/>
+                                                <p:inputText id="fechaOrden" styleClass="form-control" value="#{ordenMB.orden.fechaOrden}" readonly="true">
+                                                    <f:convertDateTime pattern="dd/MM/yyyy" />
                                                 </p:inputText>
                                             </div>
                                         </div>
-                                        <div class="col-lg-12 col-xs-3">
+                                        <div class="col-xs-6 col-sm-3">
                                             <div class="form-group">
-                                                <p:outputLabel value="Observaciones" />
-                                                <p:inputTextarea id="observacionesNota" styleClass="form-control" placeholder="Notas Resultados" value="#{ordenMB.observaciones}" disabled="#{ordenMB.disableObservacionesPrueba}">
-                                                    <f:ajax event="blur" render=":IdFormPanel:tabV"/> 
-                                                </p:inputTextarea>
+                                                <p:outputLabel for="edad"  value="Edad" id="lbedad"/>
+                                                <p:inputText id="edad" styleClass="form-control" value="#{ordenMB.edad}" readonly="true" placeholder="Edad del Paciente">
+                                                </p:inputText>
                                             </div>
                                         </div>
+
                                     </div>
-                                </p:outputPanel>
-                                <p:outputPanel id="datosCompuestos" rendered="#{ordenMB.renderDatosCompuestos}">
+                                    <!--./row-->
                                     <div class="row">
-                                        <div class="col-lg-12 col-xs-3">
+                                        <div class="col-sm-4 col-xs-6">
                                             <div class="form-group">
-                                                <p:outputLabel value="Valores Múltiples" />
-                                                <p:inputTextarea styleClass="form-control" placeholder="Presione click para ingresar resultados" value="#{ordenMB.valoresPruebaCompuesta}" disabled="#{ordenMB.disableCampoPruebaCompuesta}">
-                                                    <f:ajax event="click" listener="#{ordenMB.cargarDialogCompuesto}"/>
-                                                </p:inputTextarea>
+                                                <p:outputLabel for="embarazo"  value="Embarazo" id="lbEmbarazo"/>
+                                                <p:inputText id="embarazo" styleClass="form-control" value="#{ordenMB.orden.embarazo}" placeholder="Semanas de embarazo" readonly="#{ordenMB.disableEmbarazo}">
+                                                    <f:ajax 
+                                                        event="change"/> 
+                                                </p:inputText>
                                             </div>
                                         </div>
-                                        <div class="clearfix" />
-                                        <div class="col-lg-12 col-xs-3">
+                                        <div class="col-sm-8 col-xs-6">
                                             <div class="form-group">
-                                                <p:outputLabel value="Notas" />
-                                                <p:inputTextarea styleClass="form-control" placeholder="Notas Resultados" value="#{ordenMB.observaciones}" disabled="#{ordenMB.disableObservacionesPrueba}">
-                                                    <f:ajax event="change"/> 
-                                                </p:inputTextarea>
+                                                <p:outputLabel for="origen" styleClass="campoObligatorio2"  value="Origen" id="lbOrigen"/>
+                                                <p:selectOneMenu id="origen" value="#{ordenMB.orden.origenId.idAdministradora}" filter="true" filterMatchMode="contains">
+                                                    <f:selectItem itemLabel="" itemValue="" />
+                                                    <f:ajax 
+                                                        event="change"/> 
+                                                    <f:selectItems value="#{ordenMB.listaAdministradora}" />
+                                                </p:selectOneMenu>
                                             </div>
                                         </div>
                                     </div>
-                                </p:outputPanel>
-                                <div class="row">
-                                    <div class="col-lg-3 col-lg-offset-5  col-xs-12">
-                                        <div class="form-group">
-                                            <p:outputLabel for="area"  value="Pruebas Por Area" id="lbarea" /><br />
-                                            <p:selectOneMenu id="area" value="#{ordenMB.areaId}" title="Ver Pruebas por Areass" filter="true" filterMatchMode="contains">
-                                                <f:selectItem itemLabel="Todas las áreas" itemValue="0"/>
-                                                <f:selectItems value="#{ordenMB.listaAreas}" />
-                                                <f:ajax listener="#{ordenMB.cargarPruebasAreas}" event="change" render="pIngresPruebas" />
-                                            </p:selectOneMenu>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-4 col-xs-12">
-                                        <div class="form-group">
-                                            <p:commandButton 
-                                                title="Nueva Administradora" icon="fa fa-fw fa-edit"
-                                                styleClass="icon-new fg-lightBlue bg-white no-border"                            
-                                                id="btn1"
-                                                update=":IdFormPanel:tabV"
-                                                disabled="#{ordenMB.disableBtnEdit}"
-                                                actionListener="#{ordenMB.btnEditar}"
-                                                style="font-size: 20px; width: 30px; height: 40px; "/> 
-                                            <p:tooltip  for="btn1" value="Editar prueba seleccionada" position="top"/>
-                                            &nbsp;
-                                            <p:commandButton 
-                                                title="Buscar Administradora" icon="fa fa-fw fa-remove"
-                                                styleClass="icon-search fg-lightBlue bg-white no-border" 
-                                                id="btn2"
-                                                update=":IdFormPanel:tabV"
-                                                disabled="#{ordenMB.disableBtnClarear}"
-                                                actionListener="#{ordenMB.btnClarear}"
-                                                style="font-size: 20px; width: 30px; height: 40px; "/> 
-                                            <p:tooltip  for="btn2" value="Clarear validación para la prueba validada seleccionada" position="top"/>
-                                            &nbsp;
-                                            <p:commandButton                     
-                                                title="Eliminar Administradora" icon="fa fa-fw fa-area-chart"
-                                                styleClass="icon-cancel fg-lightBlue bg-white no-border"                     
-                                                id="btn3"
-                                                update=":IdFormPanel:tabV"
-                                                disabled="#{ordenMB.disableBtnEvolutivo}"
-                                                actionListener="#{ordenMB.btnEvolutivo}"
-                                                style="font-size: 20px; width: 30px; height: 40px; "/> 
-                                            <p:tooltip  for="btn3" value="Ver Evolutivo del resultado de la prueba seleccionada" position="top"/>
-                                            &nbsp;
-                                            <p:commandButton 
-                                                title="Guardar/Actualizar Administradora" icon="fa fa-fw fa-check-square-o"
-                                                styleClass="icon-floppy fg-lightBlue bg-white no-border" 
-                                                id="btn4"
-                                                disabled="#{ordenMB.disableBtnConfirmar}"
-                                                update=":IdFormPanel:tabV"
-                                                actionListener="#{ordenMB.btnConfirmar}"
-                                                style="font-size: 20px; width: 30px; height: 40px; "/>                    
-                                            <p:tooltip  for="btn4" value="Marcar como confirmado el resultado de la prueba seleccionada" position="top"/>
-                                            &nbsp;
-                                            <p:commandButton 
-                                                title="Guardar/Actualizar Administradora" icon="fa fa-fw fa-check"
-                                                styleClass="icon-floppy fg-lightBlue bg-white no-border" 
-                                                id="btn5"
-                                                process=":IdFormPanel:tabV"
-                                                update=":IdFormPanel:tabV"
-                                                disabled="#{ordenMB.disableBtnValidar}"
-                                                actionListener="#{ordenMB.btnValidar}"
-                                                style="font-size: 20px; width: 30px; height: 40px; "/>                    
-                                            
-                                            <p:tooltip  for="btn5" value="Validar Resultado de la prueba seleccionada" position="top"/>
-                                        </div>
-                                    </div>
+                                    <!--./row-->
+                                    <div class="row">
 
-                                </div>
-                                <br />
-                                <div class="row">
+                                    </div>
+                                    <!--./row-->
+                                    <div class="row">
+                                        <div class="col-xs-12 col-sm-5">
+                                            <div class="form-group">
+                                                <p:outputLabel for="autorizacion"  value="Autorización" id="lbAutorizacion"/>
+                                                <p:inputText id="autorizacion" styleClass="form-control" value="#{ordenMB.orden.autorizacion}" placeholder="Número de Autorización">
+                                                    <f:ajax 
+                                                        event="change"/> 
+                                                </p:inputText>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-4">
+                                            <div class="form-group">
+                                                <p:outputLabel for="fechaAut"  value="F. Autorización" id="lbfechaAut"/>
+                                                <p:calendar id="fechaAut" styleClass="campoFormulario" navigator="true" mask="true" locale="es" pattern="dd/MM/yyyy" value="#{ordenMB.orden.fechaAutorizacion}" size="14" placeholder="Fecha de autorización">
+                                                </p:calendar>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-3">
+                                            <div class="form-group">
+                                                <p:outputLabel for="nroExterno"  value="# Externo" id="lnNroExterno"/>
+                                                <p:inputText id="nroExterno" styleClass="form-control" value="#{ordenMB.orden.nroExteno}" placeholder="Número Externo">
+                                                    <f:ajax 
+                                                        event="change"/> 
+                                                </p:inputText>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--./row-->
+                                    <div class="row">
+
+                                        <div class="col-xs-12 col-sm-6">
+                                            <div class="form-group">
+                                                <p:outputLabel for="medico"  value="Médico" id="lbMedico"/>
+                                                <p:selectOneMenu id="medico" value="#{ordenMB.orden.medicoId.idUsuario}" filter="true" filterMatchMode="contains">
+                                                    <f:ajax event="change" />
+                                                    <f:selectItem itemLabel="" itemValue="" />
+                                                    <f:selectItems value="#{ordenMB.listaMedicos}" />
+                                                </p:selectOneMenu>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-6">
+                                            <div class="form-group">
+                                                <p:outputLabel for="servicio"  value="Servicio" id="lbServicio"/>
+                                                <p:selectOneMenu id="servicio" value="#{ordenMB.orden.servicioId.id}" filter="true" filterMatchMode="contains">
+                                                    <f:selectItems value="#{ordenMB.listaServicios}" />
+                                                </p:selectOneMenu>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--./row-->
+                                    <div class="row">
                                         <div class="col-xs-12">
-                                            <p:dataTable id="pIngresPruebas" var="prueba" 
-                                                         value="#{ordenMB.listaPruebas}"
-                                                         emptyMessage="No hay pruebas"
-                                                         rows="20" 
-                                                         editable="true"
-                                                         widgetVar="pruebaTable"
-                                                         paginatorPosition="bottom"
-                                                         paginator="true"
-                                                         tableStyleClass="table-striped table-hover"
-                                                         styleClass="table"
-                                                         reflow="true"
-                                                         selectionMode="multiple"
-                                                         rowKey="#{prueba.id}"
-                                                         
-                                                         selection="#{ordenMB.pruebaSeleccionada}"
-                                                         >
-                                                <p:ajax event="rowSelect" listener="#{ordenMB.onSelectPrueba}" update=":IdFormPanel:tabV" process=":IdFormPanel:tabV"/>
-                                                <p:column  style="width: 50px;font-size: 10px;" headerText="Estado" filterMatchMode="startsWith"  filterBy="" >
-                                                    <h:outputText value="#{prueba.estado}" style="font-size: 10px;"/>
-                                                </p:column>
-                                                <p:column headerText="Nombre Prueba" style="font-size: 10px;">
-                                                    <h:outputText value="#{prueba.pruebaId.nombre}" style="font-size: 10px;"/>
-                                                </p:column>
-                                                <p:column headerText="Confirmar" style="width: 60px;font-size: 10px;">
-                                                    <p:selectBooleanCheckbox  value="#{prueba.confirmado}" disabled="true"/>
-                                                </p:column>
-                                                <p:column headerText="Resultados" filterMatchMode="startsWith"  filterBy="" style="font-size: 10px;">
-                                                            <h:outputText value="#{prueba.resultado}" />
-                                                </p:column>
-                                                <p:column headerText="Unidades" filterMatchMode="startsWith"  filterBy="" style="width: 60px;font-size: 10px;">
-                                                    <h:outputText value="#{prueba.pruebaId.unidadPrueba.codigo}" style="font-size: 10px;"/>
-                                                </p:column>
-                                                <p:column headerText="Min Ref." filterMatchMode="startsWith"  filterBy="" style="width: 60px;font-size: 10px;">
-                                                    <h:outputText value="#{prueba.refMin}" style="font-size: 10px;"/>
-                                                </p:column>
-                                                <p:column headerText="Max Ref." filterMatchMode="startsWith"  filterBy="" style="width: 60px;font-size: 10px;">
-                                                    <h:outputText value="#{prueba.refMax}" style="font-size: 10px;"/>
-                                                </p:column>
-                                                <p:column headerText="Codigo Prueba" filterMatchMode="startsWith"  filterBy="" style="font-size: 10px;width:100px">
-                                                    <h:outputText value="#{prueba.pruebaId.codigo}" style="font-size: 10px;"/>
-                                                </p:column>
-                                                <p:column headerText="Nota" filterMatchMode="startsWith"  filterBy="" style="width: 40px;font-size: 10px;">
-                                                    <h:outputText value="#{prueba.nota}" style="font-size: 10px;"/>
-                                                </p:column>
-                                            </p:dataTable>
+                                            <div class="form-group">
+                                                <p:outputLabel for="diagnostico"  value="Diagnóstico" id="lbdiagnostico"/><br />
+                                                <p:autoComplete id="diagnostico" size="45"  value="#{ordenMB.diagnostico}" completeMethod="#{ordenMB.autocompletarDiagnostico}" forceSelection="true" placeholder="Digite Diagnóstico"  style="text-transform: uppercase">
+                                                    <p:ajax listener="#{ordenMB.validarDiagnostico}" event="itemSelect"/>
+                                                </p:autoComplete>
+                                                <p:tooltip id="tooldiagnostico" for="diagnostico" value="Digite Diágnotico Orden" position="top"/>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-2 col-sm-2">
+                                            <div class="form-group">
+                                                <p:outputLabel for="cama"  value="Cama" id="lbCama"/>
+                                                <p:inputText id="cama" styleClass="form-control" value="#{ordenMB.orden.cama}" placeholder="nro cama">
+                                                    <f:ajax 
+                                                        event="change"/> 
+                                                </p:inputText>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-10">
+                                            <div class="form-group">
+                                                <p:outputLabel for="nota"  value="Nota" id="lbNota"/>
+                                                <p:inputTextarea id="nota" styleClass="form-control" value="#{ordenMB.orden.nota}" placeholder="Notas de la orden" style="text-transform: uppercase">
+                                                    <f:ajax 
+                                                        event="change"/> 
+                                                </p:inputTextarea>
+
+                                            </div>
                                         </div>
                                     </div>
-                            </p:tab>
-                        </p:tabView>
-                        </p:outputPanel>
-                    </div>
-                    <!--panel estudio-->
 
+                                    <!--./row-->
+                                    <div class="row">
+
+                                    </div>
+                                    <!--./row-->
+                                </p:outputPanel>
+                            </div>
+                        </div>
+                    </div>
+                    <!--Fin Orden-->
+                    <div class="clearfix visible-xs-block"></div>
+                    <!--Estudio-->
+                    <div class="col-xs-12 col-sm-8">
+                        <div class="panel panel-white" id="panel1">
+                            <p:outputPanel id="estudioPanel">
+                                <p:tabView activeIndex="#{ordenMB.tabIndex}" dynamic="true" id="tabV">
+                                    <p:tab title="Estudios">
+                                        <div class="panel-body">
+                                            <div class="row">
+                                                <div class="col-xs-12 col-sm-10">
+                                                    <div class="form-group">
+                                                        <p:outputLabel for="estudio"  value="Estudio a Programar" id="lbEstudio"/><br />
+                                                        <p:autoComplete id="estudio" size="90"  value="#{ordenMB.estudio}" completeMethod="#{ordenMB.autocompletarEstudio}" forceSelection="true" placeholder="Digite Estudios a realizar" style="text-transform: uppercase">
+                                                            <p:ajax listener="#{ordenMB.validarEstudio}" event="itemSelect" update=":IdFormPanel,@this"/>
+                                                        </p:autoComplete>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-2 col-xs-12">
+                                                    <div class="form-group">
+                                                        <br />
+                                                        <p:commandLink process="@this" onclick="PF('dlgSeleccionarEstudio').show();" >
+                                                            <li class="fa fa-search" style="margin-top: 5px !important;" />
+                                                        </p:commandLink>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!--./row-->
+                                            <br />
+                                            <div class="row">
+                                                <div class="col-xs-12">
+                                                    <p:dataTable id="pEspecialidad" var="estudi" 
+                                                                 value="#{ordenMB.listaEstudioSeleccionados}"
+                                                                 emptyMessage=""
+                                                                 rows="20" 
+                                                                 widgetVar="estudioTable"
+                                                                 paginatorPosition="bottom"
+                                                                 paginator="true"
+                                                                 tableStyleClass="table-striped table-hover"
+                                                                 styleClass="table"
+                                                                 reflow="true"
+
+                                                                 >
+                                                        <p:column  style="width: 120px;" headerText="Código" filterMatchMode="startsWith"  filterBy="#{estudi.codigo}">
+                                                            <h:outputText value="#{estudi.codigo}" style="font-size: 10px;"/>
+                                                        </p:column>
+                                                        <p:column headerText="Estudio" filterMatchMode="startsWith"  filterBy="#{estudi.nombre}">
+                                                            <h:outputText value="#{estudi.nombre}" style="font-size: 10px;"/>
+                                                        </p:column>
+                                                        <p:column headerText="" width="50px;">
+                                                            <p:commandButton icon="ui-icon-close" id="btnEliminarEstudio"  style="height: 15px;width: 20px;"  update="pEspecialidad" />
+                                                            <p:tooltip id="toolbtnGuardar" for="btnEliminarEstudio" value="Eliminar Estudio" position="top"/>
+                                                        </p:column>
+
+                                                    </p:dataTable>
+                                                </div>
+                                            </div>
+                                            <!--./row-->
+                                        </div>
+                                    </p:tab>
+                                    <p:tab title="Pruebas">
+                                        <!--recuadros por tipo-->
+                                        <p:outputPanel id="datosAlfaNumericos" rendered="#{ordenMB.renderDatosAlfanumericos}">
+                                            <div class="row">
+                                                <div class="col-lg-12 col-xs-3">
+                                                    <div class="form-group">
+                                                        <p:outputLabel value="#{ordenMB.labelDatosPrueba}" />
+                                                    </div>
+                                                </div>
+                                                <div class="clearfix" />
+                                                <div class="col-lg-12 col-xs-3">
+                                                    <div class="form-group">
+                                                        <p:inputText styleClass="form-control" value="#{ordenMB.datosPrueba}" placeholder="Ingrese resultados de la prueba" disabled="#{ordenMB.disableCampoPrueba}">
+                                                            <f:ajax event="blur" listener="#{ordenMB.valorAlfaNumericoDigitado}" render=":IdFormPanel:tabV"/>
+                                                        </p:inputText>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-12 col-xs-3">
+                                                    <div class="form-group">
+                                                        <p:outputLabel value="Observaciones" />
+                                                        <p:inputTextarea id="observacionesNota" styleClass="form-control" placeholder="Notas Resultados" value="#{ordenMB.observaciones}" disabled="#{ordenMB.disableObservacionesPrueba}" style="text-transform: uppercase">
+                                                            <f:ajax event="blur" render=":IdFormPanel:tabV"/> 
+                                                        </p:inputTextarea>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </p:outputPanel>
+                                        <p:outputPanel id="datosCompuestos" rendered="#{ordenMB.renderDatosCompuestos}">
+                                            <div class="row">
+                                                <div class="col-lg-12 col-xs-3">
+                                                    <div class="form-group">
+                                                        <p:outputLabel value="Valores Múltiples" />
+                                                        <p:inputTextarea styleClass="form-control" placeholder="Presione click para ingresar resultados" value="#{ordenMB.valoresPruebaCompuesta}" disabled="#{ordenMB.disableCampoPruebaCompuesta}">
+                                                            <f:ajax event="click" listener="#{ordenMB.cargarDialogCompuesto}"/>
+                                                        </p:inputTextarea>
+                                                    </div>
+                                                </div>
+                                                <div class="clearfix" />
+                                                <div class="col-lg-12 col-xs-3">
+                                                    <div class="form-group">
+                                                        <p:outputLabel value="Notas" />
+                                                        <p:inputTextarea styleClass="form-control" placeholder="Notas Resultados" value="#{ordenMB.observaciones}" disabled="#{ordenMB.disableObservacionesPrueba}">
+                                                            <f:ajax event="change"/> 
+                                                        </p:inputTextarea>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </p:outputPanel>
+                                        <div class="row">
+                                            <div class="col-lg-3 col-lg-offset-3  col-xs-12">
+                                                <div class="form-group">
+                                                    <p:outputLabel for="area"  value="Pruebas Por Area" id="lbarea" /><br />
+                                                    <p:selectOneMenu id="area" value="#{ordenMB.areaId}" title="Ver Pruebas por Areass" filter="true" filterMatchMode="contains">
+                                                        <f:selectItem itemLabel="Todas las áreas" itemValue="0"/>
+                                                        <f:selectItems value="#{ordenMB.listaAreas}" />
+                                                        <f:ajax listener="#{ordenMB.cargarPruebasAreas}" event="change" render="pIngresPruebas" />
+                                                    </p:selectOneMenu>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6 col-xs-12">
+                                                <div class="form-group">
+                                                    <p:commandButton 
+                                                        title="Nueva Administradora" icon="fa fa-fw fa-edit"
+                                                        styleClass="icon-new fg-lightBlue bg-white no-border"                            
+                                                        id="btn1"
+                                                        update=":IdFormPanel:tabV"
+                                                        disabled="#{ordenMB.disableBtnEdit}"
+                                                        actionListener="#{ordenMB.btnEditar}"
+                                                        style="font-size: 20px; width: 30px; height: 40px; "/> 
+                                                    <p:tooltip  for="btn1" value="Editar prueba seleccionada" position="top"/>
+                                                    &nbsp;
+                                                    <p:commandButton 
+                                                        title="Buscar Administradora" icon="fa fa-fw fa-remove"
+                                                        styleClass="icon-search fg-lightBlue bg-white no-border" 
+                                                        id="btn2"
+                                                        update=":IdFormPanel:tabV"
+                                                        disabled="#{ordenMB.disableBtnClarear}"
+                                                        actionListener="#{ordenMB.btnClarear}"
+                                                        style="font-size: 20px; width: 30px; height: 40px; "/> 
+                                                    <p:tooltip  for="btn2" value="Clarear validación para la prueba validada seleccionada" position="top"/>
+                                                    &nbsp;
+                                                    <p:commandButton                     
+                                                        title="Eliminar Administradora" icon="fa fa-fw fa-area-chart"
+                                                        styleClass="icon-cancel fg-lightBlue bg-white no-border"                     
+                                                        id="btn3"
+                                                        update=":IdFormPanel:tabV"
+                                                        disabled="#{ordenMB.disableBtnEvolutivo}"
+                                                        actionListener="#{ordenMB.btnEvolutivo}"
+                                                        style="font-size: 20px; width: 30px; height: 40px; "/> 
+                                                    <p:tooltip  for="btn3" value="Ver Evolutivo del resultado de la prueba seleccionada" position="top"/>
+                                                    &nbsp;
+                                                    <p:commandButton 
+                                                        title="Guardar/Actualizar Administradora" icon="fa fa-fw fa-check-square-o"
+                                                        styleClass="icon-floppy fg-lightBlue bg-white no-border" 
+                                                        id="btn4"
+                                                        disabled="#{ordenMB.disableBtnConfirmar}"
+                                                        update=":IdFormPanel:tabV"
+                                                        actionListener="#{ordenMB.btnConfirmar}"
+                                                        style="font-size: 20px; width: 30px; height: 40px; "/>                    
+                                                    <p:tooltip  for="btn4" value="Marcar como confirmado el resultado de la prueba seleccionada" position="top"/>
+                                                    &nbsp;
+                                                    <p:commandButton 
+                                                        title="Guardar/Actualizar Administradora" icon="fa fa-fw fa-check"
+                                                        styleClass="icon-floppy fg-lightBlue bg-white no-border" 
+                                                        id="btn5"
+                                                        process=":IdFormPanel:tabV"
+                                                        update=":IdFormPanel:tabV"
+                                                        disabled="#{ordenMB.disableBtnValidar}"
+                                                        actionListener="#{ordenMB.btnValidar}"
+                                                        style="font-size: 20px; width: 30px; height: 40px; "/>                    
+
+                                                    <p:tooltip  for="btn5" value="Validar Resultado de la prueba seleccionada" position="top"/>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <br />
+                                        <div class="row">
+                                            <div class="col-xs-12">
+                                                <p:dataTable id="pIngresPruebas" var="prueba" 
+                                                             value="#{ordenMB.listaPruebas}"
+                                                             emptyMessage="No hay pruebas"
+                                                             rows="20" 
+                                                             editable="true"
+                                                             widgetVar="pruebaTable"
+                                                             paginatorPosition="bottom"
+                                                             paginator="true"
+                                                             tableStyleClass="table-striped table-hover"
+                                                             styleClass="table"
+                                                             reflow="true"
+                                                             selectionMode="multiple"
+                                                             rowKey="#{prueba.id}"
+
+                                                             selection="#{ordenMB.pruebaSeleccionada}"
+                                                             >
+                                                    <p:ajax event="rowSelect" listener="#{ordenMB.onSelectPrueba}" update=":IdFormPanel:tabV" process=":IdFormPanel:tabV"/>
+                                                    <p:column  style="width: 50px;font-size: 10px;" headerText="Estado" filterMatchMode="startsWith"  filterBy="" >
+                                                        <h:outputText value="#{prueba.estado}" style="font-size: 10px;"/>
+                                                    </p:column>
+                                                    <p:column headerText="Nombre Prueba" style="font-size: 10px;">
+                                                        <h:outputText value="#{prueba.pruebaId.nombre}" style="font-size: 10px;"/>
+                                                    </p:column>
+                                                    <p:column headerText="Confirmar" style="width: 60px;font-size: 10px;">
+                                                        <p:selectBooleanCheckbox  value="#{prueba.confirmado}" disabled="true"/>
+                                                    </p:column>
+                                                    <p:column headerText="Resultados" filterMatchMode="startsWith"  filterBy="" style="font-size: 10px;">
+                                                        <h:outputText value="#{prueba.resultado}" />
+                                                    </p:column>
+                                                    <p:column headerText="Unidades" filterMatchMode="startsWith"  filterBy="" style="width: 60px;font-size: 10px;">
+                                                        <h:outputText value="#{prueba.pruebaId.unidadPrueba.codigo}" style="font-size: 10px;"/>
+                                                    </p:column>
+                                                    <p:column headerText="Min Ref." filterMatchMode="startsWith"  filterBy="" style="width: 60px;font-size: 10px;">
+                                                        <h:outputText value="#{prueba.refMin}" style="font-size: 10px;"/>
+                                                    </p:column>
+                                                    <p:column headerText="Max Ref." filterMatchMode="startsWith"  filterBy="" style="width: 60px;font-size: 10px;">
+                                                        <h:outputText value="#{prueba.refMax}" style="font-size: 10px;"/>
+                                                    </p:column>
+                                                    <p:column headerText="Codigo Prueba" filterMatchMode="startsWith"  filterBy="" style="font-size: 10px;width:100px">
+                                                        <h:outputText value="#{prueba.pruebaId.codigo}" style="font-size: 10px;"/>
+                                                    </p:column>
+                                                    <p:column headerText="Nota" filterMatchMode="startsWith"  filterBy="" style="width: 40px;font-size: 10px;">
+                                                        <h:outputText value="#{prueba.nota}" style="font-size: 10px;"/>
+                                                    </p:column>
+                                                </p:dataTable>
+                                            </div>
+                                        </div>
+                                    </p:tab>
+                                </p:tabView>
+                            </p:outputPanel>
+                        </div>
+                        <!--panel estudio-->
+
+                    </div>
+                    <!--Fin Estudio-->
                 </div>
-                <!--Fin Estudio-->
-            </div>
-            <!--./panel-->
-            <!---Dialog-->
-            <p:dialog widgetVar="wVEvolutivo" modal="true" width="15%;" resizable="true" closable="true"  responsive="true" style="margin-left:10%;width: 30% !important;" >
-                <p:chart type="line" model="#{ordenMB.lineModelEvolutivo}" style="height:250px;width:350px;"/>
-            </p:dialog>
-            <p:dialog header="DIFERENCIA MANUAL" widgetVar="wVCompuestos" modal="true" width="10%;" resizable="true" closable="true"  responsive="true" style="margin-left:10%;width: 30% !important;" >
-                <div class="row form-inline">
-                    <div class="col-xs-12">
-                        <div class="form-group">
-                            <div class="input-group">
-                                Neutrofilos&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                            </div>
-                            <p:inputText styleClass="form-control" placeholder="Neutrofilos" size="40" value="#{ordenMB.c1}"/>
-                            <div class="input-group">
-                                <span class="input-group-addon">%</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xs-12">
-                        <div class="form-group">
-                            <div class="input-group">
-                                Linfocitos&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                            </div>
-                            <p:inputText styleClass="form-control" placeholder="Linfocitos" size="40" value="#{ordenMB.c2}"/>
-                            <div class="input-group">
-                                <span class="input-group-addon">%</span>
+                <!--./panel-->
+                <!---Dialog-->
+                <p:dialog widgetVar="wVEvolutivo" modal="true" width="15%;" resizable="true" closable="true"  responsive="true" style="margin-left:10%;width: 30% !important;" >
+                    <p:chart type="line" model="#{ordenMB.lineModelEvolutivo}" style="height:250px;width:350px;"/>
+                </p:dialog>
+                <p:dialog header="DIFERENCIA MANUAL" widgetVar="wVCompuestos" modal="true" width="10%;" resizable="true" closable="true"  responsive="true" style="margin-left:10%;width: 30% !important;" >
+                    <div class="row form-inline">
+                        <div class="col-xs-12">
+                            <div class="form-group">
+                                <div class="input-group">
+                                    Neutrofilos&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                </div>
+                                <p:inputText styleClass="form-control" placeholder="Neutrofilos" size="40" value="#{ordenMB.c1}"/>
+                                <div class="input-group">
+                                    <span class="input-group-addon">%</span>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-xs-12">
-                        <div class="form-group">
-                            <div class="input-group">
-                                Cayados&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                            </div>
-                            
-                            <p:inputText styleClass="form-control" placeholder="Cayados" size="40" value="#{ordenMB.c3}"/>
-                            <div class="input-group">
-                                <span class="input-group-addon">%</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xs-12">
-                        <div class="form-group">
-                            <div class="input-group">
-                                Eosinofilos&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                            </div>
-                            
-                            <p:inputText styleClass="form-control" placeholder="Eosinofilos" size="40" value="#{ordenMB.c4}"/>
-                            <div class="input-group">
-                                <span class="input-group-addon">%</span>
+                        <div class="col-xs-12">
+                            <div class="form-group">
+                                <div class="input-group">
+                                    Linfocitos&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                </div>
+                                <p:inputText styleClass="form-control" placeholder="Linfocitos" size="40" value="#{ordenMB.c2}"/>
+                                <div class="input-group">
+                                    <span class="input-group-addon">%</span>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-xs-12">
-                        <div class="form-group">
-                            <div class="input-group">
-                                Monocitos&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                            </div>
-                            <p:inputText styleClass="form-control" placeholder="Monocitos" size="40" value="#{ordenMB.c5}"/>
-                            <div class="input-group">
-                                <span class="input-group-addon">%</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xs-12">
-                        <div class="form-group">
-                            <div class="input-group">
-                                Basofilos&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                            </div>
-                            <p:inputText styleClass="form-control" placeholder="Basofilos" size="40" value="#{ordenMB.c6}"/>
-                            <div class="input-group">
-                                <span class="input-group-addon">%</span>
+                        <div class="col-xs-12">
+                            <div class="form-group">
+                                <div class="input-group">
+                                    Cayados&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                </div>
+
+                                <p:inputText styleClass="form-control" placeholder="Cayados" size="40" value="#{ordenMB.c3}"/>
+                                <div class="input-group">
+                                    <span class="input-group-addon">%</span>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-xs-12">
-                        <div class="input-group">
+                        <div class="col-xs-12">
+                            <div class="form-group">
+                                <div class="input-group">
+                                    Eosinofilos&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                </div>
+
+                                <p:inputText styleClass="form-control" placeholder="Eosinofilos" size="40" value="#{ordenMB.c4}"/>
+                                <div class="input-group">
+                                    <span class="input-group-addon">%</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-12">
+                            <div class="form-group">
+                                <div class="input-group">
+                                    Monocitos&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                </div>
+                                <p:inputText styleClass="form-control" placeholder="Monocitos" size="40" value="#{ordenMB.c5}"/>
+                                <div class="input-group">
+                                    <span class="input-group-addon">%</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-12">
+                            <div class="form-group">
+                                <div class="input-group">
+                                    Basofilos&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                </div>
+                                <p:inputText styleClass="form-control" placeholder="Basofilos" size="40" value="#{ordenMB.c6}"/>
+                                <div class="input-group">
+                                    <span class="input-group-addon">%</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-12">
+                            <div class="input-group">
                                 Metamielocitos
                             </div>
-                            
-                        <div class="form-group">
-                            <p:inputText styleClass="form-control" placeholder="Metamielocitos" size="40" value="#{ordenMB.c7}"/>
-                            <div class="input-group">
-                                <span class="input-group-addon">%</span>
+
+                            <div class="form-group">
+                                <p:inputText styleClass="form-control" placeholder="Metamielocitos" size="40" value="#{ordenMB.c7}"/>
+                                <div class="input-group">
+                                    <span class="input-group-addon">%</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-12">
+                            <div class="form-group">
+                                <div class="input-group">
+                                    Normoblastos&nbsp;&nbsp;&nbsp;&nbsp;
+                                </div>
+
+                                <p:inputText styleClass="form-control" placeholder="Normoblastos" size="40" value="#{ordenMB.c8}"/>
+                                <div class="input-group">
+                                    <span class="input-group-addon">%</span>
+                                </div>
+                            </div>
+                        </div>
+                        <br/>    <br/>
+                        <div class="col-xs-12">
+                            <div class="form-group">
+                                <p:inputTextarea styleClass="form-control" placeholder="Observaciones" style="width: 160% !important;" value="#{ordenMB.observaciones}"/>
                             </div>
                         </div>
                     </div>
-                    <div class="col-xs-12">
-                        <div class="form-group">
-                            <div class="input-group">
-                                Normoblastos&nbsp;&nbsp;&nbsp;&nbsp;
+                    <br />
+                    <div class="row">
+                        <div class="col-xs-3">
+                            <div class="form-group">
+                                <p:commandButton value="Aceptar" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" actionListener="#{ordenMB.aceptarCompuesto}" update=":IdFormPanel:tabV">
+                                    <f:ajax event="click"  render=":IdFormPanel:tabV"/>
+                                </p:commandButton>
+
                             </div>
-                            
-                            <p:inputText styleClass="form-control" placeholder="Normoblastos" size="40" value="#{ordenMB.c8}"/>
-                            <div class="input-group">
-                                <span class="input-group-addon">%</span>
+                        </div>
+                        <div class="col-xs-3">
+                            <div class="form-group">
+                                <p:commandButton value="Cancelar" styleClass="ui-confirmdialog-no" icon="ui-icon-close" actionListener="#{ordenMB.cancelarCompuesto}" update=":IdFormPanel:tabV"/>
                             </div>
                         </div>
                     </div>
-                    <br/>    <br/>
-                    <div class="col-xs-12">
-                        <div class="form-group">
-                            <p:inputTextarea styleClass="form-control" placeholder="Observaciones" style="width: 160% !important;" value="#{ordenMB.observaciones}"/>
+                </p:dialog>
+                <p:dialog header="Seleccionar Estudio" widgetVar="dlgSeleccionarEstudio" modal="true" resizable="false" closable="true"  responsive="true" style="margin-left:15%;">                
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <p:dataTable
+                                id="IdTablaEstudios"
+                                widgetVar="wvTablaEstudios"
+                                var="estudio"
+                                value="#{ordenMB.listaEstudio}" 
+                                selection="#{ordenMB.estudioSeleccionado}"
+                                selectionMode="single"
+                                rowKey="#{estudio.id}"
+                                paginator="true"
+                                scrollWidth="600"
+                                scrollHeight="250"
+                                rows="10"
+                                lazy="true"
+                                resizableColumns="true"
+                                paginatorPosition="bottom"
+                                scrollable="true"
+                                emptyMessage="No se encontraron estudios"       
+                                tableStyleClass="table-striped table-hover"
+                                styleClass="table"
+                                reflow="true"
+                                pageLinks="5"> 
+                                <f:facet name="header">
+                                    <p:outputPanel>
+                                        <h:outputText value="Buscar" />
+                                        <p:inputText id="globalFilter" onkeyup="PF('wvTablaEstudios').filter()" style="width:150px" placeholder="Ingrese Palabra"/>
+                                    </p:outputPanel>
+                                </f:facet>
+                                <p:ajax event="rowSelect" listener="#{ordenMB.onRowSelect}" update=":IdFormPanel" />
+                                <p:column headerText="Código" width="10" filterBy="#{estudio.codigo}">
+                                    #{estudio.codigo}  
+                                </p:column>  
+                                <p:column headerText="Nombre" width="90" filterBy="#{estudio.nombre}">
+                                    #{estudio.nombre}
+                                </p:column>
+
+                            </p:dataTable>
+                        </div>
+                        <div class="col-xs-12">
+                            <p:commandButton value="Cargar" actionListener="#{ordenMB.cargarEstudio}" update=":IdFormPanel" styleClass="btn btn-lg btn-info btn-block button-prime" style="margin-top:2px !important;" rendered="false"/>                
                         </div>
                     </div>
-                </div>
-                <br />
-                <div class="row">
-                    <div class="col-xs-3">
-                        <div class="form-group">
-                            <p:commandButton value="Aceptar" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" actionListener="#{ordenMB.aceptarCompuesto}" update=":IdFormPanel:tabV">
-                                <f:ajax event="click"  render=":IdFormPanel:tabV"/>
-                            </p:commandButton>
-                            
-                        </div>
-                    </div>
-                    <div class="col-xs-3">
-                        <div class="form-group">
-                            <p:commandButton value="Cancelar" styleClass="ui-confirmdialog-no" icon="ui-icon-close" actionListener="#{ordenMB.cancelarCompuesto}" update=":IdFormPanel:tabV"/>
-                        </div>
-                    </div>
-                </div>
-            </p:dialog>
-            <p:dialog header="Seleccionar Estudio" widgetVar="dlgSeleccionarEstudio" modal="true" resizable="false" closable="true"  responsive="true" style="margin-left:15%;">                
-                <div class="row">
-                    <div class="col-xs-12">
-                        <p:dataTable
-                            id="IdTablaEstudios"
-                            widgetVar="wvTablaEstudios"
-                            var="estudio"
-                            value="#{ordenMB.listaEstudio}" 
-                            selection="#{ordenMB.estudioSeleccionado}"
-                            selectionMode="single"
-                            rowKey="#{estudio.id}"
-                            paginator="true"
-                            scrollWidth="600"
-                            scrollHeight="250"
-                            rows="10"
-                            lazy="true"
-                            resizableColumns="true"
-                            paginatorPosition="bottom"
-                            scrollable="true"
-                            emptyMessage="No se encontraron estudios"       
-                            tableStyleClass="table-striped table-hover"
-                            styleClass="table"
-                            reflow="true"
-                            pageLinks="5"> 
-                            <f:facet name="header">
-                                <p:outputPanel>
-                                    <h:outputText value="Buscar" />
-                                    <p:inputText id="globalFilter" onkeyup="PF('wvTablaEstudios').filter()" style="width:150px" placeholder="Ingrese Palabra"/>
-                                </p:outputPanel>
-                            </f:facet>
-                            <p:ajax event="rowSelect" listener="#{ordenMB.onRowSelect}" update=":IdFormPanel" />
-                            <p:column headerText="Código" width="10" filterBy="#{estudio.codigo}">
-                                #{estudio.codigo}  
-                            </p:column>  
-                            <p:column headerText="Nombre" width="90" filterBy="#{estudio.nombre}">
-                                #{estudio.nombre}
-                            </p:column>
-                            
-                        </p:dataTable>
-                    </div>
-                    <div class="col-xs-12">
-                        <p:commandButton value="Cargar" actionListener="#{ordenMB.cargarEstudio}" update=":IdFormPanel" styleClass="btn btn-lg btn-info btn-block button-prime" style="margin-top:2px !important;" rendered="false"/>                
-                    </div>
-                </div>
-            </p:dialog>
-            <!--./Dialog-->
+                </p:dialog>
+                <!--./Dialog-->
+            </p:outputPanel>
         </h:form>
     </ui:define>
 

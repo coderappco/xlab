@@ -18,7 +18,9 @@ import coderappco.xlab.utilidades.ClasificacionesEnum;
 import coderappco.xlab.utilidades.Constante;
 import coderappco.xlab.utilidades.DBConnector;
 import coderappco.xlab.utilidades.SessionUtil;
+import java.io.EOFException;
 import java.io.File;
+import java.io.IOException;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
@@ -28,6 +30,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.logging.Level;
 import javax.activation.DataHandler;
 import javax.activation.FileDataSource;
 import javax.annotation.PostConstruct;
@@ -146,32 +149,34 @@ public class ResultadoOrdenMB implements Serializable {
     }
     public void imprimir(){
         if (resultadosConfirmado) {
-            try {
-            
-            FacesContext facesContext = FacesContext.getCurrentInstance();
+            /*************/
+             FacesContext facesContext = FacesContext.getCurrentInstance();
             HttpServletResponse httpServletResponse = (HttpServletResponse) facesContext.getExternalContext().getResponse();
             try (ServletOutputStream servletOutputStream = httpServletResponse.getOutputStream()) {
-            httpServletResponse.setContentType("application/pdf");
+                httpServletResponse.setContentType("application/pdf");
                 ServletContext servletContext = (ServletContext) facesContext.getExternalContext().getContext();
-            String ruta ;
-            ruta = servletContext.getRealPath("/informes/resultados/r_resultados_orden.jasper");
-            Map<String, Object> parametros = new HashMap<>();
-            parametros.put("P_EMPRESA", SessionUtil.getEmpresa());
-            parametros.put("P_ORDEN", orden.getNroOrden());
-            try{
-                Connection con = DBConnector.getInstance().getConnection();
-                JasperPrint jasperPrint = JasperFillManager.fillReport(ruta, parametros, con);
-                JasperExportManager.exportReportToPdfStream(jasperPrint, servletOutputStream);
-                FacesContext.getCurrentInstance().responseComplete();
-                if(con!=null)con.close();
-                DBConnector.getInstance().closeConnection();
-            }catch(Exception e){
-                logger.error("Error en la clase "+ ResultadoOrdenMB.class.getName() + ", mensaje: " + e.getMessage(),e);
+                String ruta;
+                ruta = servletContext.getRealPath("/informes/resultados/r_resultados_orden.jasper");
+                Map<String, Object> parametros = new HashMap<>();
+                parametros.put("P_EMPRESA", SessionUtil.getEmpresa());
+                parametros.put("P_ORDEN", orden.getNroOrden());
+                try {
+
+                    try (Connection con = DBConnector.getInstance().getConnection()) {
+                        JasperPrint jasperPrint = JasperFillManager.fillReport(ruta, parametros, con);
+                        JasperExportManager.exportReportToPdfStream(jasperPrint, servletOutputStream);
+                        FacesContext.getCurrentInstance().responseComplete();
+                    }
+                    DBConnector.getInstance().closeConnection();
+                } catch (Exception e) {
+                    java.util.logging.Logger.getLogger(ResultadoOrdenMB.class.getName()).log(Level.SEVERE, null, e);
+                }
+            }catch (IOException ex) {
+                java.util.logging.Logger.getLogger(ResultadoOrdenMB.class.getName()).log(Level.SEVERE, null, ex);
             }
-        }
-        } catch (Exception e) {
-            logger.error("Error en la clase "+ ResultadoOrdenMB.class.getName() + ", mensaje: " + e.getMessage(),e);
-        }
+            // ... this is fine
+            /*********/
+            /*********/
         }else {
             SessionUtil.addWarningMessage("Resultados", "Resultados no confirmados");
         }
@@ -320,8 +325,8 @@ public class ResultadoOrdenMB implements Serializable {
     }
     private class MyAuthenticator extends Authenticator {  
         public PasswordAuthentication getPasswordAuthentication() {  
-            String username = "miguel.arango@arcosoft.co";  
-            String password = "(mab315)";  
+            String username = "openmedicalinfo@gmail.com";  
+            String password = "open2017";  
        
             return new PasswordAuthentication(username, password);  
         }  

@@ -220,7 +220,7 @@ public class LoginMB implements Serializable {
                 //SessionUtil.redirectTo("/faces/index.xhtml", false);        
                 
                 inicializar();
-                return "ordenes/orden";
+                return "ordenes/orden?faces-redirect=true";
             }else{
                 SessionUtil.addErrorMessage("Error al iniciar sesión", "email y/o clave incorrecta");
             }

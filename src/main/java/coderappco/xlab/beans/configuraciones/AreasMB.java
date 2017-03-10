@@ -17,6 +17,7 @@ import java.io.Serializable;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
+import javax.faces.application.FacesMessage;
 
 /**
  *
@@ -61,6 +62,7 @@ public class AreasMB extends Controlador implements Serializable {
                     clasificacionFacade.create(area);
                     SessionUtil.addInfoMessage("Guardado", "Guardado Correctamente");
                     inicializarVariables();
+                    lstClasificaciones = clasificacionFacade.buscarPorMaestro(ClasificacionesEnum.GrupoArea.toString());
                 }else{
                     SessionUtil.addErrorMessage("Error al guardar", "Ya se encuentra este código registrado");
                 }
@@ -113,8 +115,13 @@ public class AreasMB extends Controlador implements Serializable {
     @Override
     public void eliminar(Object o) {
         try {
-            
+            clasificacionFacade.remove((CfgClasificaciones)o);
+            imprimirMensaje("Guardado", "Eliminado correctamente", FacesMessage.SEVERITY_INFO);
+            lstClasificaciones = clasificacionFacade.buscarPorMaestro(ClasificacionesEnum.GrupoArea.toString());
+            inicializarVariables();
         } catch (Exception e) {
+            e.printStackTrace();
+            imprimirMensaje("Error ", "No se puede eliminar área, se encuentra asociado a una prueba", FacesMessage.SEVERITY_INFO);
         }
     }
 

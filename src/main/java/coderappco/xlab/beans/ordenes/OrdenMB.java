@@ -63,6 +63,7 @@ import org.primefaces.event.FileUploadEvent;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.model.UploadedFile;
 import javax.annotation.Resource;
+import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletOutputStream;
@@ -113,14 +114,14 @@ public class OrdenMB extends Controlador implements Serializable {
     private UserTransaction utx;
     
     
-    private List<SelectItem> listaTipoIdentificacion;
-    private List<SelectItem> listaGenero;
-    private List<SelectItem> listaGrupoSanguineo;
-    private List<SelectItem> listaEstadoCivil;
-    private List<SelectItem> listaOcupacion;
-    private List<SelectItem> listaDpto;
-    private List<SelectItem> listaMunicipio;
-    private List<SelectItem> listaZona;
+    private List<CfgClasificaciones> listaTipoIdentificacion;
+    private List<CfgClasificaciones> listaGenero;
+    private List<CfgClasificaciones> listaGrupoSanguineo;
+    private List<CfgClasificaciones> listaEstadoCivil;
+    private List<CfgClasificaciones> listaOcupacion;
+    private List<CfgClasificaciones> listaDpto;
+    private List<CfgClasificaciones> listaMunicipio;
+    private List<CfgClasificaciones> listaZona;
     
     private List<SelectItem> listaAdministradora;
     private List<SelectItem> listaMedicos;
@@ -180,13 +181,22 @@ public class OrdenMB extends Controlador implements Serializable {
     private boolean disableObservacionesPrueba;
     private boolean disableCampoPrueba;
     private boolean disableCampoPruebaCompuesta;
+    private boolean disableEmbarazo;
     
     private int tipoIdentificacion;
+    private int genero;
+    private int rh;
+    private int estadoCivil;
+    private int dpto;
+    private int mun;
+    private int zona;
+    private int ocupacion;
     private LineChartModel lineModelEvolutivo;
     public OrdenMB() {
     }
     @PostConstruct
     public void inicializar(){
+        listas();
         listaPruebas = new ArrayList<>();
         pacientes =new CfgPacientes();
         identificacionPaciente="";
@@ -239,7 +249,7 @@ public class OrdenMB extends Controlador implements Serializable {
         disableCampoPruebaCompuesta = false;
         lineModelEvolutivo = new LineChartModel();
         observaciones="";
-        
+        disableEmbarazo = true;
         ChartSeries boys = new ChartSeries();
                     boys.setLabel("Boys");
                     boys.set("2004", 120);
@@ -260,62 +270,139 @@ public class OrdenMB extends Controlador implements Serializable {
         yAxis.setMax(200);
     }
 
+    private void listas(){
+        listaEstadoCivil = clasificacionFacade.buscarPorMaestro(ClasificacionesEnum.EstadoCivil.toString());
+        listaOcupacion = new ArrayList<>();// clasificacionFacade.buscarPorMaestro(ClasificacionesEnum.Ocupacion.toString());
+        listaDpto = clasificacionFacade.buscarPorMaestro(ClasificacionesEnum.DPTO.toString());
+        listaZona = new ArrayList<>();//clasificacionFacade.buscarPorMaestro(ClasificacionesEnum.Zona.toString());
+        listaTipoIdentificacion  =clasificacionFacade.buscarPorMaestro(ClasificacionesEnum.TipoIdentificacion.toString());  
+        listaGenero = clasificacionFacade.buscarPorMaestro(ClasificacionesEnum.Genero.toString());
+        listaGrupoSanguineo = clasificacionFacade.buscarPorMaestro(ClasificacionesEnum.GrupoSanguineo.toString());
+    }
     @Override
     public void nuevo() {
         inicializarVariables();
+    }
+    
+    private boolean validarDatos(){
+        if(identificacionPaciente.equals("")){
+            imprimirMensaje("Error al guardar", "Digite número identificación paciente", FacesMessage.SEVERITY_ERROR);
+            return false;
+        }
+        if(pacientes.getIdAdministradora().getIdAdministradora()==null){
+            imprimirMensaje("Error al guardar", "Seleccione administradora", FacesMessage.SEVERITY_ERROR);
+            return false;
+        }
+        if(pacientes.getIdAdministradora().getIdAdministradora()==0){
+            imprimirMensaje("Error al guardar", "Seleccione administradora", FacesMessage.SEVERITY_ERROR);
+            return false;
+        }
+        if(pacientes.getPrimerNombre().equals("")){
+            imprimirMensaje("Error al guardar", "Digite Primer Nombre paciente", FacesMessage.SEVERITY_ERROR);
+            return false;
+        }
+        if(pacientes.getPrimerApellido().equals("")){
+            imprimirMensaje("Error al guardar", "Digite Primer Apellido paciente", FacesMessage.SEVERITY_ERROR);
+            return false;
+        }
+        if(pacientes.getFechaNacimiento()==null){
+            imprimirMensaje("Error al guardar", "Seleccione fecha nacimiento paciente", FacesMessage.SEVERITY_ERROR);
+            return false;
+        }
+        if(dpto==0){
+            imprimirMensaje("Error al guardar", "Seleccione departamento", FacesMessage.SEVERITY_ERROR);
+            return false;
+        }
+        if(mun==0){
+            imprimirMensaje("Error al guardar", "Seleccione municipio", FacesMessage.SEVERITY_ERROR);
+            return false;
+        }
+        if(pacientes.getDireccion().equals("")){
+            imprimirMensaje("Error al guardar", "Digite dirección", FacesMessage.SEVERITY_ERROR);
+            return false;
+        }
+        if(orden.getNroOrden().equals("")){
+            imprimirMensaje("Error al guardar", "Digite Número de Orden", FacesMessage.SEVERITY_ERROR);
+            return false;
+        }
+        if(orden.getOrigenId().getIdAdministradora()==null){
+            imprimirMensaje("Error al guardar", "Seleccione Origen", FacesMessage.SEVERITY_ERROR);
+            return false;
+        }
+        if(orden.getOrigenId().getIdAdministradora()==0){
+            imprimirMensaje("Error al guardar", "Seleccione Origen", FacesMessage.SEVERITY_ERROR);
+            return false;
+        }
+        
+        return true;
     }
 
     @Override
     public void guardar() {
         try {
-            
-            //Guardamos fotos del paciente
-                        if (archivoFirma != null) {//se cargo firma         
-                String nombreImagenReal = archivoFirma.getFileName();
-                String extension = nombreImagenReal.substring(nombreImagenReal.lastIndexOf("."), nombreImagenReal.length());
-                CfgImagenes nuevaImagen = new CfgImagenes();
-                imagenesFacade.create(nuevaImagen);//crearlo para que me autogenere el ID            
-                String nombreImagenEnTmp = "firmaUsuario" + SessionUtil.getUserLog() + extension;
-                Utilidades.moverArchivo(SessionUtil.getUrlPath() +"imagenesOpenmedical/"+ nombreImagenEnTmp, SessionUtil.getUrlImagen()+"Produccion/firmas/" + nuevaImagen.getId().toString() + extension,true);
-                nuevaImagen.setNombre(nombreImagenReal);
-                nuevaImagen.setNombreEnServidor(nuevaImagen.getId().toString() + extension);
-                nuevaImagen.setUrlImagen("Produccion/firmas/" + nuevaImagen.getId().toString() + extension);
-                imagenesFacade.edit(nuevaImagen);
-                pacientes.setFirma(nuevaImagen);
-            }
-            
-            if (archivoFoto != null || fotoTomadaWebCam) {//se cargo foto
-                String nombreImagenReal = null;
-                String extension = null;
-            if (fotoTomadaWebCam) {//es por webCam
-                nombreImagenReal = "fotoWebCam.png";
-                extension = ".png";
-            } else {//es por carga de archivo
-                nombreImagenReal = archivoFoto.getFileName();
-                extension = nombreImagenReal.substring(nombreImagenReal.lastIndexOf("."), nombreImagenReal.length());
-            }
+            if (validarDatos()) {
+                //Guardamos fotos del paciente
+                if (archivoFirma != null) {//se cargo firma         
+                    String nombreImagenReal = archivoFirma.getFileName();
+                    String extension = nombreImagenReal.substring(nombreImagenReal.lastIndexOf("."), nombreImagenReal.length());
+                    CfgImagenes nuevaImagen = new CfgImagenes();
+                    imagenesFacade.create(nuevaImagen);//crearlo para que me autogenere el ID            
+                    String nombreImagenEnTmp = "firmaUsuario" + SessionUtil.getUserLog() + extension;
+                    Utilidades.moverArchivo(SessionUtil.getUrlPath() + "imagenesOpenmedical/" + nombreImagenEnTmp, SessionUtil.getUrlImagen() + "Produccion/firmas/" + nuevaImagen.getId().toString() + extension, true);
+                    nuevaImagen.setNombre(nombreImagenReal);
+                    nuevaImagen.setNombreEnServidor(nuevaImagen.getId().toString() + extension);
+                    nuevaImagen.setUrlImagen("Produccion/firmas/" + nuevaImagen.getId().toString() + extension);
+                    imagenesFacade.edit(nuevaImagen);
+                    pacientes.setFirma(nuevaImagen);
+                }
 
-            CfgImagenes nuevaImagen = new CfgImagenes();
-            imagenesFacade.create(nuevaImagen);//crearlo para que me autogenere el ID            
-            String nombreImagenEnTmp = "fotoUsuario" + SessionUtil.getUserLog() + extension;
-            Utilidades.moverArchivo(SessionUtil.getUrlPath() +"imagenesOpenmedical/"+ nombreImagenEnTmp, SessionUtil.getUrlImagen()+"Produccion/fotos/" + nuevaImagen.getId().toString() + extension,true);
-            nuevaImagen.setNombre(nombreImagenReal);
-             nuevaImagen.setNombreEnServidor(nuevaImagen.getId().toString() + extension);
-            nuevaImagen.setUrlImagen("Produccion/fotos/" + nuevaImagen.getId().toString() + extension);
-            imagenesFacade.edit(nuevaImagen);
-            pacientes.setFoto(nuevaImagen);
-        }
-            
-            if(pacientes.getIdPaciente()==null){
-                CfgClasificaciones c = new CfgClasificaciones();
-                c.setId(tipoIdentificacion);
-                pacientes.setTipoIdentificacion(c);
-                pacientes.setIdentificacion(identificacionPaciente);
-                if(pacientes.getOcupacion().getId()==0)pacientes.setOcupacion(null);
-                pacienteFacade.create(pacientes);
-            }
-            else pacienteFacade.edit(pacientes);
-            if(!listaEstudioSeleccionados.isEmpty()){
+                if (archivoFoto != null || fotoTomadaWebCam) {//se cargo foto
+                    String nombreImagenReal = null;
+                    String extension = null;
+                    if (fotoTomadaWebCam) {//es por webCam
+                        nombreImagenReal = "fotoWebCam.png";
+                        extension = ".png";
+                    } else {//es por carga de archivo
+                        nombreImagenReal = archivoFoto.getFileName();
+                        extension = nombreImagenReal.substring(nombreImagenReal.lastIndexOf("."), nombreImagenReal.length());
+                    }
+
+                    CfgImagenes nuevaImagen = new CfgImagenes();
+                    imagenesFacade.create(nuevaImagen);//crearlo para que me autogenere el ID            
+                    String nombreImagenEnTmp = "fotoUsuario" + SessionUtil.getUserLog() + extension;
+                    Utilidades.moverArchivo(SessionUtil.getUrlPath() + "imagenesOpenmedical/" + nombreImagenEnTmp, SessionUtil.getUrlImagen() + "Produccion/fotos/" + nuevaImagen.getId().toString() + extension, true);
+                    nuevaImagen.setNombre(nombreImagenReal);
+                    nuevaImagen.setNombreEnServidor(nuevaImagen.getId().toString() + extension);
+                    nuevaImagen.setUrlImagen("Produccion/fotos/" + nuevaImagen.getId().toString() + extension);
+                    imagenesFacade.edit(nuevaImagen);
+                    pacientes.setFoto(nuevaImagen);
+                }
+
+                //establecemos informacion del paciente
+                pacientes.setMunicipio(clasificacionFacade.find(mun));
+                pacientes.setGenero(clasificacionFacade.find(genero));
+                pacientes.setGrupoSanguineo(clasificacionFacade.find(rh));
+                pacientes.setEstadoCivil(clasificacionFacade.find(estadoCivil));
+                pacientes.setDepartamento(clasificacionFacade.find(dpto));
+                //pacientes.setZona(clasificacionFacade.find(zona));
+                //pacientes.setOcupacion(clasificacionFacade.find(ocupacion));
+                pacientes.setIdAdministradora(administradorFacade.find(pacientes.getIdAdministradora().getIdAdministradora()));
+
+                if (pacientes.getIdPaciente() == null) {
+                    CfgClasificaciones c = new CfgClasificaciones();
+                    c.setId(tipoIdentificacion);
+                    pacientes.setTipoIdentificacion(c);
+                    pacientes.setIdentificacion(identificacionPaciente);
+                    if (pacientes.getOcupacion().getId() == 0) {
+                        pacientes.setOcupacion(null);
+                    }
+                    pacientes.setZona(null);
+                    pacientes.setOcupacion(null);
+                    pacienteFacade.create(pacientes);
+                } else {
+                    pacienteFacade.edit(pacientes);
+                }
+                /*if(!listaEstudioSeleccionados.isEmpty()){
                 orden.setXlabEstudioList(listaEstudioSeleccionados);
             }
             if(diagnostico==null)orden.setDiagnosticoId(null);
@@ -370,12 +457,13 @@ public class OrdenMB extends Controlador implements Serializable {
                         }
                     }
             
-            
-            //actualizamos 
-            SessionUtil.addInfoMessage("Guardado", "Guardado Correctamente Nro de orden "+orden.getNroOrden());
-            inicializarVariables();
+                 */
+                //actualizamos 
+                SessionUtil.addInfoMessage("Guardado", "Guardado Correctamente Nro de orden " + orden.getNroOrden());
+                inicializarVariables();
+            }
         } catch (Exception e) {
-            logger.error("Error en la clase "+ OrdenMB.class.getName() + ", mensaje: " + e.getMessage(),e);
+            logger.error("Error en la clase " + OrdenMB.class.getName() + ", mensaje: " + e.getMessage(), e);
             SessionUtil.addErrorMessage("Error al guardar", e.toString());
         }
     }
@@ -421,6 +509,8 @@ public class OrdenMB extends Controlador implements Serializable {
         disableCampoPrueba = false;
         disableCampoPruebaCompuesta = false;
         observaciones="";
+        dpto=0;
+        mun=0;
     }
 
     @Override
@@ -473,6 +563,9 @@ public class OrdenMB extends Controlador implements Serializable {
             SessionUtil.addErrorMessage("Error al guardar", e.toString());
         }
     }
+    public void validarGenero(){
+        disableEmbarazo = clasificacionFacade.find(genero).getObservacion().equals("M");
+    }
     public void validarIdentificacion() {//verifica si existe la identificacion de lo contrario abre un dialogo para seleccionar el paciente de una tabla
         try{
         pacientes = pacienteFacade.findPacienteByTipIden(tipoIdentificacion, identificacionPaciente);
@@ -500,6 +593,19 @@ public class OrdenMB extends Controlador implements Serializable {
                 urlFoto = this.fotoPorDefecto;
             }
                 
+            //Cargamos informacion del paciente
+            if(pacientes.getGenero()!=null){
+                disableEmbarazo = !pacientes.getGenero().getObservacion().equals("F");
+                genero = pacientes.getGenero().getId();
+            }
+            rh  =pacientes.getGrupoSanguineo()!=null?pacientes.getGrupoSanguineo().getId():0;
+            estadoCivil =pacientes.getEstadoCivil()!=null?pacientes.getEstadoCivil().getId():0;
+            dpto = pacientes.getDepartamento()!=null?pacientes.getDepartamento().getId():0;
+            cargarMunicipios();
+            mun=pacientes.getMunicipio()!=null?pacientes.getMunicipio().getId():0;
+            //zona = pacientes.getZona()!=null?pacientes.getZona().getId():0;
+            //ocupacion=pacientes.getOcupacion()!=null?pacientes.getOcupacion().getId():0;
+            
         }
         establecerOrden();
         }catch(Exception ex){
@@ -509,10 +615,14 @@ public class OrdenMB extends Controlador implements Serializable {
 
     public void validarEdad(){
         try{
-            if(pacientes.getFechaNacimiento()!=null)
-            edad = calcularEdad(pacientes.getFechaNacimiento());
-        }catch(Exception ex){
+            if(pacientes.getFechaNacimiento()!=null){
+                edad = calcularEdad(pacientes.getFechaNacimiento());
+            }
             
+            System.out.println(edad);
+            
+        }catch(Exception ex){
+            ex.printStackTrace();
         }
             
     }
@@ -549,103 +659,59 @@ public class OrdenMB extends Controlador implements Serializable {
     }
 
     
-    public List<SelectItem> getListaGenero() {
-        if(listaGenero==null){
-            listaGenero = new ArrayList();
-            List<CfgClasificaciones> lstGenero = clasificacionFacade.buscarPorMaestro(ClasificacionesEnum.Genero.toString());
-            for(CfgClasificaciones g:lstGenero){
-                listaGenero.add(new SelectItem(g.getId(),g.getDescripcion()));
-            }
-        }
+    public List<CfgClasificaciones> getListaGenero() {
         return listaGenero;
     }
 
-    public void setListaGenero(List<SelectItem> listaGenero) {
+    public void setListaGenero(List<CfgClasificaciones> listaGenero) {
         this.listaGenero = listaGenero;
     }
 
-    public List<SelectItem> getListaGrupoSanguineo() {
-        if(listaGrupoSanguineo==null){
-            listaGrupoSanguineo = new ArrayList();
-            List<CfgClasificaciones> lstGrupoSanguineo = clasificacionFacade.buscarPorMaestro(ClasificacionesEnum.GrupoSanguineo.toString());
-            for(CfgClasificaciones g:lstGrupoSanguineo){
-                listaGrupoSanguineo.add(new SelectItem(g.getId(),g.getDescripcion()));
-            }
-        }
+    public List<CfgClasificaciones> getListaGrupoSanguineo() {
         return listaGrupoSanguineo;
     }
 
-    public void setListaGrupoSanguineo(List<SelectItem> listaGrupoSanguineo) {
+    public void setListaGrupoSanguineo(List<CfgClasificaciones> listaGrupoSanguineo) {
         this.listaGrupoSanguineo = listaGrupoSanguineo;
     }
 
-    public List<SelectItem> getListaEstadoCivil() {
-        if(listaEstadoCivil==null){
-            listaEstadoCivil = new ArrayList<>();
-            List<CfgClasificaciones> lstEstado = clasificacionFacade.buscarPorMaestro(ClasificacionesEnum.EstadoCivil.toString());
-            for(CfgClasificaciones e:lstEstado){
-                listaEstadoCivil.add(new SelectItem(e.getId(),e.getDescripcion()));
-            }
-        }
+    public List<CfgClasificaciones> getListaEstadoCivil() {
         return listaEstadoCivil;
     }
 
-    public void setListaEstadoCivil(List<SelectItem> listaEstadoCivil) {
+    public void setListaEstadoCivil(List<CfgClasificaciones> listaEstadoCivil) {
         this.listaEstadoCivil = listaEstadoCivil;
     }
 
-    public List<SelectItem> getListaOcupacion() {
-        if(listaOcupacion==null){
-            listaOcupacion = new ArrayList<>();
-            listaOcupacion.add(new SelectItem(0,"Seleccione Ocupaciòn"));
-            List<CfgClasificaciones> lstOcupacion = clasificacionFacade.buscarPorMaestro(ClasificacionesEnum.Ocupacion.toString());
-            for(CfgClasificaciones o:lstOcupacion){
-                listaOcupacion.add(new SelectItem(o.getId(),o.getDescripcion()));
-            }
-        }
+    public List<CfgClasificaciones> getListaOcupacion() {
         return listaOcupacion;
     }
 
-    public void setListaOcupacion(List<SelectItem> listaOcupacion) {
+    public void setListaOcupacion(List<CfgClasificaciones> listaOcupacion) {
         this.listaOcupacion = listaOcupacion;
     }
 
-    public List<SelectItem> getListaDpto() {
-        if(listaDpto==null){
-            listaDpto = new ArrayList<>();
-            listaDpto.add(new SelectItem(0,"Seleccione Departamento"));
-            List<CfgClasificaciones> lstDpto = clasificacionFacade.buscarPorMaestro(ClasificacionesEnum.DPTO.toString());
-            for(CfgClasificaciones d:lstDpto){
-                listaDpto.add(new SelectItem(d.getId(),d.getDescripcion()));
-            }
-        }
+    public List<CfgClasificaciones> getListaDpto() {
         return listaDpto;
     }
 
-    public void setListaDpto(List<SelectItem> listaDpto) {
+    public void setListaDpto(List<CfgClasificaciones> listaDpto) {
         this.listaDpto = listaDpto;
     }
 
-    public List<SelectItem> getListaMunicipio() {
+    public List<CfgClasificaciones> getListaMunicipio() {
         return listaMunicipio;
     }
 
-    public void setListaMunicipio(List<SelectItem> listaMunicipio) {
+    public void setListaMunicipio(List<CfgClasificaciones> listaMunicipio) {
         this.listaMunicipio = listaMunicipio;
     }
 
-    public List<SelectItem> getListaZona() {
-        if(listaZona==null){
-            listaZona = new ArrayList<>();
-            List<CfgClasificaciones> lstZona = clasificacionFacade.buscarPorMaestro(ClasificacionesEnum.Zona.toString());
-            for(CfgClasificaciones z:lstZona){
-                listaZona.add(new SelectItem(z.getId(),z.getDescripcion()));
-            }
-        }
+    public List<CfgClasificaciones> getListaZona() {
         return listaZona;
     }
 
-    public void setListaZona(List<SelectItem> listaZona) {
+    public void setListaZona(List<CfgClasificaciones> listaZona) {
         this.listaZona = listaZona;
     }
 
@@ -839,15 +905,8 @@ public class OrdenMB extends Controlador implements Serializable {
     public void cargarMunicipios() {
         try{
             listaMunicipio = new ArrayList<>();
-            if (pacientes.getDepartamento().getId() != 0) {
-                List<CfgClasificaciones> listaM = clasificacionFacade.buscarMunicipioPorDepartamento(clasificacionFacade.find(pacientes.getDepartamento().getId()).getCodigo());
-                listaMunicipio.clear();
-                int i = 0;
-                for (CfgClasificaciones mun : listaM) {
-                    if(i==0)pacientes.setMunicipio(mun);
-                    listaMunicipio.add(new SelectItem(mun.getId(), mun.getDescripcion()));
-                    i++;
-                }
+            if (dpto != 0) {
+                listaMunicipio = clasificacionFacade.buscarMunicipioPorDepartamento(clasificacionFacade.find(dpto).getCodigo());
 
             }
         }catch(Exception ex){
@@ -862,23 +921,11 @@ public class OrdenMB extends Controlador implements Serializable {
         RequestContext.getCurrentInstance().openDialog("./configuraciones/estudios", options, null);
     }
     
-    public List<SelectItem> getListaTipoIdentificacion() {
-        if(listaTipoIdentificacion==null){
-            listaTipoIdentificacion  = new ArrayList<>();
-            
-          List<CfgClasificaciones> lstTi = clasificacionFacade.buscarPorMaestro(ClasificacionesEnum.TipoIdentificacion.toString());  
-          int i=0;
-          for(CfgClasificaciones cfg:lstTi){
-              if(i==0)tipoIdentificacion=cfg.getId();
-               listaTipoIdentificacion.add(new SelectItem(cfg.getId(),cfg.getObservacion()));
-            i++;
-          }
-        }
-            
+    public List<CfgClasificaciones> getListaTipoIdentificacion() {
         return listaTipoIdentificacion;
     }
 
-    public void setListaTipoIdentificacion(List<SelectItem> listaTipoIdentificacion) {
+    public void setListaTipoIdentificacion(List<CfgClasificaciones> listaTipoIdentificacion) {
         this.listaTipoIdentificacion = listaTipoIdentificacion;
     }
 
@@ -1782,5 +1829,71 @@ public class OrdenMB extends Controlador implements Serializable {
     public void setTipoIdentificacion(int tipoIdentificacion) {
         this.tipoIdentificacion = tipoIdentificacion;
     }
+
+    public boolean isDisableEmbarazo() {
+        return disableEmbarazo;
+    }
+
+    public void setDisableEmbarazo(boolean disableEmbarazo) {
+        this.disableEmbarazo = disableEmbarazo;
+    }
+
+    public int getGenero() {
+        return genero;
+    }
+
+    public void setGenero(int genero) {
+        this.genero = genero;
+    }
+
+    public int getRh() {
+        return rh;
+    }
+
+    public void setRh(int rh) {
+        this.rh = rh;
+    }
+
+    public int getEstadoCivil() {
+        return estadoCivil;
+    }
+
+    public void setEstadoCivil(int estadoCivil) {
+        this.estadoCivil = estadoCivil;
+    }
+
+    public int getDpto() {
+        return dpto;
+    }
+
+    public void setDpto(int dpto) {
+        this.dpto = dpto;
+    }
+
+    public int getMun() {
+        return mun;
+    }
+
+    public void setMun(int mun) {
+        this.mun = mun;
+    }
+
+    public int getZona() {
+        return zona;
+    }
+
+    public void setZona(int zona) {
+        this.zona = zona;
+    }
+
+    public int getOcupacion() {
+        return ocupacion;
+    }
+
+    public void setOcupacion(int ocupacion) {
+        this.ocupacion = ocupacion;
+    }
+
+    
     
 }

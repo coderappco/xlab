@@ -1,0 +1,141 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./../template/master.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://java.sun.com/jsf/core">
+
+    <ui:define name="title">
+        Informe de Resultados
+    </ui:define>
+
+    <ui:define name="content">
+        <div class="container-fluid container-fullw">
+            <h:form id="frmOrden">
+                <section id="page-title">
+                    <div class="row">
+                        <div class="col-sm-8">
+                            <h1 class="mainTitle">Informe de Resultados</h1>
+                        </div>
+                        <ol class="breadcrumb">
+                            <li>
+                                <span>Informe de Resultados</span>
+                            </li>
+                            <li class="active">
+                                <span>Ordenes</span>
+                            </li>
+                        </ol>
+                    </div>
+                </section>
+                <div class="row">
+                    <div class="col-xs-12 col-sm-2">
+                        <div class="form-group">
+                            <p:outputLabel value="Fecha Desde"/><br />
+                            <p:calendar style="width: 100%;" required="true" styleClass="campoFormulario" navigator="true" mask="true" locale="es" pattern="dd/MM/yyyy" value="#{informeResultadoMB.fechaDesde}" size="20" placeholder="fecha desde orden" />
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-2">
+                        <div class="form-group">
+                            <p:outputLabel value="Fecha Hasta"/><br />
+                            <p:calendar style="width: 100%;" required="true" styleClass="campoFormulario" navigator="true" mask="true" locale="es" pattern="dd/MM/yyyy" value="#{informeResultadoMB.fechaHasta}" size="20" placeholder="fecha hasta orden" />
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-3">
+                        <div class="form-group">
+                            <p:outputLabel value="Estudio"/>
+                            <p:autoComplete id="estudio" size="50"  value="#{informeResultadoMB.estudio}" completeMethod="#{informeResultadoMB.autocompletarEstudio}" forceSelection="true" placeholder="Digite Estudios a consultar">
+                                <p:ajax listener="#{informeResultadoMB.validarEstudio}" event="itemSelect" update=":frmOrden,@this"/>
+                            </p:autoComplete>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12">
+                        <p:dataTable id="pOrden" var="orden" 
+                                     value="#{informeResultadoMB.listaOrdenes}"
+                                     emptyMessage="No hay resultados"
+                                     rows="20" 
+                                     widgetVar="pruebaTable"
+                                     paginatorPosition="bottom"
+                                     paginator="true"
+                                     tableStyleClass="table-striped table-hover"
+                                     styleClass="table"
+                                     reflow="true"
+                                     
+                                     >
+                            <p:column  style="font-size: 10px;" headerText="Nro Orden" >
+                                <h:outputText value="#{orden.nroOrden}" style="font-size: 10px;"/>
+                            </p:column>
+                            <p:column headerText="Fecha Orden"  style="font-size: 10px;">
+                                <h:outputText value="#{orden.fechaOrden}" >
+                                    <f:convertDateTime pattern="dd/MM/yyyy" />
+                                </h:outputText>
+                            </p:column>
+                            <p:column headerText="Documento"  style="font-size: 10px;">
+                                <h:outputText value="#{orden.documento}" />
+                            </p:column>
+                            <p:column headerText="Primer Apellido"  style="font-size: 10px;">
+                                <h:outputText value="#{orden.primerApellido}" />
+                            </p:column>
+                            <p:column headerText="Segundo Apellido"  style="font-size: 10px;">
+                                <h:outputText value="#{orden.segundoApellido}" />
+                            </p:column>
+                            <p:column headerText="Primer Nombre"  style="font-size: 10px;">
+                                <h:outputText value="#{orden.primerNombre}" />
+                            </p:column>
+                            <p:column headerText="Segundo Nombre"  style="font-size: 10px;">
+                                <h:outputText value="#{orden.segundoNombre}" />
+                            </p:column>
+                            <p:column headerText="Fecha Nacimiento"  style="font-size: 10px;">
+                                <h:outputText value="#{orden.fechaNacimiento}" >
+                                    <f:convertDateTime pattern="dd/MM/yyyy" />
+                                </h:outputText>
+                            </p:column>
+                            <p:column headerText="Género"  style="font-size: 10px;">
+                                <h:outputText value="#{orden.genero}" />
+                            </p:column>
+                            <p:column headerText="Télefono"  style="font-size: 10px;">
+                                <h:outputText value="#{orden.telefono}" />
+                            </p:column>
+                            <p:column headerText="Edad"  style="font-size: 10px;">
+                                <h:outputText value="#{orden.edad}" />
+                            </p:column>
+                            <p:column headerText="Estudio"  style="font-size: 10px;">
+                                <h:outputText  value="#{orden.estudio}"/>
+                            </p:column>
+                            <p:column headerText="Resultado"  style="font-size: 10px;">
+                                <h:outputText  value="#{orden.resultado}"/>
+                            </p:column>
+                            <p:column headerText="Unidades"  style="font-size: 10px;">
+                                <h:outputText  value="#{orden.unidad}"/>
+                            </p:column>
+                            <p:column headerText="Fecha Valoración"  style="font-size: 10px;">
+                                <h:outputText  value="#{orden.fechaPrueba}">
+                                    <f:convertDateTime pattern="dd/MM/yyyy" />
+                                </h:outputText>
+                            </p:column>
+                            <p:column headerText="Entidad"  style="font-size: 10px;">
+                                <h:outputText  value="#{orden.entidad}"/>
+                            </p:column>
+                        </p:dataTable>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-1">
+                        <div class="form-group">
+                            
+                            <p:commandLink  styleClass="btn btn-lg btn-success btn-block button-prime"
+                                            actionListener="#{informeResultadoMB.exportar}"
+                                    >
+                                    <i class="fa fa-print"></i> Exportar
+                            </p:commandLink>
+                        </div>
+                    </div>
+                </div>
+            </h:form>
+        </div>
+    </ui:define>
+
+</ui:composition>

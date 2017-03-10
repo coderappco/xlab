@@ -23,7 +23,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author ArcoSoft-Pc1
  */
 @Entity
-@Table(name = "xlab_consecutivos", catalog = "openmedical", schema = "public")
+@Table(name = "xlab_consecutivos")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "XlabConsecutivos.findAll", query = "SELECT x FROM XlabConsecutivos x"),

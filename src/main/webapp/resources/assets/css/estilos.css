@@ -125,3 +125,13 @@ box-shadow: 1px 11px 25px -2px rgba(0,0,0,0.75);
     font-size: 18px;
     
 }
+.campoObligatorio2{/* Nombres de campo de los formularios obligatorio*/
+    display: inline-block;
+    max-width: 100%;
+    margin-bottom: 5px;
+    font-weight: 700;
+}
+.campoObligatorio2:after{
+    color: red;    
+    content: "  *";    
+}

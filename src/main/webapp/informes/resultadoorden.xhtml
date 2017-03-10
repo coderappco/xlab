@@ -1,0 +1,177 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./../template/master.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://java.sun.com/jsf/core">
+
+    <ui:define name="title">
+        Resultado Orden
+    </ui:define>
+
+    <ui:define name="content">
+        #{resultadoOrdenMB.inicializar()}
+        <div class="container-fluid container-fullw">
+            <h:form id="frmOrden">
+                <section id="page-title">
+                    <div class="row">
+                        <div class="col-sm-8">
+                            <h1 class="mainTitle">Resultado de Orden</h1>
+                        </div>
+                        <ol class="breadcrumb">
+                            <li>
+                                <span>Resultado de Orden</span>
+                            </li>
+                            <li class="active">
+                                <span>Informe</span>
+                            </li>
+                        </ol>
+                    </div>
+                </section>
+                <div class="row">
+                    <div class="col-xs-12 col-sm-3">
+                        <div class="form-group">
+                            <p:outputLabel for="orden"  value="No. Orden" id="lbOrden"/>
+                            <p:inputText id="orden" styleClass="form-control" value="#{resultadoOrdenMB.orden.nroOrden}" placeholder="Dígite número de orden">
+                                <p:ajax update="frmOrden" listener="#{resultadoOrdenMB.cargarOrden}" onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()"  />
+                            </p:inputText>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-3">
+                        <div class="form-group">
+                            <p:outputLabel for="tipoIdentificacion"  value="Tipo Identificación" id="lbIdentificacion"/>
+                            <p:selectOneMenu id="tipoIdentificacion" value="#{resultadoOrdenMB.tipoIdentificacion}">
+                                <f:selectItems value="#{resultadoOrdenMB.listaTipoIdentificacion}" />
+                            </p:selectOneMenu>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-3">
+                        <div class="form-group">
+                            <p:outputLabel for="nroIdentificacion"  value="Número Identificación" id="lbIdenti"/>
+                            <p:inputText id="nroIdentificacion" styleClass="form-control" value="#{resultadoOrdenMB.identificacionPaciente}"  placeholder="Identificación del Paciente">
+                                <p:ajax update="nroIdentificacion,lbIdenti,frmOrden" listener="#{resultadoOrdenMB.validarIdentificacion}" onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />
+                            </p:inputText>
+                        </div>
+                    </div>
+                </div>
+                <!--.row-->
+                <div class="row">
+                    <div class="col-sm-3 col-xs-12">
+                        <div class="form-group">
+                            <p:outputLabel for="nroorden"  value="Nro Orden" id="lbNroOrden" rendered="#{resultadoOrdenMB.renderInfo}"/>
+                            <p:inputText id="nroorden" styleClass="form-control" value="#{resultadoOrdenMB.orden.nroOrden}" disabled="true" rendered="#{resultadoOrdenMB.renderInfo}"/>
+                        </div>
+                    </div>
+                    <div class="col-sm-3 col-xs-12">
+                        <div class="form-group">
+                            <p:outputLabel for="fechaorden"  value="Fecha Orden" id="lbFechaOrden" rendered="#{resultadoOrdenMB.renderInfo}"/>
+                            <p:inputText id="fechaorden" styleClass="form-control" value="#{resultadoOrdenMB.orden.fechaCreacion}" disabled="true" rendered="#{resultadoOrdenMB.renderInfo}">
+                                <f:convertDateTime pattern="dd/MM/yyyy" />
+                            </p:inputText>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-5 col-xs-12">
+                        <div class="form-group">
+                            <p:outputLabel for="nombre"  value="Nombre Paciente" id="lbPaciente" rendered="#{resultadoOrdenMB.renderInfo}"/>
+                            <p:inputText id="nombre" styleClass="form-control" value="#{resultadoOrdenMB.pacientes.primerNombre} #{resultadoOrdenMB.pacientes.segundoNombre} #{resultadoOrdenMB.pacientes.primerApellido} #{resultadoOrdenMB.pacientes.segundoApellido}" disabled="true" rendered="#{resultadoOrdenMB.renderInfo}"/>
+                        </div>
+                    </div>
+                    <div class="col-sm-3 col-xs-12">
+                        <div class="form-group">
+                            <p:outputLabel for="fechaNac"  value="Fecha Nacimiento" id="lbfechaNac" rendered="#{resultadoOrdenMB.renderInfo}"/>
+                            <p:inputText id="fechaNac" styleClass="form-control" value="#{resultadoOrdenMB.pacientes.fechaNacimiento}" disabled="true" rendered="#{resultadoOrdenMB.renderInfo}">
+                                <f:convertDateTime pattern="dd/MM/yyyy" />
+                            </p:inputText>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12 col-xs-12">
+                        <div class="form-group">
+                            <p:outputLabel for="email"  value="E-mail" id="lbEmail" rendered="#{resultadoOrdenMB.renderInfo}"/>
+                            <p:inputText id="email" styleClass="form-control" value="#{resultadoOrdenMB.emails}" rendered="#{resultadoOrdenMB.renderInfo}"/>
+                        </div>
+                    </div>
+                </div>
+                <!--.row-->
+                <div class="row">
+                    <div class="col-xs-12">
+                        <p:dataTable id="pIngresPruebas" var="prueba" 
+                                     value="#{resultadoOrdenMB.listaPruebas}"
+                                     emptyMessage="No hay pruebas"
+                                     rows="20" 
+                                     editable="true"
+                                     widgetVar="pruebaTable"
+                                     paginatorPosition="bottom"
+                                     paginator="true"
+                                     rendered="#{resultadoOrdenMB.renderInfo}"
+                                     tableStyleClass="table-striped table-hover"
+                                     styleClass="table"
+                                     reflow="true"
+                                     selectionMode="multiple"
+                                     rowKey="#{prueba.id}"
+>
+                            <p:column  style="width: 50px;font-size: 10px;" headerText="Estado" filterMatchMode="startsWith"  filterBy="" >
+                                <h:outputText value="#{prueba.estado}" style="font-size: 10px;"/>
+                            </p:column>
+                            <p:column headerText="Nombre Prueba" style="font-size: 10px;">
+                                <h:outputText value="#{prueba.pruebaId.nombre}" style="font-size: 10px;"/>
+                            </p:column>
+                            <p:column headerText="Confirmar" style="width: 60px;font-size: 10px;">
+                                <p:selectBooleanCheckbox  value="#{prueba.confirmado}" disabled="true"/>
+                            </p:column>
+                            <p:column headerText="Resultados" filterMatchMode="startsWith"  filterBy="" style="font-size: 10px;">
+                                <h:outputText value="#{prueba.resultado}" />
+                            </p:column>
+                            <p:column headerText="Unidades" filterMatchMode="startsWith"  filterBy="" style="width: 60px;font-size: 10px;">
+                                <h:outputText value="#{prueba.pruebaId.unidadPrueba.codigo}" style="font-size: 10px;"/>
+                            </p:column>
+                            <p:column headerText="Min Ref." filterMatchMode="startsWith"  filterBy="" style="width: 60px;font-size: 10px;">
+                                <h:outputText value="#{prueba.refMin}" style="font-size: 10px;"/>
+                            </p:column>
+                            <p:column headerText="Max Ref." filterMatchMode="startsWith"  filterBy="" style="width: 60px;font-size: 10px;">
+                                <h:outputText value="#{prueba.refMax}" style="font-size: 10px;"/>
+                            </p:column>
+                            <p:column headerText="Codigo Prueba" filterMatchMode="startsWith"  filterBy="" style="font-size: 10px;width:100px">
+                                <h:outputText value="#{prueba.pruebaId.codigo}" style="font-size: 10px;"/>
+                            </p:column>
+                            <p:column headerText="Nota" filterMatchMode="startsWith"  filterBy="" style="width: 40px;font-size: 10px;">
+                                <h:outputText value="#{prueba.nota}" style="font-size: 10px;"/>
+                            </p:column>
+                        </p:dataTable>
+                    </div>
+                </div>
+                <div class="row">
+                <div class="col-lg-2 col-xs-12">
+                <p:commandLink  styleClass="btn btn-lg btn-success btn-block button-prime"
+                                actionListener="#{resultadoOrdenMB.imprimir}"
+                                target="_blank"
+                                    ajax="false"
+                                rendered="#{resultadoOrdenMB.renderInfo}">
+                    <i class="fa fa-print"></i> Imprimir
+                </p:commandLink>
+                </div>
+                <div class="col-lg-2 col-xs-12">
+                                <p:commandLink       
+                                    styleClass="btn btn-lg btn-info btn-block button-prime"
+                                    actionListener="#{resultadoOrdenMB.email}"
+                                    rendered="#{resultadoOrdenMB.renderInfo}"
+                                    onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()"
+                                    >
+                                    <i class="fa fa-envelope"></i> Email
+                                </p:commandLink>
+
+
+
+                            </div>
+                        </div>
+
+            </h:form>
+        </div>
+    </ui:define>
+
+</ui:composition>
