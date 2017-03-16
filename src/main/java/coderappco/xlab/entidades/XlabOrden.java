@@ -50,6 +50,9 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "XlabOrden.findByEstado", query = "SELECT x FROM XlabOrden x WHERE x.estado = :estado"),
     @NamedQuery(name = "XlabOrden.findByFechaEstado", query = "SELECT x FROM XlabOrden x WHERE x.fechaEstado = :fechaEstado")})
 public class XlabOrden implements Serializable {
+
+    @OneToMany(mappedBy = "idOrden")
+    private List<XlabOrdenVisor> xlabOrdenVisorList;
     @JoinColumn(name = "empresa_id", referencedColumnName = "cod_empresa")
     @ManyToOne
     private CfgEmpresa empresaId;
@@ -353,6 +356,15 @@ public class XlabOrden implements Serializable {
 
     public void setEmpresaId(CfgEmpresa empresaId) {
         this.empresaId = empresaId;
+    }
+
+    @XmlTransient
+    public List<XlabOrdenVisor> getXlabOrdenVisorList() {
+        return xlabOrdenVisorList;
+    }
+
+    public void setXlabOrdenVisorList(List<XlabOrdenVisor> xlabOrdenVisorList) {
+        this.xlabOrdenVisorList = xlabOrdenVisorList;
     }
     
 }

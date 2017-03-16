@@ -46,6 +46,10 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "CfgEmpresa.findByRegimen", query = "SELECT c FROM CfgEmpresa c WHERE c.regimen = :regimen"),
     @NamedQuery(name = "CfgEmpresa.findByRazonRip", query = "SELECT c FROM CfgEmpresa c WHERE c.razonRip = :razonRip")})
 public class CfgEmpresa implements Serializable {
+
+    @Size(max = 100)
+    @Column(name = "nivel")
+    private String nivel;
     @OneToMany(mappedBy = "empresaId")
     private List<XlabOrden> xlabOrdenList;
     private static final long serialVersionUID = 1L;
@@ -300,6 +304,14 @@ public class CfgEmpresa implements Serializable {
 
     public void setXlabOrdenList(List<XlabOrden> xlabOrdenList) {
         this.xlabOrdenList = xlabOrdenList;
+    }
+
+    public String getNivel() {
+        return nivel;
+    }
+
+    public void setNivel(String nivel) {
+        this.nivel = nivel;
     }
     
 }

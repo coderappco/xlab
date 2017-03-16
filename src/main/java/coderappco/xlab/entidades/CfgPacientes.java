@@ -74,6 +74,21 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "CfgPacientes.findByFechaVenceCarnet", query = "SELECT c FROM CfgPacientes c WHERE c.fechaVenceCarnet = :fechaVenceCarnet"),
     @NamedQuery(name = "CfgPacientes.findByObservaciones", query = "SELECT c FROM CfgPacientes c WHERE c.observaciones = :observaciones")})
 public class CfgPacientes implements Serializable {
+
+    @Column(name = "id_discapacidad")
+    private Integer idDiscapacidad;
+    @Column(name = "id_gestacion")
+    private Integer idGestacion;
+    @Column(name = "poblacion_lbgt")
+    private Boolean poblacionLbgt;
+    @Column(name = "desplazado")
+    private Boolean desplazado;
+    @Column(name = "id_religion")
+    private Integer idReligion;
+    @Column(name = "victima_maltrato")
+    private Boolean victimaMaltrato;
+    @Column(name = "victima_conflicto_armado")
+    private Boolean victimaConflictoArmado;
     @OneToMany(mappedBy = "pacienteId")
     private List<XlabOrden> xlabOrdenList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idPaciente")
@@ -840,6 +855,62 @@ public class CfgPacientes implements Serializable {
             strNombre = strNombre + segundoApellido;
         }
         return strNombre;
+    }
+
+    public Integer getIdDiscapacidad() {
+        return idDiscapacidad;
+    }
+
+    public void setIdDiscapacidad(Integer idDiscapacidad) {
+        this.idDiscapacidad = idDiscapacidad;
+    }
+
+    public Integer getIdGestacion() {
+        return idGestacion;
+    }
+
+    public void setIdGestacion(Integer idGestacion) {
+        this.idGestacion = idGestacion;
+    }
+
+    public Boolean getPoblacionLbgt() {
+        return poblacionLbgt;
+    }
+
+    public void setPoblacionLbgt(Boolean poblacionLbgt) {
+        this.poblacionLbgt = poblacionLbgt;
+    }
+
+    public Boolean getDesplazado() {
+        return desplazado;
+    }
+
+    public void setDesplazado(Boolean desplazado) {
+        this.desplazado = desplazado;
+    }
+
+    public Integer getIdReligion() {
+        return idReligion;
+    }
+
+    public void setIdReligion(Integer idReligion) {
+        this.idReligion = idReligion;
+    }
+
+    public Boolean getVictimaMaltrato() {
+        return victimaMaltrato;
+    }
+
+    public void setVictimaMaltrato(Boolean victimaMaltrato) {
+        this.victimaMaltrato = victimaMaltrato;
+    }
+
+    public Boolean getVictimaConflictoArmado() {
+        return victimaConflictoArmado;
+    }
+
+    public void setVictimaConflictoArmado(Boolean victimaConflictoArmado) {
+        this.victimaConflictoArmado = victimaConflictoArmado;
     }
 
 }

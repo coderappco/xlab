@@ -59,6 +59,9 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "CfgUsuarios.findByVisible", query = "SELECT c FROM CfgUsuarios c WHERE c.visible = :visible"),
     @NamedQuery(name = "CfgUsuarios.findByMostrarEnHistorias", query = "SELECT c FROM CfgUsuarios c WHERE c.mostrarEnHistorias = :mostrarEnHistorias")})
 public class CfgUsuarios implements Serializable {
+
+    @OneToMany(mappedBy = "usuario")
+    private List<XlabOrdenVisor> xlabOrdenVisorList;
     @OneToMany(mappedBy = "usuarioActualiza")
     private List<XlabOrdenEstudiosPruebas> xlabOrdenEstudiosPruebasList;
     @OneToMany(mappedBy = "usuarioElimina")
@@ -644,5 +647,14 @@ public class CfgUsuarios implements Serializable {
 
     public void setXlabOrdenEstudiosPruebasList1(List<XlabOrdenEstudiosPruebas> xlabOrdenEstudiosPruebasList1) {
         this.xlabOrdenEstudiosPruebasList1 = xlabOrdenEstudiosPruebasList1;
+    }
+
+    @XmlTransient
+    public List<XlabOrdenVisor> getXlabOrdenVisorList() {
+        return xlabOrdenVisorList;
+    }
+
+    public void setXlabOrdenVisorList(List<XlabOrdenVisor> xlabOrdenVisorList) {
+        this.xlabOrdenVisorList = xlabOrdenVisorList;
     }
 }

@@ -256,7 +256,7 @@
                 </div>
                 <br />
                 <!--./panel-->
-                <h:panelGrid columns="10" style="margin-left:20%;">
+                <h:panelGrid columns="12" style="margin-left:20%;">
                     <h:panelGroup>
                         <p:commandLink          styleClass="btn btn-lg btn-success btn-block button-prime"
                                                 actionListener="#{ordenMB.guardar}"
@@ -325,6 +325,18 @@
                             <p:resetInput target=":IdFormPanel" />
                         </p:commandLink>
                         <p:tooltip id="toolbtnCancelar" for="btnCancelar" value="Cancelar Orden" position="top"/>
+                    </h:panelGroup>
+                    <h:panelGroup>&nbsp;&nbsp;</h:panelGroup>
+                    <h:panelGroup>
+                        <p:commandLink          styleClass="btn btn-lg btn-button btn-block button-prime"
+                                                update="@parent"
+                                                oncomplete="PF('dlgVisor').show()"
+                                                id="btnVisor"
+                                                rendered="#{!ordenMB.renderAccion}"
+                                                >
+                            <i class="fa fa-eye"></i> Visor
+                        </p:commandLink>
+                        <p:tooltip id="toolbtnVisor" for="btnVisor" value="Visor de Operaciones de la orden" position="top"/>
                     </h:panelGroup>
                 </h:panelGrid>
                 <div class="row" style="margin-top: 2%;">
@@ -557,7 +569,7 @@
                                                 <div class="col-lg-12 col-xs-3">
                                                     <div class="form-group">
                                                         <p:inputText styleClass="form-control" value="#{ordenMB.datosPrueba}" placeholder="Ingrese resultados de la prueba" disabled="#{ordenMB.disableCampoPrueba}">
-                                                            <f:ajax event="blur" listener="#{ordenMB.valorAlfaNumericoDigitado}" render=":IdFormPanel:tabV"/>
+                                                            <f:ajax event="blur" listener="#{ordenMB.valorAlfaNumericoDigitado}" render=":IdFormPanel:tabV :IdFormPanel:dataTableVisor"/>
                                                         </p:inputText>
                                                     </div>
                                                 </div>
@@ -609,7 +621,7 @@
                                                         title="Nueva Administradora" icon="fa fa-fw fa-edit"
                                                         styleClass="icon-new fg-lightBlue bg-white no-border"                            
                                                         id="btn1"
-                                                        update=":IdFormPanel:tabV"
+                                                        update=":IdFormPanel:tabV,:IdFormPanel:dataTableVisor"
                                                         disabled="#{ordenMB.disableBtnEdit}"
                                                         actionListener="#{ordenMB.btnEditar}"
                                                         style="font-size: 20px; width: 30px; height: 40px; "/> 
@@ -619,7 +631,7 @@
                                                         title="Buscar Administradora" icon="fa fa-fw fa-remove"
                                                         styleClass="icon-search fg-lightBlue bg-white no-border" 
                                                         id="btn2"
-                                                        update=":IdFormPanel:tabV"
+                                                        update=":IdFormPanel:tabV,:IdFormPanel:dataTableVisor"
                                                         disabled="#{ordenMB.disableBtnClarear}"
                                                         actionListener="#{ordenMB.btnClarear}"
                                                         style="font-size: 20px; width: 30px; height: 40px; "/> 
@@ -629,7 +641,7 @@
                                                         title="Eliminar Administradora" icon="fa fa-fw fa-area-chart"
                                                         styleClass="icon-cancel fg-lightBlue bg-white no-border"                     
                                                         id="btn3"
-                                                        update=":IdFormPanel:tabV"
+                                                        update=":IdFormPanel:tabV,:IdFormPanel:dataTableVisor"
                                                         rendered="false"
                                                         disabled="#{ordenMB.disableBtnEvolutivo}"
                                                         actionListener="#{ordenMB.btnEvolutivo}"
@@ -641,7 +653,7 @@
                                                         styleClass="icon-floppy fg-lightBlue bg-white no-border" 
                                                         id="btn4"
                                                         disabled="#{ordenMB.disableBtnConfirmar}"
-                                                        update=":IdFormPanel:tabV"
+                                                        update=":IdFormPanel:tabV,:IdFormPanel:dataTableVisor"
                                                         actionListener="#{ordenMB.btnConfirmar}"
                                                         style="font-size: 20px; width: 30px; height: 40px; "/>                    
                                                     <p:tooltip  for="btn4" value="Marcar como confirmado el resultado de la prueba seleccionada" position="top"/>
@@ -651,7 +663,7 @@
                                                         styleClass="icon-floppy fg-lightBlue bg-white no-border" 
                                                         id="btn5"
                                                         process=":IdFormPanel:tabV"
-                                                        update=":IdFormPanel:tabV"
+                                                        update=":IdFormPanel:tabV,:IdFormPanel:dataTableVisor"
                                                         disabled="#{ordenMB.disableBtnValidar}"
                                                         actionListener="#{ordenMB.btnValidar}"
                                                         style="font-size: 20px; width: 30px; height: 40px; "/>                    
@@ -889,6 +901,65 @@
                     </div>
                 </p:dialog>
                 <!--./Dialog-->
+                <p:dialog id="dialogVisor" header="Visor de operaciones orden #{ordenMB.orden.nroOrden}" widgetVar="dlgVisor" modal="true" resizable="true" closable="true"  responsive="true" width="580px;" style="width: 850px; height: auto;margin-left: 3%;">                
+                    <p:dataTable id="dataTableVisor"
+                                 value="#{ordenMB.listaOrdenVisor}"
+                                 var="visor"
+                                 rows="10"         
+                                 rowKey="#{visor.idVisor}"  
+                                    paginatorPosition="bottom"                                
+                                    scrollable="true" 
+                                    currentPageReportTemplate="Mostrando {startRecord}-{endRecord} de {totalRecords}"
+                                    paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"                                    
+                                    pageLinks="5"                                   
+                                    paginator="true"
+                                 emptyMessage="No hay registros"
+                                 selectionMode="single"
+                                 selection="#{ordenMB.ordenVisor}">
+                        <p:ajax event="rowSelect" listener="#{ordenMB.onRowSelectVisor}"  update="IdFormPanel:opDatos"/>
+                        <p:column headerText="Fecha" style="font-size: 10px">  
+                            #{visor.fechaFormato}
+                        </p:column>                            
+                        <p:column headerText="Prueba" style="font-size: 10px">  
+                                #{visor.prueba}
+                        </p:column>                            
+                        <p:column headerText="Operación" style="font-size: 10px">  
+                            #{visor.operacion}
+                        </p:column>                            
+                        <p:column headerText="Nota" style="font-size: 10px">  
+                            <p:outputLabel>
+                                
+                            </p:outputLabel>
+                        </p:column>               
+                        <p:column headerText="usuario" style="font-size: 10px">  
+                            #{visor.usuario.loginUsuario}
+                        </p:column>                            
+                    </p:dataTable>
+                    <p:outputPanel id="opDatos">
+                    <div class="row">
+                        <div class="col-xs-3">
+                            <div class="form-group">
+                                <p:outputLabel  value="Fecha" /><br />
+                                #{ordenMB.ordenVisor.fechaFormato}
+                            </div>
+                        </div>
+                        <div class="col-xs-6">
+                            <div class="form-group">
+                                <p:outputLabel  value="Operación"/><br />
+                                #{ordenMB.ordenVisor.prueba} - #{ordenMB.ordenVisor.operacion}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-6">
+                            <div class="form-group">
+                                <p:outputLabel  value="Anotación"/><br />
+                                #{ordenMB.ordenVisor.nota}
+                            </div>
+                        </div>
+                    </div>
+                    </p:outputPanel>
+                </p:dialog>
             </p:outputPanel>
         </h:form>
     </ui:define>

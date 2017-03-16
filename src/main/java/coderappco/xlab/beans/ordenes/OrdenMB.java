@@ -5,7 +5,6 @@
  */
 package coderappco.xlab.beans.ordenes;
 
-import coderappco.xlab.beans.seguridad.LoginMB;
 import coderappco.xlab.business.Controlador;
 import coderappco.xlab.entidades.CfgClasificaciones;
 import coderappco.xlab.entidades.CfgEmpresa;
@@ -13,12 +12,12 @@ import coderappco.xlab.entidades.CfgImagenes;
 import coderappco.xlab.entidades.CfgPacientes;
 import coderappco.xlab.entidades.CfgUsuarios;
 import coderappco.xlab.entidades.FacAdministradora;
-import coderappco.xlab.entidades.FacConsecutivo;
 import coderappco.xlab.entidades.XlabConsecutivos;
 import coderappco.xlab.entidades.XlabEstudio;
 import coderappco.xlab.entidades.XlabOrden;
 import coderappco.xlab.entidades.XlabOrdenEstudioPruebaResultados;
 import coderappco.xlab.entidades.XlabOrdenEstudiosPruebas;
+import coderappco.xlab.entidades.XlabOrdenVisor;
 import coderappco.xlab.entidades.XlabPrueba;
 import coderappco.xlab.entidades.XlabPruebaReferencia;
 import coderappco.xlab.facades.CfgClasificacionesFacade;
@@ -27,12 +26,12 @@ import coderappco.xlab.facades.CfgImagenesFacade;
 import coderappco.xlab.facades.CfgPacientesFacade;
 import coderappco.xlab.facades.CfgUsuariosFacade;
 import coderappco.xlab.facades.FacAdministradoraFacade;
-import coderappco.xlab.facades.FacConsecutivoFacade;
 import coderappco.xlab.facades.XlabConsecutivosFacade;
 import coderappco.xlab.facades.XlabEstudioFacade;
 import coderappco.xlab.facades.XlabOrdenEstudioPruebaResultadosFacade;
 import coderappco.xlab.facades.XlabOrdenEstudiosPruebasFacade;
 import coderappco.xlab.facades.XlabOrdenFacade;
+import coderappco.xlab.facades.XlabOrdenVisorFacade;
 import coderappco.xlab.utilidades.ClasificacionesEnum;
 import coderappco.xlab.utilidades.Constante;
 import coderappco.xlab.utilidades.DBConnector;
@@ -77,7 +76,7 @@ import org.primefaces.model.chart.AxisType;
 import org.primefaces.model.chart.CategoryAxis;
 import org.primefaces.model.chart.ChartSeries;
 import org.primefaces.model.chart.LineChartModel;
-import org.primefaces.model.chart.LineChartSeries;
+
 
 /**
  *
@@ -109,6 +108,8 @@ public class OrdenMB extends Controlador implements Serializable {
     private XlabOrdenEstudioPruebaResultadosFacade resultadoCompuesto;
     @EJB
     private CfgImagenesFacade imagenesFacade;
+    @EJB
+    private XlabOrdenVisorFacade ordenVisorFacade;
     
     @Resource
     private UserTransaction utx;
@@ -130,10 +131,12 @@ public class OrdenMB extends Controlador implements Serializable {
     
     private List<XlabEstudio> listaEstudio;
     private List<XlabEstudio> listaEstudioSeleccionados;
+    private List<XlabOrdenVisor> listaOrdenVisor;
     private List<XlabOrdenEstudiosPruebas> listaPruebas;
     private CfgPacientes pacientes;
     
     private XlabOrden orden;
+    private XlabOrdenVisor ordenVisor;
     private XlabEstudio estudioSeleccionado;
     private List<XlabOrdenEstudiosPruebas> pruebaSeleccionada;
     private XlabOrdenEstudiosPruebas pruebaValidada;
@@ -201,11 +204,13 @@ public class OrdenMB extends Controlador implements Serializable {
         pacientes =new CfgPacientes();
         identificacionPaciente="";
         orden = new XlabOrden();
+        ordenVisor = new XlabOrdenVisor();
         CfgUsuarios usuario = new CfgUsuarios();
         usuario.setIdUsuario(0);
         orden.setMedicoId(usuario);
         listaEstudioSeleccionados = new ArrayList<>();
         listaMunicipio = new ArrayList<>();
+        listaOrdenVisor = new ArrayList<>();
         lecturaOrden = false;
         edad = "";
         diagnostico="";
@@ -457,6 +462,14 @@ public class OrdenMB extends Controlador implements Serializable {
                     con.setNumeroActual(con.getNumeroActual()+1);
                     consecutivoFacade.edit(con);
             
+               //Guardamos visor
+               ordenVisor = new XlabOrdenVisor();
+               ordenVisor.setIdOrden(orden);
+               ordenVisor.setUsuario(usuarioActual);
+               ordenVisor.setOperacion(Constante.OPERACION_CREACION);
+               ordenVisor.setPrueba(Constante.PRUEBA);
+               ordenVisor.setFecha(new Date());
+               ordenVisorFacade.create(ordenVisor);
                 
                 //actualizamos 
                 SessionUtil.addInfoMessage("Guardado", "Guardado Correctamente Nro de orden " + orden.getNroOrden());
@@ -562,6 +575,10 @@ public class OrdenMB extends Controlador implements Serializable {
         } catch (Exception e) {
             SessionUtil.addErrorMessage("Error al guardar", e.toString());
         }
+    }
+    
+     public void onRowSelectVisor(SelectEvent event) {
+         ordenVisor =(XlabOrdenVisor) event.getObject();
     }
     public void validarGenero(){
         disableEmbarazo = clasificacionFacade.find(genero).getObservacion().equals("M");
@@ -1027,6 +1044,9 @@ public class OrdenMB extends Controlador implements Serializable {
                             }//fin for pruebas
                         }
                     }
+                    
+                    //cargamos el visor de operaciones de la orden
+                    listaOrdenVisor = ordenVisorFacade.visorXOrden(orden.getId());
                     //listaPruebas = orden.getXlabEstudioList().get(0).getXlabPruebaList();
                 }else{
                     inicializarVariables();
@@ -1046,9 +1066,23 @@ public class OrdenMB extends Controlador implements Serializable {
                 if(Objects.equals(xo.getId(), pruebaValidada.getId())){
                     listaPruebas.get(i).setResultado(datosPrueba);
                     listaPruebas.get(i).setNota(observaciones);
+                    
+                    //Guardamos visor
+                    ordenVisor = new XlabOrdenVisor();
+                    ordenVisor.setIdOrden(orden);
+                    ordenVisor.setUsuario(usuarioActual);
+                    ordenVisor.setOperacion(Constante.OPERACION_ASIGNA);
+                    ordenVisor.setPrueba(pruebaValidada.getPruebaId().getCodigo());
+                    ordenVisor.setFecha(new Date());
+                    ordenVisorFacade.create(ordenVisor);
+                    if(listaOrdenVisor!=null){
+                        listaOrdenVisor.add(ordenVisor);
+                    }
                 }
                 i++;
             }
+            //Guardamos valor a visor
+            
             RequestContext.getCurrentInstance().update(":IdFormPanel:tabV");
         }
     }
@@ -1243,8 +1277,22 @@ public class OrdenMB extends Controlador implements Serializable {
                     i++;
                 }
             }
+            
+            //Guardamos visor
+               ordenVisor = new XlabOrdenVisor();
+               ordenVisor.setIdOrden(orden);
+               ordenVisor.setUsuario(usuarioActual);
+               ordenVisor.setOperacion(Constante.OPERACION_ASIGNA);
+               ordenVisor.setPrueba(Constante.PRUEBA);
+               ordenVisor.setFecha(new Date());
+               ordenVisorFacade.create(ordenVisor);
+               
+               if(listaOrdenVisor!=null){
+                listaOrdenVisor.add(ordenVisor);
+            }
         }
         RequestContext.getCurrentInstance().update(":IdFormPanel:tabV");
+        RequestContext.getCurrentInstance().update(":IdFormPanel:dataTableVisor");
         RequestContext.getCurrentInstance().execute("PF('wVCompuestos').hide();");
         
     }
@@ -1273,6 +1321,18 @@ public class OrdenMB extends Controlador implements Serializable {
                     for(XlabOrdenEstudioPruebaResultados xr:resultadoPruebaSeleccionada){
                         if(xr.getOrdenEstudiosPruebasId().getPruebaId()==xo.getPruebaId()){
                             resultadoCompuesto.edit(xr);
+                            //Guardamos visor
+                            ordenVisor = new XlabOrdenVisor();
+                            ordenVisor.setIdOrden(orden);
+                            ordenVisor.setUsuario(usuarioActual);
+                            ordenVisor.setOperacion(Constante.OPERACION_VALIDA);
+                            ordenVisor.setPrueba(xo.getPruebaId().getCodigo());
+                            ordenVisor.setFecha(new Date());
+                            ordenVisorFacade.create(ordenVisor);
+                            
+                            if(listaOrdenVisor!=null){
+                                    listaOrdenVisor.add(ordenVisor);
+                            }
                         }
                     }
                     utx.commit();
@@ -1285,6 +1345,19 @@ public class OrdenMB extends Controlador implements Serializable {
                 xo.setFechaActualizacion(new Date());
                 ordenEstudioPruebaFacade.edit(xo);
                 pruebaSeleccionada.set(i, xo);
+                
+                //Guardamos visor
+                            ordenVisor = new XlabOrdenVisor();
+                            ordenVisor.setIdOrden(orden);
+                            ordenVisor.setUsuario(usuarioActual);
+                            ordenVisor.setOperacion(Constante.OPERACION_VALIDA);
+                            ordenVisor.setPrueba(xo.getPruebaId().getCodigo());
+                            ordenVisor.setFecha(new Date());
+                            ordenVisorFacade.create(ordenVisor);
+                            
+                            if(listaOrdenVisor!=null){
+                                    listaOrdenVisor.add(ordenVisor);
+                            }
             }
             i++;
         }
@@ -1294,6 +1367,7 @@ public class OrdenMB extends Controlador implements Serializable {
         disableCampoPrueba = true;
         disableCampoPruebaCompuesta = true;
         RequestContext.getCurrentInstance().update(":IdFormPanel:tabV");
+        RequestContext.getCurrentInstance().update(":IdFormPanel:dataTableVisor");
     }
     public void btnConfirmar(){
         int i = 0;
@@ -1305,25 +1379,37 @@ public class OrdenMB extends Controlador implements Serializable {
             pruebaSeleccionada.set(i, xo);
             i++;
             observaciones = xo.getNota();
+            
+            //Guardamos visor
+            ordenVisor = new XlabOrdenVisor();
+            ordenVisor.setIdOrden(orden);
+            ordenVisor.setUsuario(usuarioActual);
+            ordenVisor.setOperacion(Constante.OPERACION_CONFIRMA);
+            ordenVisor.setPrueba(xo.getPruebaId().getCodigo());
+            ordenVisor.setFecha(new Date());
+            ordenVisorFacade.create(ordenVisor);
+            if(listaOrdenVisor!=null){
+                listaOrdenVisor.add(ordenVisor);
+            }
         }
         disableBtnValidar =true;
         disableBtnConfirmar=true;
         
         RequestContext.getCurrentInstance().update(":IdFormPanel:tabV");
+        RequestContext.getCurrentInstance().update(":IdFormPanel:dataTableVisor");
     }
     public void btnEvolutivo(){
         ChartSeries boys = new ChartSeries();
-                    boys.setLabel("Boys");
-                    boys.set("2004", 100);
-                    boys.set("2005", 90);
-                    boys.set("2006", 34);
-                    boys.set("2007", 110);
-                    boys.set("2008", 65);
-                    LineChartModel model = new LineChartModel();
-                    model.addSeries(boys);
-                    System.out.println("Entro..");
-                    lineModelEvolutivo = model;
-                    lineModelEvolutivo.setTitle("Category Chart");
+        boys.setLabel("Boys");
+        boys.set("2004", 100);
+        boys.set("2005", 90);
+        boys.set("2006", 34);
+        boys.set("2007", 110);
+        boys.set("2008", 65);
+        LineChartModel model = new LineChartModel();
+        model.addSeries(boys);
+        lineModelEvolutivo = model;
+        lineModelEvolutivo.setTitle("Category Chart");
         lineModelEvolutivo.setLegendPosition("e");
         lineModelEvolutivo.setShowPointLabels(true);
         lineModelEvolutivo.getAxes().put(AxisType.X, new CategoryAxis("Years"));
@@ -1332,12 +1418,12 @@ public class OrdenMB extends Controlador implements Serializable {
         yAxis.setMin(0);
         yAxis.setMax(200);
         RequestContext.getCurrentInstance().update(":IdFormPanel:tabV");
-                        RequestContext.getCurrentInstance().execute("PF('wVEvolutivo').show();");
-        if(pruebaValidada!=null)   {
-             try {
-                 List<XlabOrdenEstudiosPruebas> lista = ordenEstudioPruebaFacade.getEvolutivoPacienteXprueba(orden.getPacienteId().getIdPaciente(), pruebaValidada.getPruebaId().getId());
-                 if(!pruebaValidada.getPruebaId().getFormatoResultado().equals("C")){
-                      /*LineChartModel  model = new LineChartModel();
+        RequestContext.getCurrentInstance().execute("PF('wVEvolutivo').show();");
+        if (pruebaValidada != null) {
+            try {
+                List<XlabOrdenEstudiosPruebas> lista = ordenEstudioPruebaFacade.getEvolutivoPacienteXprueba(orden.getPacienteId().getIdPaciente(), pruebaValidada.getPruebaId().getId());
+                if (!pruebaValidada.getPruebaId().getFormatoResultado().equals("C")) {
+                    /*LineChartModel  model = new LineChartModel();
                        LineChartSeries   series1 = new LineChartSeries();
                         series1.setLabel(pruebaValidada.getPruebaId().getCodigo());
                         series1.set(3, 2);
@@ -1359,9 +1445,9 @@ public class OrdenMB extends Controlador implements Serializable {
                         yAxis.setMin(0);
                         yAxis.setMax(10);
                         System.out.println(lineModelEvolutivo);*/
-                        //RequestContext.getCurrentInstance().update(":IdFormPanel:tabV");
+                    //RequestContext.getCurrentInstance().update(":IdFormPanel:tabV");
                 }
-                 
+
             } catch (Exception e) {
                 logger.error("Error en la clase " + OrdenMB.class.getName() + ", mensaje: " + e.getMessage(), e);
             }
@@ -1381,10 +1467,22 @@ public class OrdenMB extends Controlador implements Serializable {
             xo.setFechaActualizacion(new Date());
             ordenEstudioPruebaFacade.edit(xo);
             pruebaSeleccionada.set(i, xo);
+             //Guardamos visor
+            ordenVisor = new XlabOrdenVisor();
+            ordenVisor.setIdOrden(orden);
+            ordenVisor.setUsuario(usuarioActual);
+            ordenVisor.setOperacion(Constante.OPERACION_CLAREA);
+            ordenVisor.setPrueba(xo.getPruebaId().getCodigo());
+            ordenVisor.setFecha(new Date());
+            ordenVisorFacade.create(ordenVisor);
+            if(listaOrdenVisor!=null){
+                listaOrdenVisor.add(ordenVisor);
+            }
             i++;
         }
         
         RequestContext.getCurrentInstance().update(":IdFormPanel:tabV");
+        RequestContext.getCurrentInstance().update(":IdFormPanel:dataTableVisor");
     }
     public void btnEditar(){
         disableObservacionesPrueba = false;
@@ -1399,8 +1497,20 @@ public class OrdenMB extends Controlador implements Serializable {
             ordenEstudioPruebaFacade.edit(xo);
             pruebaSeleccionada.set(i, xo);
             i++;
+             //Guardamos visor
+            ordenVisor = new XlabOrdenVisor();
+            ordenVisor.setIdOrden(orden);
+            ordenVisor.setUsuario(usuarioActual);
+            ordenVisor.setOperacion(Constante.OPERACION_INVALIDA);
+            ordenVisor.setPrueba(xo.getPruebaId().getCodigo());
+            ordenVisor.setFecha(new Date());
+            ordenVisorFacade.create(ordenVisor);
+            if(listaOrdenVisor!=null){
+                listaOrdenVisor.add(ordenVisor);
+            }
         }
         RequestContext.getCurrentInstance().update(":IdFormPanel:tabV");
+        RequestContext.getCurrentInstance().update(":IdFormPanel:dataTableVisor");
     }
      
     public List<SelectItem> getListaAreas() {
@@ -1900,6 +2010,22 @@ public class OrdenMB extends Controlador implements Serializable {
 
     public void setOcupacion(int ocupacion) {
         this.ocupacion = ocupacion;
+    }
+
+    public XlabOrdenVisor getOrdenVisor() {
+        return ordenVisor;
+    }
+
+    public void setOrdenVisor(XlabOrdenVisor ordenVisor) {
+        this.ordenVisor = ordenVisor;
+    }
+
+    public List<XlabOrdenVisor> getListaOrdenVisor() {
+        return listaOrdenVisor;
+    }
+
+    public void setListaOrdenVisor(List<XlabOrdenVisor> listaOrdenVisor) {
+        this.listaOrdenVisor = listaOrdenVisor;
     }
 
     
